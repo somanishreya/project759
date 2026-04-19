@@ -174,7 +174,8 @@ void
 Router::schedule_wakeup(Cycles time)
 {
     // wake up after time cycles
-    scheduleEvent(time);
+    // Disabled for OpenMP Global Wakeup
+    // scheduleEvent(time);
 }
 
 std::string

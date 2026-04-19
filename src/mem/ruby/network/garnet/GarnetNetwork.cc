@@ -62,7 +62,7 @@ namespace garnet
  */
 
 GarnetNetwork::GarnetNetwork(const Params &p)
-    : Network(p)
+    : Network(p), globalWakeupEvent([this]{ globalWakeup(); }, name())
 {
     m_num_rows = p.num_rows;
     m_ni_flit_size = p.ni_flit_size;
@@ -150,6 +150,22 @@ GarnetNetwork::init()
             router->printFaultVector(std::cout);
         }
     }
+
+    // Schedule first global wakeup
+    schedule(globalWakeupEvent, clockEdge(Cycles(1)));
+}
+
+void
+GarnetNetwork::globalWakeup()
+{
+    gem5::EventQueue *eq = gem5::curEventQueue();
+    #pragma omp parallel for
+    for (int i = 0; i < m_routers.size(); i++) {
+        gem5::curEventQueue(eq);
+        m_routers[i]->wakeup();
+    }
+
+    schedule(globalWakeupEvent, clockEdge(Cycles(1)));
 }
 
 /*
@@ -609,6 +625,7 @@ GarnetNetwork::update_traffic_distribution(RouteInfo route)
     int dest_node = route.dest_router;
     int vnet = route.vnet;
 
+    std::lock_guard<std::mutex> lock(stats_mutex);
     if (m_vnet_type[vnet] == DATA_VNET_)
         (*m_data_traffic_distribution[src_node][dest_node])++;
     else

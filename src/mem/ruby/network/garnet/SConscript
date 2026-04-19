@@ -31,6 +31,9 @@ Import('*')
 if not env['CONF']['RUBY']:
     Return()
 
+env.Append(CXXFLAGS=['-fopenmp'])
+env.Append(LINKFLAGS=['-fopenmp'])
+
 SimObject('GarnetLink.py', enums=['CDCType'], sim_objects=[
     'NetworkLink', 'CreditLink', 'NetworkBridge', 'GarnetIntLink',
     'GarnetExtLink'])

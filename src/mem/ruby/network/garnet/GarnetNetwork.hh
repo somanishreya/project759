@@ -32,7 +32,9 @@
 #ifndef __MEM_RUBY_NETWORK_GARNET_0_GARNETNETWORK_HH__
 #define __MEM_RUBY_NETWORK_GARNET_0_GARNETNETWORK_HH__
 
+#include <atomic>
 #include <iostream>
+#include <mutex>
 #include <vector>
 
 #include "mem/ruby/network/Network.hh"
@@ -66,6 +68,9 @@ class GarnetNetwork : public Network
     ~GarnetNetwork() = default;
 
     void init();
+
+    EventFunctionWrapper globalWakeupEvent;
+    void globalWakeup();
 
     const char *garnetVersion = "3.0";
 
@@ -118,39 +123,56 @@ class GarnetNetwork : public Network
     void print(std::ostream& out) const;
 
     // increment counters
-    void increment_injected_packets(int vnet) { m_packets_injected[vnet]++; }
-    void increment_received_packets(int vnet) { m_packets_received[vnet]++; }
+    void increment_injected_packets(int vnet) { 
+        std::lock_guard<std::mutex> lock(stats_mutex);
+        m_packets_injected[vnet]++; 
+    }
+    void increment_received_packets(int vnet) { 
+        std::lock_guard<std::mutex> lock(stats_mutex);
+        m_packets_received[vnet]++; 
+    }
 
     void
     increment_packet_network_latency(Tick latency, int vnet)
     {
+        std::lock_guard<std::mutex> lock(stats_mutex);
         m_packet_network_latency[vnet] += latency;
     }
 
     void
     increment_packet_queueing_latency(Tick latency, int vnet)
     {
+        std::lock_guard<std::mutex> lock(stats_mutex);
         m_packet_queueing_latency[vnet] += latency;
     }
 
-    void increment_injected_flits(int vnet) { m_flits_injected[vnet]++; }
-    void increment_received_flits(int vnet) { m_flits_received[vnet]++; }
+    void increment_injected_flits(int vnet) { 
+        std::lock_guard<std::mutex> lock(stats_mutex);
+        m_flits_injected[vnet]++; 
+    }
+    void increment_received_flits(int vnet) { 
+        std::lock_guard<std::mutex> lock(stats_mutex);
+        m_flits_received[vnet]++; 
+    }
 
     void
     increment_flit_network_latency(Tick latency, int vnet)
     {
+        std::lock_guard<std::mutex> lock(stats_mutex);
         m_flit_network_latency[vnet] += latency;
     }
 
     void
     increment_flit_queueing_latency(Tick latency, int vnet)
     {
+        std::lock_guard<std::mutex> lock(stats_mutex);
         m_flit_queueing_latency[vnet] += latency;
     }
 
     void
     increment_total_hops(int hops)
     {
+        std::lock_guard<std::mutex> lock(stats_mutex);
         m_total_hops += hops;
     }
 
@@ -207,13 +229,15 @@ class GarnetNetwork : public Network
     GarnetNetwork(const GarnetNetwork& obj);
     GarnetNetwork& operator=(const GarnetNetwork& obj);
 
+    mutable std::mutex stats_mutex;
+
     std::vector<VNET_type > m_vnet_type;
     std::vector<Router *> m_routers;   // All Routers in Network
     std::vector<NetworkLink *> m_networklinks; // All flit links in the network
     std::vector<NetworkBridge *> m_networkbridges; // All network bridges
     std::vector<CreditLink *> m_creditlinks; // All credit links in the network
     std::vector<NetworkInterface *> m_nis;   // All NI's in Network
-    int m_next_packet_id; // static vairable for packet id allocation
+    std::atomic<int> m_next_packet_id; // static vairable for packet id allocation
 };
 
 inline std::ostream&
