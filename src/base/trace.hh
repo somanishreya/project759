@@ -32,6 +32,7 @@
 #ifndef __BASE_TRACE_HH__
 #define __BASE_TRACE_HH__
 
+#include <mutex>
 #include <ostream>
 #include <string>
 #include <sstream>
@@ -137,6 +138,7 @@ class OstreamLogger : public Logger
 {
   protected:
     std::ostream &stream;
+    mutable std::mutex log_mutex;
 
   public:
     OstreamLogger(std::ostream &stream_) : stream(stream_)

@@ -1,0 +1,427 @@
+Global frequency set at 1000000000000 ticks per second
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967280, (next-(2*max_machines)): 0, src: 0, next: 16, vnet:0 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967280, (next-(2*max_machines)): 0, src: 0, next: 16, vnet:1 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967280, (next-(2*max_machines)): 0, src: 0, next: 16, vnet:2 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967280, (next-(2*max_machines)): 0, src: 0, next: 16, vnet:3 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967280, (next-(2*max_machines)): 0, src: 0, next: 16, vnet:4 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: system.ruby.network.netifs0: OutputPort:system.ruby.network.ext_links0.network_links0 Vnet: 
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967281, (next-(2*max_machines)): 1, src: 1, next: 17, vnet:0 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967281, (next-(2*max_machines)): 1, src: 1, next: 17, vnet:1 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967281, (next-(2*max_machines)): 1, src: 1, next: 17, vnet:2 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967281, (next-(2*max_machines)): 1, src: 1, next: 17, vnet:3 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967281, (next-(2*max_machines)): 1, src: 1, next: 17, vnet:4 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: system.ruby.network.netifs1: OutputPort:system.ruby.network.ext_links1.network_links0 Vnet: 
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967282, (next-(2*max_machines)): 2, src: 2, next: 18, vnet:0 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967282, (next-(2*max_machines)): 2, src: 2, next: 18, vnet:1 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967282, (next-(2*max_machines)): 2, src: 2, next: 18, vnet:2 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967282, (next-(2*max_machines)): 2, src: 2, next: 18, vnet:3 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967282, (next-(2*max_machines)): 2, src: 2, next: 18, vnet:4 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: system.ruby.network.netifs2: OutputPort:system.ruby.network.ext_links2.network_links0 Vnet: 
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967283, (next-(2*max_machines)): 3, src: 3, next: 19, vnet:0 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967283, (next-(2*max_machines)): 3, src: 3, next: 19, vnet:1 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967283, (next-(2*max_machines)): 3, src: 3, next: 19, vnet:2 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967283, (next-(2*max_machines)): 3, src: 3, next: 19, vnet:3 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967283, (next-(2*max_machines)): 3, src: 3, next: 19, vnet:4 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: system.ruby.network.netifs3: OutputPort:system.ruby.network.ext_links3.network_links0 Vnet: 
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967284, (next-(2*max_machines)): 0, src: 4, next: 16, vnet:0 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967284, (next-(2*max_machines)): 0, src: 4, next: 16, vnet:1 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967284, (next-(2*max_machines)): 0, src: 4, next: 16, vnet:2 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967284, (next-(2*max_machines)): 0, src: 4, next: 16, vnet:3 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967284, (next-(2*max_machines)): 0, src: 4, next: 16, vnet:4 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: system.ruby.network.netifs4: OutputPort:system.ruby.network.ext_links4.network_links0 Vnet: 
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967285, (next-(2*max_machines)): 1, src: 5, next: 17, vnet:0 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967285, (next-(2*max_machines)): 1, src: 5, next: 17, vnet:1 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967285, (next-(2*max_machines)): 1, src: 5, next: 17, vnet:2 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967285, (next-(2*max_machines)): 1, src: 5, next: 17, vnet:3 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967285, (next-(2*max_machines)): 1, src: 5, next: 17, vnet:4 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: system.ruby.network.netifs5: OutputPort:system.ruby.network.ext_links5.network_links0 Vnet: 
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967286, (next-(2*max_machines)): 2, src: 6, next: 18, vnet:0 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967286, (next-(2*max_machines)): 2, src: 6, next: 18, vnet:1 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967286, (next-(2*max_machines)): 2, src: 6, next: 18, vnet:2 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967286, (next-(2*max_machines)): 2, src: 6, next: 18, vnet:3 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967286, (next-(2*max_machines)): 2, src: 6, next: 18, vnet:4 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: system.ruby.network.netifs6: OutputPort:system.ruby.network.ext_links6.network_links0 Vnet: 
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967287, (next-(2*max_machines)): 3, src: 7, next: 19, vnet:0 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967287, (next-(2*max_machines)): 3, src: 7, next: 19, vnet:1 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967287, (next-(2*max_machines)): 3, src: 7, next: 19, vnet:2 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967287, (next-(2*max_machines)): 3, src: 7, next: 19, vnet:3 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 4294967287, (next-(2*max_machines)): 3, src: 7, next: 19, vnet:4 result: [NetDest (20)  - 1 1 1 1  -  -  - 1 1 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: system.ruby.network.netifs7: OutputPort:system.ruby.network.ext_links7.network_links0 Vnet: 
+      0: global: Returning shortest path
+(src-(2*max_machines)): 0, (next-(2*max_machines)): 4294967288, src: 16, next: 8, vnet:0 result: [NetDest (20)  - 1 0 0 0  -  -  - 0 0 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 0, (next-(2*max_machines)): 4294967288, src: 16, next: 8, vnet:1 result: [NetDest (20)  - 1 0 0 0  -  -  - 0 0 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 0, (next-(2*max_machines)): 4294967288, src: 16, next: 8, vnet:2 result: [NetDest (20)  - 1 0 0 0  -  -  - 0 0 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 0, (next-(2*max_machines)): 4294967288, src: 16, next: 8, vnet:3 result: [NetDest (20)  - 1 0 0 0  -  -  - 0 0 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 0, (next-(2*max_machines)): 4294967288, src: 16, next: 8, vnet:4 result: [NetDest (20)  - 1 0 0 0  -  -  - 0 0 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: system.ruby.network.netifs0: Adding input port:system.ruby.network.ext_links0.network_links1 with vnets 
+      0: global: Returning shortest path
+(src-(2*max_machines)): 0, (next-(2*max_machines)): 4294967292, src: 16, next: 12, vnet:0 result: [NetDest (20)  - 0 0 0 0  -  -  - 1 0 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 0, (next-(2*max_machines)): 4294967292, src: 16, next: 12, vnet:1 result: [NetDest (20)  - 0 0 0 0  -  -  - 1 0 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 0, (next-(2*max_machines)): 4294967292, src: 16, next: 12, vnet:2 result: [NetDest (20)  - 0 0 0 0  -  -  - 1 0 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 0, (next-(2*max_machines)): 4294967292, src: 16, next: 12, vnet:3 result: [NetDest (20)  - 0 0 0 0  -  -  - 1 0 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 0, (next-(2*max_machines)): 4294967292, src: 16, next: 12, vnet:4 result: [NetDest (20)  - 0 0 0 0  -  -  - 1 0 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: system.ruby.network.netifs4: Adding input port:system.ruby.network.ext_links4.network_links1 with vnets 
+      0: global: Returning shortest path
+(src-(2*max_machines)): 0, (next-(2*max_machines)): 1, src: 16, next: 17, vnet:0 result: [NetDest (20)  - 0 1 0 1  -  -  - 0 1 0 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 0, (next-(2*max_machines)): 1, src: 16, next: 17, vnet:1 result: [NetDest (20)  - 0 1 0 1  -  -  - 0 1 0 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 0, (next-(2*max_machines)): 1, src: 16, next: 17, vnet:2 result: [NetDest (20)  - 0 1 0 1  -  -  - 0 1 0 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 0, (next-(2*max_machines)): 1, src: 16, next: 17, vnet:3 result: [NetDest (20)  - 0 1 0 1  -  -  - 0 1 0 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 0, (next-(2*max_machines)): 1, src: 16, next: 17, vnet:4 result: [NetDest (20)  - 0 1 0 1  -  -  - 0 1 0 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 0, (next-(2*max_machines)): 2, src: 16, next: 18, vnet:0 result: [NetDest (20)  - 0 0 1 1  -  -  - 0 0 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 0, (next-(2*max_machines)): 2, src: 16, next: 18, vnet:1 result: [NetDest (20)  - 0 0 1 1  -  -  - 0 0 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 0, (next-(2*max_machines)): 2, src: 16, next: 18, vnet:2 result: [NetDest (20)  - 0 0 1 1  -  -  - 0 0 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 0, (next-(2*max_machines)): 2, src: 16, next: 18, vnet:3 result: [NetDest (20)  - 0 0 1 1  -  -  - 0 0 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 0, (next-(2*max_machines)): 2, src: 16, next: 18, vnet:4 result: [NetDest (20)  - 0 0 1 1  -  -  - 0 0 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 1, (next-(2*max_machines)): 4294967289, src: 17, next: 9, vnet:0 result: [NetDest (20)  - 0 1 0 0  -  -  - 0 0 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 1, (next-(2*max_machines)): 4294967289, src: 17, next: 9, vnet:1 result: [NetDest (20)  - 0 1 0 0  -  -  - 0 0 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 1, (next-(2*max_machines)): 4294967289, src: 17, next: 9, vnet:2 result: [NetDest (20)  - 0 1 0 0  -  -  - 0 0 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 1, (next-(2*max_machines)): 4294967289, src: 17, next: 9, vnet:3 result: [NetDest (20)  - 0 1 0 0  -  -  - 0 0 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 1, (next-(2*max_machines)): 4294967289, src: 17, next: 9, vnet:4 result: [NetDest (20)  - 0 1 0 0  -  -  - 0 0 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: system.ruby.network.netifs1: Adding input port:system.ruby.network.ext_links1.network_links1 with vnets 
+      0: global: Returning shortest path
+(src-(2*max_machines)): 1, (next-(2*max_machines)): 4294967293, src: 17, next: 13, vnet:0 result: [NetDest (20)  - 0 0 0 0  -  -  - 0 1 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 1, (next-(2*max_machines)): 4294967293, src: 17, next: 13, vnet:1 result: [NetDest (20)  - 0 0 0 0  -  -  - 0 1 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 1, (next-(2*max_machines)): 4294967293, src: 17, next: 13, vnet:2 result: [NetDest (20)  - 0 0 0 0  -  -  - 0 1 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 1, (next-(2*max_machines)): 4294967293, src: 17, next: 13, vnet:3 result: [NetDest (20)  - 0 0 0 0  -  -  - 0 1 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 1, (next-(2*max_machines)): 4294967293, src: 17, next: 13, vnet:4 result: [NetDest (20)  - 0 0 0 0  -  -  - 0 1 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: system.ruby.network.netifs5: Adding input port:system.ruby.network.ext_links5.network_links1 with vnets 
+      0: global: Returning shortest path
+(src-(2*max_machines)): 1, (next-(2*max_machines)): 0, src: 17, next: 16, vnet:0 result: [NetDest (20)  - 1 0 1 0  -  -  - 1 0 1 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 1, (next-(2*max_machines)): 0, src: 17, next: 16, vnet:1 result: [NetDest (20)  - 1 0 1 0  -  -  - 1 0 1 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 1, (next-(2*max_machines)): 0, src: 17, next: 16, vnet:2 result: [NetDest (20)  - 1 0 1 0  -  -  - 1 0 1 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 1, (next-(2*max_machines)): 0, src: 17, next: 16, vnet:3 result: [NetDest (20)  - 1 0 1 0  -  -  - 1 0 1 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 1, (next-(2*max_machines)): 0, src: 17, next: 16, vnet:4 result: [NetDest (20)  - 1 0 1 0  -  -  - 1 0 1 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 1, (next-(2*max_machines)): 3, src: 17, next: 19, vnet:0 result: [NetDest (20)  - 0 0 1 1  -  -  - 0 0 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 1, (next-(2*max_machines)): 3, src: 17, next: 19, vnet:1 result: [NetDest (20)  - 0 0 1 1  -  -  - 0 0 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 1, (next-(2*max_machines)): 3, src: 17, next: 19, vnet:2 result: [NetDest (20)  - 0 0 1 1  -  -  - 0 0 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 1, (next-(2*max_machines)): 3, src: 17, next: 19, vnet:3 result: [NetDest (20)  - 0 0 1 1  -  -  - 0 0 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 1, (next-(2*max_machines)): 3, src: 17, next: 19, vnet:4 result: [NetDest (20)  - 0 0 1 1  -  -  - 0 0 1 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 2, (next-(2*max_machines)): 4294967290, src: 18, next: 10, vnet:0 result: [NetDest (20)  - 0 0 1 0  -  -  - 0 0 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 2, (next-(2*max_machines)): 4294967290, src: 18, next: 10, vnet:1 result: [NetDest (20)  - 0 0 1 0  -  -  - 0 0 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 2, (next-(2*max_machines)): 4294967290, src: 18, next: 10, vnet:2 result: [NetDest (20)  - 0 0 1 0  -  -  - 0 0 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 2, (next-(2*max_machines)): 4294967290, src: 18, next: 10, vnet:3 result: [NetDest (20)  - 0 0 1 0  -  -  - 0 0 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 2, (next-(2*max_machines)): 4294967290, src: 18, next: 10, vnet:4 result: [NetDest (20)  - 0 0 1 0  -  -  - 0 0 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: system.ruby.network.netifs2: Adding input port:system.ruby.network.ext_links2.network_links1 with vnets 
+      0: global: Returning shortest path
+(src-(2*max_machines)): 2, (next-(2*max_machines)): 4294967294, src: 18, next: 14, vnet:0 result: [NetDest (20)  - 0 0 0 0  -  -  - 0 0 1 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 2, (next-(2*max_machines)): 4294967294, src: 18, next: 14, vnet:1 result: [NetDest (20)  - 0 0 0 0  -  -  - 0 0 1 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 2, (next-(2*max_machines)): 4294967294, src: 18, next: 14, vnet:2 result: [NetDest (20)  - 0 0 0 0  -  -  - 0 0 1 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 2, (next-(2*max_machines)): 4294967294, src: 18, next: 14, vnet:3 result: [NetDest (20)  - 0 0 0 0  -  -  - 0 0 1 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 2, (next-(2*max_machines)): 4294967294, src: 18, next: 14, vnet:4 result: [NetDest (20)  - 0 0 0 0  -  -  - 0 0 1 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: system.ruby.network.netifs6: Adding input port:system.ruby.network.ext_links6.network_links1 with vnets 
+      0: global: Returning shortest path
+(src-(2*max_machines)): 2, (next-(2*max_machines)): 0, src: 18, next: 16, vnet:0 result: [NetDest (20)  - 1 1 0 0  -  -  - 1 1 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 2, (next-(2*max_machines)): 0, src: 18, next: 16, vnet:1 result: [NetDest (20)  - 1 1 0 0  -  -  - 1 1 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 2, (next-(2*max_machines)): 0, src: 18, next: 16, vnet:2 result: [NetDest (20)  - 1 1 0 0  -  -  - 1 1 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 2, (next-(2*max_machines)): 0, src: 18, next: 16, vnet:3 result: [NetDest (20)  - 1 1 0 0  -  -  - 1 1 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 2, (next-(2*max_machines)): 0, src: 18, next: 16, vnet:4 result: [NetDest (20)  - 1 1 0 0  -  -  - 1 1 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 2, (next-(2*max_machines)): 3, src: 18, next: 19, vnet:0 result: [NetDest (20)  - 0 1 0 1  -  -  - 0 1 0 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 2, (next-(2*max_machines)): 3, src: 18, next: 19, vnet:1 result: [NetDest (20)  - 0 1 0 1  -  -  - 0 1 0 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 2, (next-(2*max_machines)): 3, src: 18, next: 19, vnet:2 result: [NetDest (20)  - 0 1 0 1  -  -  - 0 1 0 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 2, (next-(2*max_machines)): 3, src: 18, next: 19, vnet:3 result: [NetDest (20)  - 0 1 0 1  -  -  - 0 1 0 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 2, (next-(2*max_machines)): 3, src: 18, next: 19, vnet:4 result: [NetDest (20)  - 0 1 0 1  -  -  - 0 1 0 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 3, (next-(2*max_machines)): 4294967291, src: 19, next: 11, vnet:0 result: [NetDest (20)  - 0 0 0 1  -  -  - 0 0 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 3, (next-(2*max_machines)): 4294967291, src: 19, next: 11, vnet:1 result: [NetDest (20)  - 0 0 0 1  -  -  - 0 0 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 3, (next-(2*max_machines)): 4294967291, src: 19, next: 11, vnet:2 result: [NetDest (20)  - 0 0 0 1  -  -  - 0 0 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 3, (next-(2*max_machines)): 4294967291, src: 19, next: 11, vnet:3 result: [NetDest (20)  - 0 0 0 1  -  -  - 0 0 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 3, (next-(2*max_machines)): 4294967291, src: 19, next: 11, vnet:4 result: [NetDest (20)  - 0 0 0 1  -  -  - 0 0 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: system.ruby.network.netifs3: Adding input port:system.ruby.network.ext_links3.network_links1 with vnets 
+      0: global: Returning shortest path
+(src-(2*max_machines)): 3, (next-(2*max_machines)): 4294967295, src: 19, next: 15, vnet:0 result: [NetDest (20)  - 0 0 0 0  -  -  - 0 0 0 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 3, (next-(2*max_machines)): 4294967295, src: 19, next: 15, vnet:1 result: [NetDest (20)  - 0 0 0 0  -  -  - 0 0 0 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 3, (next-(2*max_machines)): 4294967295, src: 19, next: 15, vnet:2 result: [NetDest (20)  - 0 0 0 0  -  -  - 0 0 0 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 3, (next-(2*max_machines)): 4294967295, src: 19, next: 15, vnet:3 result: [NetDest (20)  - 0 0 0 0  -  -  - 0 0 0 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 3, (next-(2*max_machines)): 4294967295, src: 19, next: 15, vnet:4 result: [NetDest (20)  - 0 0 0 0  -  -  - 0 0 0 1  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: system.ruby.network.netifs7: Adding input port:system.ruby.network.ext_links7.network_links1 with vnets 
+      0: global: Returning shortest path
+(src-(2*max_machines)): 3, (next-(2*max_machines)): 1, src: 19, next: 17, vnet:0 result: [NetDest (20)  - 1 1 0 0  -  -  - 1 1 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 3, (next-(2*max_machines)): 1, src: 19, next: 17, vnet:1 result: [NetDest (20)  - 1 1 0 0  -  -  - 1 1 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 3, (next-(2*max_machines)): 1, src: 19, next: 17, vnet:2 result: [NetDest (20)  - 1 1 0 0  -  -  - 1 1 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 3, (next-(2*max_machines)): 1, src: 19, next: 17, vnet:3 result: [NetDest (20)  - 1 1 0 0  -  -  - 1 1 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 3, (next-(2*max_machines)): 1, src: 19, next: 17, vnet:4 result: [NetDest (20)  - 1 1 0 0  -  -  - 1 1 0 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 3, (next-(2*max_machines)): 2, src: 19, next: 18, vnet:0 result: [NetDest (20)  - 1 0 1 0  -  -  - 1 0 1 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 3, (next-(2*max_machines)): 2, src: 19, next: 18, vnet:1 result: [NetDest (20)  - 1 0 1 0  -  -  - 1 0 1 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 3, (next-(2*max_machines)): 2, src: 19, next: 18, vnet:2 result: [NetDest (20)  - 1 0 1 0  -  -  - 1 0 1 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 3, (next-(2*max_machines)): 2, src: 19, next: 18, vnet:3 result: [NetDest (20)  - 1 0 1 0  -  -  - 1 0 1 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+      0: global: Returning shortest path
+(src-(2*max_machines)): 3, (next-(2*max_machines)): 2, src: 19, next: 18, vnet:4 result: [NetDest (20)  - 1 0 1 0  -  -  - 1 0 1 0  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - ]
+gem5 Simulator System.  https://www.gem5.org
+gem5 is copyrighted software; use the --copyright option for details.
+
+gem5 version 25.1.0.0
+gem5 compiled Apr 20 2026 17:39:19
+gem5 started Apr 20 2026 17:40:27
+gem5 executing on labpc-pid, pid 812479
+command line: ./build/NULL/gem5.opt --debug-flags=RubyNetwork configs/example/garnet_synth_traffic.py --num-cpus=4 --num-dirs=4 --network=garnet --topology=Mesh_XY --mesh-rows=2 --sim-cycles=10000 --synthetic=uniform_random --injectionrate=0.01
+
+    500: system.ruby.network.routers0: Router 0 woke up
+    500: system.ruby.network.routers0: CrossbarSwitch at Router 0 woke up at time: 1
+    500: system.ruby.network.routers1: Router 1 woke up
+    500: system.ruby.network.routers1: CrossbarSwitch at Router 1 woke up at time: 1
+    500: system.ruby.network.routers2: Router 2 woke up
+    500: system.ruby.network.routers2: CrossbarSwitch at Router 2 woke up at time: 1
+    500: system.ruby.network.routers3: Router 3 woke up
+    500: system.ruby.network.routers3: CrossbarSwitch at Router 3 woke up at time: 1
+   1000: system.ruby.network.routers0: Router 0 woke up
+   1000: system.ruby.network.routers0: CrossbarSwitch at Router 0 woke up at time: 2
+   1000: system.ruby.network.routers1: Router 1 woke up
+   1000: system.ruby.network.routers1: CrossbarSwitch at Router 1 woke up at time: 2
+   1000: system.ruby.network.routers2: Router 2 woke up
+   1000: system.ruby.network.routers2: CrossbarSwitch at Router 2 woke up at time: 2
+   1000: system.ruby.network.routers3: Router 3 woke up
+   1000: system.ruby.network.routers3: CrossbarSwitch at Router 3 woke up at time: 2
+   1500: system.ruby.network.routers0: Router 0 woke up
+   1500: system.ruby.network.routers0: CrossbarSwitch at Router 0 woke up at time: 3
+   1500: system.ruby.network.routers1: Router 1 woke up
+   1500: system.ruby.network.routers1: CrossbarSwitch at Router 1 woke up at time: 3
+   1500: system.ruby.network.routers2: Router 2 woke up
+   1500: system.ruby.network.routers2: CrossbarSwitch at Router 2 woke up at time: 3
+   1500: system.ruby.network.routers3: Router 3 woke up
+   1500: system.ruby.network.routers3: CrossbarSwitch at Router 3 woke up at time: 3
+   2000: system.ruby.network.routers0: Router 0 woke up
+   2000: system.ruby.network.routers0: CrossbarSwitch at Router 0 woke up at time: 4
+   2000: system.ruby.network.routers1: Router 1 woke up
+   2000: system.ruby.network.routers1: CrossbarSwitch at Router 1 woke up at time: 4
+   2000: system.ruby.network.routers2: Router 2 woke up
+   2000: system.ruby.network.routers2: CrossbarSwitch at Router 2 woke up at time: 4
+   2000: system.ruby.network.routers3: Router 3 woke up
+   2000: system.ruby.network.routers3: CrossbarSwitch at Router 3 woke up at time: 4
+   2500: system.ruby.network.routers0: Router 0 woke up
+   2500: system.ruby.network.routers0: CrossbarSwitch at Router 0 woke up at time: 5
+   2500: system.ruby.network.routers1: Router 1 woke up
+   2500: system.ruby.network.routers1: CrossbarSwitch at Router 1 woke up at time: 5
+   2500: system.ruby.network.routers2: Router 2 woke up
+   2500: system.ruby.network.routers2: CrossbarSwitch at Router 2 woke up at time: 5
+   2500: system.ruby.network.routers3: Router 3 woke up
+   2500: system.ruby.network.routers3: CrossbarSwitch at Router 3 woke up at time: 5
+   3000: system.ruby.network.routers0: Router 0 woke up
+   3000: system.ruby.network.routers0: CrossbarSwitch at Router 0 woke up at time: 6
+   3000: system.ruby.network.routers1: Router 1 woke up
+   3000: system.ruby.network.routers1: CrossbarSwitch at Router 1 woke up at time: 6
+   3000: system.ruby.network.routers2: Router 2 woke up
+   3000: system.ruby.network.routers2: CrossbarSwitch at Router 2 woke up at time: 6
+   3000: system.ruby.network.routers3: Router 3 woke up
+   3000: system.ruby.network.routers3: CrossbarSwitch at Router 3 woke up at time: 6
+   3500: system.ruby.network.routers0: Router 0 woke up
+   3500: system.ruby.network.routers0: CrossbarSwitch at Router 0 woke up at time: 7
+   3500: system.ruby.network.routers1: Router 1 woke up
+   3500: system.ruby.network.routers1: CrossbarSwitch at Router 1 woke up at time: 7
+   3500: system.ruby.network.routers2: Router 2 woke up
+   3500: system.ruby.network.routers2: CrossbarSwitch at Router 2 woke up at time: 7
+   3500: system.ruby.network.routers3: Router 3 woke up
+   3500: system.ruby.network.routers3: CrossbarSwitch at Router 3 woke up at time: 7
+   4000: system.ruby.network.routers0: Router 0 woke up
+   4000: system.ruby.network.routers0: CrossbarSwitch at Router 0 woke up at time: 8
+   4000: system.ruby.network.routers1: Router 1 woke up
+   4000: system.ruby.network.routers1: CrossbarSwitch at Router 1 woke up at time: 8
+   4000: system.ruby.network.routers2: Router 2 woke up
+   4000: system.ruby.network.routers2: CrossbarSwitch at Router 2 woke up at time: 8
+   4000: system.ruby.network.routers3: Router 3 woke up
+   4000: system.ruby.network.routers3: CrossbarSwitch at Router 3 woke up at time: 8
+   4500: system.ruby.network.routers0: Router 0 woke up
+   4500: system.ruby.network.routers0: CrossbarSwitch at Router 0 woke up at time: 9
+   4500: system.ruby.network.routers1: Router 1 woke up
+   4500: system.ruby.network.routers1: CrossbarSwitch at Router 1 woke up at time: 9
+   4500: system.ruby.network.routers2: Router 2 woke up
+   4500: system.ruby.network.routers2: CrossbarSwitch at Router 2 woke up at time: 9
+   4500: system.ruby.network.routers3: Router 3 woke up
+   4500: system.ruby.network.routers3: CrossbarSwitch at Router 3 woke up at time: 9
+   5000: system.ruby.network.routers0: Router 0 woke up
+   5000: system.ruby.network.routers0: CrossbarSwitch at Router 0 woke up at time: 10
+   5000: system.ruby.network.routers1: Router 1 woke up
+   5000: system.ruby.network.routers1: CrossbarSwitch at Router 1 woke up at time: 10
+   5000: system.ruby.network.routers2: Router 2 woke up
+   5000: system.ruby.network.routers2: CrossbarSwitch at Router 2 woke up at time: 10
+   5000: system.ruby.network.routers3: Router 3 woke up
+   5000: system.ruby.network.routers3: CrossbarSwitch at Router 3 woke up at time: 10
+   5500: system.ruby.network.routers0: Router 0 woke up
+   5500: system.ruby.network.routers0: CrossbarSwitch at Router 0 woke up at time: 11
+   5500: system.ruby.network.routers1: Router 1 woke up
+   5500: system.ruby.network.routers1: CrossbarSwitch at Router 1 woke up at time: 11
+   5500: system.ruby.network.routers2: Router 2 woke up
+   5500: system.ruby.network.routers2: CrossbarSwitch at Router 2 woke up at time: 11
+   5500: system.ruby.network.routers3: Router 3 woke up
+   5500: system.ruby.network.routers3: CrossbarSwitch at Router 3 woke up at time: 11
+   6000: system.ruby.network.routers0: Router 0 woke up
+   6000: system.ruby.network.routers0: CrossbarSwitch at Router 0 woke up at time: 12
+   6000: system.ruby.network.routers1: Router 1 woke up
+   6000: system.ruby.network.routers1: CrossbarSwitch at Router 1 woke up at time: 12
+   6000: system.ruby.network.routers2: Router 2 woke up
+   6000: system.ruby.network.routers2: CrossbarSwitch at Router 2 woke up at time: 12
+   6000: system.ruby.network.routers3: Router 3 woke up
+   6000: system.ruby.network.routers3: CrossbarSwitch at Router 3 woke up at time: 12
+   6500: system.ruby.network.routers0: Router 0 woke up
+   6500: system.ruby.network.routers0: CrossbarSwitch at Router 0 woke up at time: 13
+   6500: system.ruby.network.routers1: Router 1 woke up
+   6500: system.ruby.network.routers1: CrossbarSwitch at Router 1 woke up at time: 13
+   6500: system.ruby.network.routers2: Router 2 woke up
+   6500: system.ruby.network.routers2: CrossbarSwitch at Router 2 woke up at time: 13
+   6500: system.ruby.network.routers3: Router 3 woke up
+   6500: system.ruby.network.routers3: CrossbarSwitch at Router 3 woke up at time: 13
+   7000: system.ruby.network.routers0: Router 0 woke up
+   7000: system.ruby.network.routers0: CrossbarSwitch at Router 0 woke up at time: 14
+   7000: system.ruby.network.routers1: Router 1 woke up
+   7000: system.ruby.network.routers1: CrossbarSwitch at Router 1 woke up at time: 14
+   7000: system.ruby.network.routers2: Router 2 woke up
+   7000: system.ruby.network.routers2: CrossbarSwitch at Router 2 woke up at time: 14
+   7000: system.ruby.network.routers3: Router 3 woke up
+   7000: system.ruby.network.routers3: CrossbarSwitch at Router 3 woke up at time: 14
+   7500: system.ruby.network.routers0: Router 0 woke up
+   7500: system.ruby.network.routers0: CrossbarSwitch at Router 0 woke up at time: 15
+   7500: system.ruby.network.routers1: Router 1 woke up
+   7500: system.ruby.network.routers1: CrossbarSwitch at Router 1 woke up at time: 15
+   7500: system.ruby.network.routers2: Router 2 woke up
+   7500: system.ruby.network.routers2: CrossbarSwitch at Router 2 woke up at time: 15
+   7500: system.ruby.network.routers3: Router 3 woke up
+   7500: system.ruby.network.routers3: CrossbarSwitch at Router 3 woke up at time: 15
+   8000: system.ruby.network.routers0: Router 0 woke up
+   8000: system.ruby.network.routers0: CrossbarSwitch at Router 0 woke up at time: 16
+   8000: system.ruby.network.routers1: Router 1 woke up
+   8000: system.ruby.network.routers1: CrossbarSwitch at Router 1 woke up at time: 16
+   8000: system.ruby.network.routers2: Router 2 woke up
+   8000: system.ruby.network.routers2: CrossbarSwitch at Router 2 woke up at time: 16
+   8000: system.ruby.network.routers3: Router 3 woke up
+   8000: system.ruby.network.routers3: CrossbarSwitch at Router 3 woke up at time: 16
+   8500: system.ruby.network.routers0: Router 0 woke up
+   8500: system.ruby.network.routers0: CrossbarSwitch at Router 0 woke up at time: 17
+   8500: system.ruby.network.routers1: Router 1 woke up
+   8500: system.ruby.network.routers1: CrossbarSwitch at Router 1 woke up at time: 17
+   8500: system.ruby.network.routers2: Router 2 woke up
+   8500: system.ruby.network.routers2: CrossbarSwitch at Router 2 woke up at time: 17
+   8500: system.ruby.network.routers3: Router 3 woke up
+   8500: system.ruby.network.routers3: CrossbarSwitch at Router 3 woke up at time: 17
+   9000: system.ruby.network.routers0: Router 0 woke up
+   9000: system.ruby.network.routers0: CrossbarSwitch at Router 0 woke up at time: 18
+   9000: system.ruby.network.routers1: Router 1 woke up
+   9000: system.ruby.network.routers1: CrossbarSwitch at Router 1 woke up at time: 18
+   9000: system.ruby.network.routers2: Router 2 woke up
+   9000: system.ruby.network.routers2: CrossbarSwitch at Router 2 woke up at time: 18
+   9000: system.ruby.network.routers3: Router 3 woke up
+   9000: system.ruby.network.routers3: CrossbarSwitch at Router 3 woke up at time: 18
+   9500: system.ruby.network.routers0: Router 0 woke up
+   9500: system.ruby.network.routers0: CrossbarSwitch at Router 0 woke up at time: 19
+   9500: system.ruby.network.routers1: Router 1 woke up
+   9500: system.ruby.network.routers1: CrossbarSwitch at Router 1 woke up at time: 19
+   9500: system.ruby.network.routers2: Router 2 woke up
+   9500: system.ruby.network.routers2: CrossbarSwitch at Router 2 woke up at time: 19
+   9500: system.ruby.network.routers3: Router 3 woke up
+   9500: system.ruby.network.routers3: CrossbarSwitch at Router 3 woke up at time: 19
+  10000: system.ruby.network.routers0: Router 0 woke up
+  10000: system.ruby.network.routers0: CrossbarSwitch at Router 0 woke up at time: 20
+  10000: system.ruby.network.routers1: Router 1 woke up
+  10000: system.ruby.network.routers1: CrossbarSwitch at Router 1 woke up at time: 20
+  10000: system.ruby.network.routers2: Router 2 woke up
+  10000: system.ruby.network.routers2: CrossbarSwitch at Router 2 woke up at time: 20
+  10000: system.ruby.network.routers3: Router 3 woke up
+  10000: system.ruby.network.routers3: CrossbarSwitch at Router 3 woke up at time: 20
+Exiting @ tick 10000 because Network Tester completed simCycles

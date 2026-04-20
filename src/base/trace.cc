@@ -151,6 +151,8 @@ OstreamLogger::logMessage(Tick when, const std::string &name,
     if (!isEnabled(name))
         return;
 
+    std::lock_guard<std::mutex> lock(log_mutex);
+
     if (!debug::FmtTicksOff && (when != MaxTick))
         ccprintf(stream, "%7d: ", when);
 

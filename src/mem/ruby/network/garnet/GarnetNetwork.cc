@@ -46,6 +46,16 @@
 #include "mem/ruby/network/garnet/Router.hh"
 #include "mem/ruby/system/RubySystem.hh"
 
+#include <algorithm>
+#include <iomanip>
+#include <map>
+#include <mutex>
+#include <sstream>
+#include <string>
+
+#include "debug/FmtFlag.hh"
+#include "debug/FmtTicksOff.hh"
+
 namespace gem5
 {
 
@@ -155,15 +165,62 @@ GarnetNetwork::init()
     schedule(globalWakeupEvent, clockEdge(Cycles(1)));
 }
 
+class BufferedLogger : public trace::Logger
+{
+  public:
+    void logMessage(Tick when, const std::string &name,
+                    const std::string &flag,
+                    const std::string &message) override
+    {
+        std::lock_guard<std::mutex> lock(mutex);
+        std::stringstream ss;
+        if (!debug::FmtTicksOff && (when != MaxTick))
+            ss << std::setw(7) << when << ": ";
+        if (debug::FmtFlag && !flag.empty())
+            ss << flag << ": ";
+        
+        // Use thread-local context name if available
+        std::string context_name = currentContext.empty() ? name : currentContext;
+        if (!context_name.empty())
+            ss << context_name << ": ";
+            
+        ss << message;
+        
+        buffer[context_name] += ss.str();
+    }
+
+    std::ostream &getOstream() override { return std::cerr; }
+
+    static thread_local std::string currentContext;
+    std::map<std::string, std::string> buffer;
+    std::mutex mutex;
+};
+
+thread_local std::string BufferedLogger::currentContext = "";
+
 void
 GarnetNetwork::globalWakeup()
 {
     gem5::EventQueue *eq = gem5::curEventQueue();
+    BufferedLogger *buffered_logger = new BufferedLogger();
+    trace::Logger *old_logger = trace::getDebugLogger();
+    trace::setDebugLogger(buffered_logger);
+
     #pragma omp parallel for
     for (int i = 0; i < m_routers.size(); i++) {
         gem5::curEventQueue(eq);
+        BufferedLogger::currentContext = m_routers[i]->name();
         m_routers[i]->wakeup();
+        BufferedLogger::currentContext = "";
     }
+
+    trace::setDebugLogger(old_logger);
+
+    // Print buffered messages in order of router name
+    for (auto const& [name, message] : buffered_logger->buffer) {
+        old_logger->getOstream() << message;
+    }
+    delete buffered_logger;
 
     schedule(globalWakeupEvent, clockEdge(Cycles(1)));
 }
