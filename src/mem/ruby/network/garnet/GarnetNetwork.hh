@@ -98,6 +98,7 @@ class GarnetNetwork : public Network
         return m_vnet_type[vnet];
     }
     int getNumRouters();
+    static std::mutex g_scheduling_mutex;
     int get_router_id(int ni, int vnet);
 
 
@@ -229,7 +230,7 @@ class GarnetNetwork : public Network
     GarnetNetwork(const GarnetNetwork& obj);
     GarnetNetwork& operator=(const GarnetNetwork& obj);
 
-    mutable std::mutex stats_mutex;
+    std::mutex stats_mutex;
 
     std::vector<VNET_type > m_vnet_type;
     std::vector<Router *> m_routers;   // All Routers in Network

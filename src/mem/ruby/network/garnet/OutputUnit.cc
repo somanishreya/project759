@@ -142,6 +142,7 @@ OutputUnit::wakeup()
         delete t_credit;
 
         if (m_credit_link->isReady(curTick())) {
+            std::lock_guard<std::mutex> lock(GarnetNetwork::g_scheduling_mutex);
             scheduleEvent(Cycles(1));
         }
     }
@@ -169,7 +170,10 @@ void
 OutputUnit::insert_flit(flit *t_flit)
 {
     outBuffer.insert(t_flit);
-    m_out_link->scheduleEventAbsolute(m_router->clockEdge(Cycles(1)));
+    {
+        std::lock_guard<std::mutex> lock(GarnetNetwork::g_scheduling_mutex);
+        m_out_link->scheduleEventAbsolute(m_router->clockEdge(Cycles(1)));
+    }
 }
 
 bool

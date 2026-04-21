@@ -71,6 +71,8 @@ namespace garnet
  * (see configs/network/Network.py)
  */
 
+std::mutex GarnetNetwork::g_scheduling_mutex;
+
 GarnetNetwork::GarnetNetwork(const Params &p)
     : Network(p), globalWakeupEvent([this]{ globalWakeup(); }, name())
 {
