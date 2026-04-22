@@ -52,13 +52,21 @@ namespace ruby
 namespace garnet
 {
 
+class CreditLink;
+class Router;
+class Credit; //ECE 759
+
 class InputUnit : public Consumer
 {
   public:
+    int get_num_vcs() const { return virtualChannels.size(); }
     InputUnit(int id, PortDirection direction, Router *router);
     ~InputUnit() = default;
 
     void wakeup();
+    void updatePhase();
+    void flushStagedEvents();
+
     void print(std::ostream& out) const {};
 
     inline PortDirection get_direction() { return m_direction; }
@@ -172,6 +180,9 @@ class InputUnit : public Consumer
     // Statistical variables
     std::vector<double> m_num_buffer_writes;
     std::vector<double> m_num_buffer_reads;
+
+    std::vector<Credit*> m_staged_credits;
+    bool m_staged_credit_wakeup = false;
 };
 
 } // namespace garnet

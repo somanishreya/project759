@@ -200,6 +200,8 @@ class BufferedLogger : public trace::Logger
 
 thread_local std::string BufferedLogger::currentContext = "";
 
+
+
 void
 GarnetNetwork::globalWakeup()
 {
@@ -208,12 +210,31 @@ GarnetNetwork::globalWakeup()
     trace::Logger *old_logger = trace::getDebugLogger();
     trace::setDebugLogger(buffered_logger);
 
+    // --- PHASE 1: Parallel Compute ---
+    // All routers perform logic and arbitration in parallel.
     #pragma omp parallel for
     for (int i = 0; i < m_routers.size(); i++) {
         gem5::curEventQueue(eq);
         BufferedLogger::currentContext = m_routers[i]->name();
-        m_routers[i]->wakeup();
+        
+        m_routers[i]->computePhase(); // This is the new compute logic
+        
         BufferedLogger::currentContext = "";
+    }
+
+    // --- PHASE 2: Parallel Update ---
+    // All routers move flits internally and to output staging.
+    #pragma omp parallel for
+    for (int i = 0; i < m_routers.size(); i++) {
+        gem5::curEventQueue(eq);
+        m_routers[i]->updatePhase(); 
+    }
+
+    // --- PHASE 3: Sequential Flush (Safety Barrier) ---
+    // The main thread pushes all events to the gem5 global queue.
+    // This MUST NOT be parallelized.
+    for (int i = 0; i < m_routers.size(); i++) {
+        m_routers[i]->flushStagedEvents();
     }
 
     trace::setDebugLogger(old_logger);
@@ -224,6 +245,7 @@ GarnetNetwork::globalWakeup()
     }
     delete buffered_logger;
 
+    // Reschedule for the next cycle
     schedule(globalWakeupEvent, clockEdge(Cycles(1)));
 }
 

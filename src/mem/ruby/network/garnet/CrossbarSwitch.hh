@@ -56,6 +56,7 @@ class CrossbarSwitch : public Consumer
     CrossbarSwitch(Router *router);
     ~CrossbarSwitch() = default;
     void wakeup();
+    void updatePhase(); // --- CS 759: Parallel Execution ---
     void init();
     void print(std::ostream& out) const {};
 

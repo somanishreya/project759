@@ -62,29 +62,72 @@ CrossbarSwitch::init()
  * output link. The output link is scheduled for wakeup in the next cycle.
  */
 
+//void
+//CrossbarSwitch::wakeup()
+//{
+//    DPRINTF(RubyNetwork, "CrossbarSwitch at Router %d woke up "
+//            "at time: %lld\n",
+//            m_router->get_id(), m_router->curCycle());
+
+//    for (auto& switch_buffer : switchBuffers) {
+//        if (!switch_buffer.isReady(curTick())) {
+//            continue;
+//        }
+
+//        flit *t_flit = switch_buffer.peekTopFlit();
+//        if (t_flit->is_stage(ST_, curTick())) {
+//            int outport = t_flit->get_outport();
+
+            // flit performs LT_ in the next cycle
+//            t_flit->advance_stage(LT_, m_router->clockEdge(Cycles(1)));
+//            t_flit->set_time(m_router->clockEdge(Cycles(1)));
+
+            // This will take care of waking up the Network Link
+            // in the next cycle
+//            m_router->getOutputUnit(outport)->insert_flit(t_flit);
+//            switch_buffer.getTopFlit();
+//            m_crossbar_activity++;
+//        }
+//    }
+//}
+
 void
 CrossbarSwitch::wakeup()
 {
-    DPRINTF(RubyNetwork, "CrossbarSwitch at Router %d woke up "
-            "at time: %lld\n",
-            m_router->get_id(), m_router->curCycle());
+    // --- CS 759: Compute Phase ---
+    // In the parallel model, wakeup() (Stage 1) is a no-op for the Crossbar.
+    // The SwitchAllocator's updatePhase() has already placed flits into 
+    // our switchBuffers via update_sw_winner().
+}
 
+void
+CrossbarSwitch::updatePhase()
+{
+    // --- CS 759: Update Phase ---
+    // This runs sequentially or via thread-parallelism per-router.
+    // We physically move flits from the Crossbar to the OutputUnits.
+    
     for (auto& switch_buffer : switchBuffers) {
         if (!switch_buffer.isReady(curTick())) {
             continue;
         }
 
         flit *t_flit = switch_buffer.peekTopFlit();
+        
+        // Ensure the flit is actually ready for Switch Traversal
         if (t_flit->is_stage(ST_, curTick())) {
             int outport = t_flit->get_outport();
 
-            // flit performs LT_ in the next cycle
+            // Advance flit to Link Traversal (LT_) for the next cycle
             t_flit->advance_stage(LT_, m_router->clockEdge(Cycles(1)));
             t_flit->set_time(m_router->clockEdge(Cycles(1)));
 
-            // This will take care of waking up the Network Link
-            // in the next cycle
+            // Hand the flit over to the OutputUnit. 
+            // Note: OutputUnit::insert_flit is now thread-safe because 
+            // it only touches the OutputUnit's internal staging buffer.
             m_router->getOutputUnit(outport)->insert_flit(t_flit);
+            
+            // Pop the flit from the crossbar buffer
             switch_buffer.getTopFlit();
             m_crossbar_activity++;
         }

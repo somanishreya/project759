@@ -51,11 +51,20 @@ class Router;
 class InputUnit;
 class OutputUnit;
 
+// --- CS 759: Struct to hold staged allocation decisions ---
+struct SwitchDecision {
+    int inport;
+    int invc;
+    int outport;
+    int outvc;
+};
+
 class SwitchAllocator : public Consumer
 {
   public:
     SwitchAllocator(Router *router);
     void wakeup();
+    void updatePhase(); // --- CS 759: New Update Phase ---
     void init();
     void clear_request_vector();
     void check_for_wakeup();
@@ -90,6 +99,9 @@ class SwitchAllocator : public Consumer
     std::vector<int> m_round_robin_inport;
     std::vector<int> m_port_requests;
     std::vector<int> m_vc_winners;
+
+    // --- CS 759: Staging buffer for allocator decisions ---
+    std::vector<SwitchDecision> m_staged_decisions;
 };
 
 } // namespace garnet

@@ -72,6 +72,13 @@ class Router : public BasicRouter, public Consumer
     ~Router() = default;
 
     void wakeup();
+
+    // --- ECE 759: Double Buffering Additions ---
+    void computePhase(); 
+    void updatePhase();
+    void flushStagedEvents(); 
+    // ------------------------------------------
+
     void print(std::ostream& out) const {};
 
     void init();
@@ -143,6 +150,9 @@ class Router : public BasicRouter, public Consumer
     uint32_t functionalWrite(Packet *);
 
   private:
+    // --- ECE 759: Local Event Staging ---
+    std::vector<Cycles> m_staged_wakeups;
+
     Cycles m_latency;
     uint32_t m_virtual_networks, m_vc_per_vnet, m_num_vcs;
     uint32_t m_bit_width;

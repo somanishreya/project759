@@ -129,6 +129,25 @@ OutputUnit::select_free_vc(int vnet)
  * the output VC is marked IDLE.
  */
 
+//void
+//OutputUnit::wakeup()
+//{
+//    if (m_credit_link->isReady(curTick())) {
+//        Credit *t_credit = (Credit*) m_credit_link->consumeLink();
+//        increment_credit(t_credit->get_vc());
+
+//        if (t_credit->is_free_signal())
+//            set_vc_state(IDLE_, t_credit->get_vc(), curTick());
+
+//        delete t_credit;
+
+//        if (m_credit_link->isReady(curTick())) {
+//            std::lock_guard<std::mutex> lock(GarnetNetwork::g_scheduling_mutex);
+//            scheduleEvent(Cycles(1));
+//        }
+//    }
+//}
+
 void
 OutputUnit::wakeup()
 {
@@ -142,8 +161,9 @@ OutputUnit::wakeup()
         delete t_credit;
 
         if (m_credit_link->isReady(curTick())) {
-            std::lock_guard<std::mutex> lock(GarnetNetwork::g_scheduling_mutex);
-            scheduleEvent(Cycles(1));
+            // --- CS 759: Mutex Removed! ---
+            // Instead of scheduling locally and locking, tell the router to stage it.
+            m_router->schedule_wakeup(Cycles(1));
         }
     }
 }
@@ -166,14 +186,58 @@ OutputUnit::set_credit_link(CreditLink *credit_link)
     m_credit_link = credit_link;
 }
 
+//void
+//OutputUnit::insert_flit(flit *t_flit)
+//{
+//    outBuffer.insert(t_flit);
+//    {
+//        std::lock_guard<std::mutex> lock(GarnetNetwork::g_scheduling_mutex);
+//        m_out_link->scheduleEventAbsolute(m_router->clockEdge(Cycles(1)));
+//    }
+//}
+
+void
+OutputUnit::updatePhase()
+{
+    // If you are moving flits from an internal router switch to the output:
+    // This is where you identify a flit is ready and put it in the staging area.
+    
+    if (!m_staged_flits.empty()) {
+        // We DON'T move to outBuffer here because outBuffer.insert() 
+        // might not be thread-safe depending on who else is looking at it.
+        // We just set the flag.
+        m_staged_link_wakeup = true;
+    }
+}
+
+
+void
+OutputUnit::flushStagedEvents()
+{
+    // 1. Move flits from the temporary parallel stage to the actual buffer
+    // This is safe because only the main thread is running this loop.
+    for (auto& t_flit : m_staged_flits) {
+        outBuffer.insert(t_flit);
+    }
+    m_staged_flits.clear(); 
+
+    // 2. Handle the link wakeup
+    if (m_staged_link_wakeup) {
+        // This modifies the gem5 global event queue (scheduleEventAbsolute).
+        // MUST be done here, sequentially.
+        m_out_link->scheduleEventAbsolute(m_router->clockEdge(Cycles(1)));
+        m_staged_link_wakeup = false;
+    }
+}
+
+
 void
 OutputUnit::insert_flit(flit *t_flit)
 {
-    outBuffer.insert(t_flit);
-    {
-        std::lock_guard<std::mutex> lock(GarnetNetwork::g_scheduling_mutex);
-        m_out_link->scheduleEventAbsolute(m_router->clockEdge(Cycles(1)));
-    }
+    // --- CS 759: Mutex Removed! ---
+    // Do not insert into outBuffer or schedule the link yet.
+    // Just safely push it to our thread-local staging buffer.
+    m_staged_flits.push_back(t_flit);
 }
 
 bool

@@ -55,8 +55,8 @@ Router::Router(const Params &p)
     m_network_ptr(nullptr), routingUnit(this), switchAllocator(this),
     crossbarSwitch(this)
 {
-    m_input_unit.clear();
-    m_output_unit.clear();
+    //m_input_unit.clear();
+    //m_output_unit.clear();
 }
 
 void
@@ -68,16 +68,16 @@ Router::init()
     crossbarSwitch.init();
 }
 
-void
-Router::wakeup()
-{
-    DPRINTF(RubyNetwork, "Router %d woke up\n", m_id);
-    assert(clockEdge() == curTick());
+//void
+//Router::wakeup()
+//{
+//    DPRINTF(RubyNetwork, "Router %d woke up\n", m_id);
+//    assert(clockEdge() == curTick());
 
     // check for incoming flits
-    for (int inport = 0; inport < m_input_unit.size(); inport++) {
-        m_input_unit[inport]->wakeup();
-    }
+//    for (int inport = 0; inport < m_input_unit.size(); inport++) {
+//        m_input_unit[inport]->wakeup();
+//    }
 
     // check for incoming credits
     // Note: the credit update is happening before SA
@@ -85,16 +85,80 @@ Router::wakeup()
     //     credit traversal (1-cycle) + SA (1-cycle) + Link Traversal (1-cycle)
     // if we want the credit update to take place after SA, this loop should
     // be moved after the SA request
-    for (int outport = 0; outport < m_output_unit.size(); outport++) {
-        m_output_unit[outport]->wakeup();
-    }
+//    for (int outport = 0; outport < m_output_unit.size(); outport++) {
+//        m_output_unit[outport]->wakeup();
+//    }
 
     // Switch Allocation
-    switchAllocator.wakeup();
+//    switchAllocator.wakeup();
 
     // Switch Traversal
+//    crossbarSwitch.wakeup();
+//}
+
+void
+Router::wakeup()
+{
+    // Redirect to computePhase to satisfy the Consumer interface
+    computePhase();
+}
+
+void
+Router::computePhase()
+{
+    // Safety check: ensure the router is actually initialized
+    if (m_input_unit.empty() && m_output_unit.empty()) {
+        return;
+    }
+
+    DPRINTF(RubyNetwork, "Router %d compute phase at tick %lu\n", m_id, curTick());
+
+    // 1. Input Unit Wakeup
+    for (int inport = 0; inport < m_input_unit.size(); inport++) {
+        if (m_input_unit[inport]) {
+            m_input_unit[inport]->wakeup();
+        }
+    }
+
+    // 2. Output Unit Wakeup (Credit Processing)
+    for (int outport = 0; outport < m_output_unit.size(); outport++) {
+        if (m_output_unit[outport]) {
+            m_output_unit[outport]->wakeup();
+        }
+    }
+
+    // 3. Switch Allocation
+    // This is where the SegFault is triggered. 
+    // Ensure SwitchAllocator uses input_unit->get_num_vcs() internally!
+    switchAllocator.wakeup();
+
+    // 4. Switch Traversal
     crossbarSwitch.wakeup();
 }
+
+void
+Router::updatePhase()
+{
+    // 1. First, handle the Input side (Credits)
+    for (int inport = 0; inport < m_input_unit.size(); inport++) {
+        m_input_unit[inport]->updatePhase(); 
+    }
+
+    // 2. CS 759: EXECUTE Switch Allocation decisions
+    // This moves flits from InputUnits into Crossbar switchBuffers
+    switchAllocator.updatePhase();
+
+    // 3. CS 759: EXECUTE Crossbar Traversal
+    // This moves flits from switchBuffers into OutputUnits
+    crossbarSwitch.updatePhase();
+
+    // 4. Finally, handle the Output side (Links)
+    // This pushes flits from OutputUnit staging onto the physical links
+    for (int outport = 0; outport < m_output_unit.size(); outport++) {
+        m_output_unit[outport]->updatePhase(); 
+    }
+}
+
 
 void
 Router::addInPort(PortDirection inport_dirn,
@@ -176,6 +240,18 @@ Router::schedule_wakeup(Cycles time)
     // wake up after time cycles
     // Disabled for OpenMP Global Wakeup
     // scheduleEvent(time);
+
+    // Thread-safe local staging instead of global min-heap insertion
+    m_staged_wakeups.push_back(time);
+}
+
+void
+Router::flushStagedEvents()
+{
+    for (Cycles t : m_staged_wakeups) {
+        scheduleEvent(t);
+    }
+    m_staged_wakeups.clear();
 }
 
 std::string

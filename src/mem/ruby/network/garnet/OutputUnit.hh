@@ -62,6 +62,8 @@ class OutputUnit : public Consumer
     void set_out_link(NetworkLink *link);
     void set_credit_link(CreditLink *credit_link);
     void wakeup();
+    void updatePhase(); //ECE 759
+    void flushStagedEvents(); //ECE 759
     flitBuffer* getOutQueue();
     void print(std::ostream& out) const {};
     void decrement_credit(int out_vc);
@@ -119,6 +121,9 @@ class OutputUnit : public Consumer
     flitBuffer outBuffer;
     // vc state of downstream router
     std::vector<OutVcState> outVcState;
+
+    std::vector<flit*> m_staged_flits; //ECE 759: Local Staging Buffer
+    bool m_staged_link_wakeup = false;
 };
 
 } // namespace garnet
