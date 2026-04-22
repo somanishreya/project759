@@ -74,9 +74,9 @@ class Router : public BasicRouter, public Consumer
     void wakeup();
 
     // --- ECE 759: Double Buffering Additions ---
-    void computePhase(); 
+    void computePhase();
     void updatePhase();
-    void flushStagedEvents(); 
+    void flushStagedEvents();
     // ------------------------------------------
 
     void print(std::ostream& out) const {};

@@ -201,9 +201,9 @@ OutputUnit::updatePhase()
 {
     // If you are moving flits from an internal router switch to the output:
     // This is where you identify a flit is ready and put it in the staging area.
-    
+
     if (!m_staged_flits.empty()) {
-        // We DON'T move to outBuffer here because outBuffer.insert() 
+        // We DON'T move to outBuffer here because outBuffer.insert()
         // might not be thread-safe depending on who else is looking at it.
         // We just set the flag.
         m_staged_link_wakeup = true;
@@ -219,7 +219,7 @@ OutputUnit::flushStagedEvents()
     for (auto& t_flit : m_staged_flits) {
         outBuffer.insert(t_flit);
     }
-    m_staged_flits.clear(); 
+    m_staged_flits.clear();
 
     // 2. Handle the link wakeup
     if (m_staged_link_wakeup) {

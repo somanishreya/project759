@@ -128,7 +128,7 @@ Router::computePhase()
     }
 
     // 3. Switch Allocation
-    // This is where the SegFault is triggered. 
+    // This is where the SegFault is triggered.
     // Ensure SwitchAllocator uses input_unit->get_num_vcs() internally!
     switchAllocator.wakeup();
 
@@ -141,7 +141,7 @@ Router::updatePhase()
 {
     // 1. First, handle the Input side (Credits)
     for (int inport = 0; inport < m_input_unit.size(); inport++) {
-        m_input_unit[inport]->updatePhase(); 
+        m_input_unit[inport]->updatePhase();
     }
 
     // 2. CS 759: EXECUTE Switch Allocation decisions
@@ -155,7 +155,7 @@ Router::updatePhase()
     // 4. Finally, handle the Output side (Links)
     // This pushes flits from OutputUnit staging onto the physical links
     for (int outport = 0; outport < m_output_unit.size(); outport++) {
-        m_output_unit[outport]->updatePhase(); 
+        m_output_unit[outport]->updatePhase();
     }
 }
 

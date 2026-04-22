@@ -96,7 +96,7 @@ CrossbarSwitch::wakeup()
 {
     // --- CS 759: Compute Phase ---
     // In the parallel model, wakeup() (Stage 1) is a no-op for the Crossbar.
-    // The SwitchAllocator's updatePhase() has already placed flits into 
+    // The SwitchAllocator's updatePhase() has already placed flits into
     // our switchBuffers via update_sw_winner().
 }
 
@@ -106,14 +106,14 @@ CrossbarSwitch::updatePhase()
     // --- CS 759: Update Phase ---
     // This runs sequentially or via thread-parallelism per-router.
     // We physically move flits from the Crossbar to the OutputUnits.
-    
+
     for (auto& switch_buffer : switchBuffers) {
         if (!switch_buffer.isReady(curTick())) {
             continue;
         }
 
         flit *t_flit = switch_buffer.peekTopFlit();
-        
+
         // Ensure the flit is actually ready for Switch Traversal
         if (t_flit->is_stage(ST_, curTick())) {
             int outport = t_flit->get_outport();
@@ -122,11 +122,11 @@ CrossbarSwitch::updatePhase()
             t_flit->advance_stage(LT_, m_router->clockEdge(Cycles(1)));
             t_flit->set_time(m_router->clockEdge(Cycles(1)));
 
-            // Hand the flit over to the OutputUnit. 
-            // Note: OutputUnit::insert_flit is now thread-safe because 
+            // Hand the flit over to the OutputUnit.
+            // Note: OutputUnit::insert_flit is now thread-safe because
             // it only touches the OutputUnit's internal staging buffer.
             m_router->getOutputUnit(outport)->insert_flit(t_flit);
-            
+
             // Pop the flit from the crossbar buffer
             switch_buffer.getTopFlit();
             m_crossbar_activity++;

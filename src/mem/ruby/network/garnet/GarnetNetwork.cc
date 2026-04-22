@@ -180,14 +180,14 @@ class BufferedLogger : public trace::Logger
             ss << std::setw(7) << when << ": ";
         if (debug::FmtFlag && !flag.empty())
             ss << flag << ": ";
-        
+
         // Use thread-local context name if available
         std::string context_name = currentContext.empty() ? name : currentContext;
         if (!context_name.empty())
             ss << context_name << ": ";
-            
+
         ss << message;
-        
+
         buffer[context_name] += ss.str();
     }
 
@@ -216,9 +216,9 @@ GarnetNetwork::globalWakeup()
     for (int i = 0; i < m_routers.size(); i++) {
         gem5::curEventQueue(eq);
         BufferedLogger::currentContext = m_routers[i]->name();
-        
+
         m_routers[i]->computePhase(); // This is the new compute logic
-        
+
         BufferedLogger::currentContext = "";
     }
 
@@ -227,7 +227,7 @@ GarnetNetwork::globalWakeup()
     #pragma omp parallel for
     for (int i = 0; i < m_routers.size(); i++) {
         gem5::curEventQueue(eq);
-        m_routers[i]->updatePhase(); 
+        m_routers[i]->updatePhase();
     }
 
     // --- PHASE 3: Sequential Flush (Safety Barrier) ---

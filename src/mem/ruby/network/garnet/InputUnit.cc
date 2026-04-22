@@ -49,7 +49,7 @@ InputUnit::InputUnit(int id, PortDirection direction, Router *router)
     m_vc_per_vnet(m_router->get_vc_per_vnet())
 {
     const int m_num_vcs = m_router->get_num_vcs();
-    
+
     // Safety check for vnet division to avoid division by zero
     int num_vnets = (m_vc_per_vnet > 0) ? (m_num_vcs / m_vc_per_vnet) : 0;
     m_num_buffer_reads.resize(num_vnets, 0);
@@ -70,22 +70,22 @@ InputUnit::wakeup()
     if (m_in_link->isReady(m_router->clockEdge())) {
 
         t_flit = m_in_link->consumeLink();
-        
+
         DPRINTF(RubyNetwork, "Router[%d] Consuming:%s Width: %d Flit:%s\n",
         m_router->get_id(), m_in_link->name(),
         m_router->getBitWidth(), *t_flit);
-        
+
         assert(t_flit->m_width == m_router->getBitWidth());
-        
+
         int vc = t_flit->get_vc();
-        
+
         // --- SAFETY CHECK: Bounds check to prevent SegFault ---
         if (vc >= virtualChannels.size()) {
-            fatal("Router %d received flit with out-of-bounds VC %d (Max: %d)", 
+            fatal("Router %d received flit with out-of-bounds VC %d (Max: %d)",
                   m_router->get_id(), vc, virtualChannels.size());
         }
 
-        t_flit->increment_hops(); 
+        t_flit->increment_hops();
 
         if ((t_flit->get_type() == HEAD_) ||
             (t_flit->get_type() == HEAD_TAIL_)) {
@@ -132,9 +132,9 @@ InputUnit::increment_credit(int in_vc, bool free_signal, Tick curTime)
 {
     DPRINTF(RubyNetwork, "Router[%d]: Sending a credit vc:%d free:%d to %s\n",
     m_router->get_id(), in_vc, free_signal, m_credit_link->name());
-    
+
     Credit *t_credit = new Credit(in_vc, free_signal, curTime);
-   
+
     // Thread-safe: push to staging buffer for the updatePhase to handle
     m_staged_credits.push_back(t_credit);
 }
