@@ -48,6 +48,7 @@
 #define __MEM_RUBY_COMMON_CONSUMER_HH__
 
 #include <iostream>
+#include <mutex>
 #include <set>
 
 #include "sim/clocked_object.hh"
@@ -72,11 +73,7 @@ class Consumer
     virtual void print(std::ostream& out) const = 0;
     virtual void storeEventInfo(int info) {}
 
-    bool
-    alreadyScheduled(Tick time)
-    {
-        return m_wakeup_ticks.find(time) != m_wakeup_ticks.end();
-    }
+    bool alreadyScheduled(Tick time);
 
     ClockedObject *
     getObject()
@@ -86,8 +83,12 @@ class Consumer
 
     void scheduleEventAbsolute(Tick timeAbs);
     void scheduleEvent(Cycles timeDelta);
+    void recordEvent(Cycles timeDelta);
+    void recordEventAbsolute(Tick timeAbs);
+    void descheduleTick(Tick tick);
 
   private:
+    mutable std::recursive_mutex m_consumer_mutex;
     std::set<Tick> m_wakeup_ticks;
     EventFunctionWrapper m_wakeup_event;
     ClockedObject *em;

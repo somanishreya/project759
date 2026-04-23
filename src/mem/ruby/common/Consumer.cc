@@ -52,9 +52,17 @@ Consumer::Consumer(ClockedObject *_em, Event::Priority ev_prio)
       em(_em)
 { }
 
+bool
+Consumer::alreadyScheduled(Tick time)
+{
+    std::lock_guard<std::recursive_mutex> lock(m_consumer_mutex);
+    return m_wakeup_ticks.find(time) != m_wakeup_ticks.end();
+}
+
 void
 Consumer::scheduleEvent(Cycles timeDelta)
 {
+    std::lock_guard<std::recursive_mutex> lock(m_consumer_mutex);
     m_wakeup_ticks.insert(em->clockEdge(timeDelta));
     scheduleNextWakeup();
 }
@@ -62,14 +70,38 @@ Consumer::scheduleEvent(Cycles timeDelta)
 void
 Consumer::scheduleEventAbsolute(Tick evt_time)
 {
+    std::lock_guard<std::recursive_mutex> lock(m_consumer_mutex);
     m_wakeup_ticks.insert(
         divCeil(evt_time, em->clockPeriod()) * em->clockPeriod());
     scheduleNextWakeup();
 }
 
 void
+Consumer::recordEvent(Cycles timeDelta)
+{
+    std::lock_guard<std::recursive_mutex> lock(m_consumer_mutex);
+    m_wakeup_ticks.insert(em->clockEdge(timeDelta));
+}
+
+void
+Consumer::recordEventAbsolute(Tick evt_time)
+{
+    std::lock_guard<std::recursive_mutex> lock(m_consumer_mutex);
+    m_wakeup_ticks.insert(
+        divCeil(evt_time, em->clockPeriod()) * em->clockPeriod());
+}
+
+void
+Consumer::descheduleTick(Tick tick)
+{
+    std::lock_guard<std::recursive_mutex> lock(m_consumer_mutex);
+    m_wakeup_ticks.erase(tick);
+}
+
+void
 Consumer::scheduleNextWakeup()
 {
+    std::lock_guard<std::recursive_mutex> lock(m_consumer_mutex);
     // look for the next tick in the future to schedule
     auto it = m_wakeup_ticks.lower_bound(em->clockEdge());
     if (it != m_wakeup_ticks.end()) {
@@ -85,14 +117,21 @@ Consumer::scheduleNextWakeup()
 void
 Consumer::processCurrentEvent()
 {
-    auto curr = m_wakeup_ticks.begin();
-    assert(em->clockEdge() == *curr);
+    Tick current_tick = em->clockEdge();
+    {
+        std::lock_guard<std::recursive_mutex> lock(m_consumer_mutex);
+        auto it = m_wakeup_ticks.find(current_tick);
+        if (it != m_wakeup_ticks.end()) {
+            m_wakeup_ticks.erase(it);
+        }
+    }
 
-    // remove the current tick from the wakeup list, wake up, and then schedule
-    // the next wakeup
-    m_wakeup_ticks.erase(curr);
     wakeup();
-    scheduleNextWakeup();
+
+    {
+        std::lock_guard<std::recursive_mutex> lock(m_consumer_mutex);
+        scheduleNextWakeup();
+    }
 }
 
 } // namespace ruby

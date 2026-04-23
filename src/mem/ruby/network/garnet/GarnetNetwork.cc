@@ -208,12 +208,17 @@ GarnetNetwork::globalWakeup()
     trace::Logger *old_logger = trace::getDebugLogger();
     trace::setDebugLogger(buffered_logger);
 
+    Tick current_tick = curTick();
+
     #pragma omp parallel for
     for (int i = 0; i < m_routers.size(); i++) {
         gem5::curEventQueue(eq);
-        BufferedLogger::currentContext = m_routers[i]->name();
-        m_routers[i]->wakeup();
-        BufferedLogger::currentContext = "";
+        if (m_routers[i]->alreadyScheduled(current_tick)) {
+            m_routers[i]->descheduleTick(current_tick);
+            BufferedLogger::currentContext = m_routers[i]->name();
+            m_routers[i]->wakeup();
+            BufferedLogger::currentContext = "";
+        }
     }
 
     trace::setDebugLogger(old_logger);
