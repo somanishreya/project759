@@ -100,6 +100,9 @@ SwitchAllocator::wakeup()
     check_for_wakeup();
 }
 
+
+
+
 void
 SwitchAllocator::arbitrate_inports()
 {
@@ -111,26 +114,35 @@ SwitchAllocator::arbitrate_inports()
         int invc = m_round_robin_invc[inport] % actual_vcs;
 
         for (int invc_iter = 0; invc_iter < actual_vcs; invc_iter++) {
-            // DEBUG: See if there is a flit waiting for SA
-            if (input_unit->need_stage(invc, SA_, m_router->clockEdge())) {
+            auto vc_ptr = input_unit->get_vc_ptr(invc);
+
+            // 1. INPUT GUARD: Ensure source VC is in ACTIVE state
+            if (vc_ptr->get_state() == ACTIVE_ && 
+                input_unit->need_stage(invc, SA_, m_router->clockEdge())) {
+                
                 int outport = input_unit->get_outport(invc);
                 int outvc = input_unit->get_outvc(invc);
+                auto out_unit = m_router->getOutputUnit(outport);
 
+                // 2. OUTPUT GUARD: Use the global curTick() function
+                // Note: If 'is_vc_idle' is not found, swap for: !out_unit->is_vc_active(outvc, curTick())
+                if (out_unit->is_vc_idle(outvc, curTick())) {
+                    invc = (invc + 1) % actual_vcs;
+                    continue; 
+                }
+
+                // 3. CREDIT CHECK: Now safe to call
                 if (send_allowed(inport, invc, outport, outvc)) {
-                    // Success! This inport is making a request
                     m_port_requests[inport] = outport;
                     m_vc_winners[inport] = invc;
                     break;
-                } else {
-                    // DEBUG: Request exists but outport/outvc is blocked (no credits)
-                    // std::cout << "Router " << m_router->get_id() << " Inport " << inport 
-                    //           << " blocked by send_allowed for outport " << outport << std::endl;
                 }
             }
             invc = (invc + 1) % actual_vcs;
         }
     }
 }
+
 
 void
 SwitchAllocator::arbitrate_outports()
@@ -180,52 +192,24 @@ SwitchAllocator::arbitrate_outports()
 
 
 
-
-
-void
-SwitchAllocator::updatePhase()
-{
-    if (m_staged_decisions.empty()) return;
-
+void SwitchAllocator::updatePhase() {
     for (auto& decision : m_staged_decisions) {
         auto input_unit = m_router->getInputUnit(decision.inport);
         auto output_unit = m_router->getOutputUnit(decision.outport);
+        auto vc_ptr = input_unit->get_vc_ptr(decision.invc);
 
-        // This call BOTH returns the pointer AND removes it from the buffer
-        flit *t_flit = input_unit->get_vc_ptr(decision.invc)->getTopFlit();
-        
+        flit *t_flit = vc_ptr->getTopFlit(); // The "Pop"
+
         if (t_flit) {
-            // Now we use the pointer we just grabbed
-            bool is_tail = (t_flit->get_type() == TAIL_ || 
-                            t_flit->get_type() == HEAD_TAIL_);
-            
-            // 1. Tell upstream a slot is free
-            input_unit->increment_credit(decision.invc, is_tail, m_router->clockEdge());
-
-            // 2. Execute crossing logic
-            std::cout << "EXECUTE: Router " << m_router->get_id() 
-                      << " | Flit " << t_flit->get_id() 
-                      << " crossing to Port " << decision.outport << std::endl;
-            
-            m_router->grant_switch(decision.inport, t_flit); 
-
-            t_flit->set_outport(decision.outport);
-            t_flit->set_vc(decision.outvc);
-            t_flit->advance_stage(ST_, m_router->clockEdge());
-
-            // 3. Move flit to OutputUnit
             output_unit->insert_flit(t_flit);
-            output_unit->wakeup(); 
-            
-        } else {
-            // This should only happen if another thread or function 
-            // emptied the buffer unexpectedly
-            std::cerr << "ERROR: VC " << decision.invc << " was empty!" << std::endl;
+            // REMOVED: vc_ptr->set_state(...) 
+            // Let the InputUnit handle the paperwork.
         }
     }
     m_staged_decisions.clear();
-    std::cout << "CLEARING" << std::endl;
 }
+
+
 
 bool
 SwitchAllocator::send_allowed(int inport, int invc, int outport, int outvc)
@@ -274,6 +258,7 @@ SwitchAllocator::vc_allocate(int outport, int inport, int invc)
     return outvc;
 }
 
+
 void
 SwitchAllocator::check_for_wakeup()
 {
@@ -283,8 +268,17 @@ SwitchAllocator::check_for_wakeup()
 
     for (int i = 0; i < m_num_inports; i++) {
         auto input_unit = m_router->getInputUnit(i);
+        if (!input_unit) continue;
+
         for (int j = 0; j < m_num_vcs; j++) {
-            if (input_unit->need_stage(j, SA_, nextCycle)) {
+            auto vc_ptr = input_unit->get_vc_ptr(j);
+            
+            // --- THE FIX ---
+            // Only ask if a stage is needed if the VC is actually ACTIVE.
+            // This prevents the assertion crash when a flit arrives but 
+            // the state machine hasn't officially 'activated' it yet.
+            if (vc_ptr->get_state() == ACTIVE_ && 
+                input_unit->need_stage(j, SA_, nextCycle)) {
                 m_router->schedule_wakeup(Cycles(1));
                 return;
             }

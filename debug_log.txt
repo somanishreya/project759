@@ -200,119 +200,1888 @@ gem5 Simulator System.  https://www.gem5.org
 gem5 is copyrighted software; use the --copyright option for details.
 
 gem5 version 25.1.0.0
-gem5 compiled Apr 23 2026 22:53:22
-gem5 started Apr 23 2026 22:54:28
-gem5 executing on DESKTOP-D0O9BA6, pid 480961
-command line: ./build/Garnet_standalone/gem5.opt configs/example/garnet_synth_traffic.py --num-cpus=64 --num-dirs=64 --network=garnet --topology=Mesh_XY --mesh-rows=8 --sim-cycles=100000 --synthetic=uniform_random --injectionrate=0.1
+gem5 compiled Apr 24 2026 01:39:04
+gem5 started Apr 24 2026 01:47:59
+gem5 executing on DESKTOP-D0O9BA6, pid 502600
+command line: ./build/Garnet_standalone/gem5.opt configs/example/garnet_synth_traffic.py --num-cpus=64 --num-dirs=64 --network=garnet --topology=Mesh_XY --mesh-rows=8 --sim-cycles=100000 --synthetic=uniform_random --injectionrate=0.04
 
 src/mem/ruby/system/Sequencer.cc:707: warn: Replacement policy updates recently became the responsibility of SLICC state machines. Make sure to setMRU() near callbacks in .sm files!
-NI 61 HEARTBEAT at 1500
-NI 61 sees message ready on Vnet 0
-CHECK 3: NI 61 attempting to flitisize at 1500
-NI 61 successfully flitisized message!
-NI 60 sees message ready on Vnet 0
-CHECK 3: NI 60 attempting to flitisize at 1500
-NI 60 successfully flitisized message!
+NI 55 HEARTBEAT at 1500
 NI 55 sees message ready on Vnet 2
 CHECK 3: NI 55 attempting to flitisize at 1500
 NI 55 successfully flitisized message!
-NI 42 sees message ready on Vnet 1
-CHECK 3: NI 42 attempting to flitisize at 1500
-NI 42 successfully flitisized message!
 NI 4 sees message ready on Vnet 1
 CHECK 3: NI 4 attempting to flitisize at 1500
 NI 4 successfully flitisized message!
 [TICK 2500] ROUTER 4 RECEIVED Flit ID: 0 on VC: 4
   -> Flit 0 assigned Outport: 3
-[STAGED] Router 4 | VC 4 | Staged Count: 1
-EXECUTE: Router 4 | Flit 0 crossing to Port 3
-CLEARING
-[TICK 2500] ROUTER 42 RECEIVED Flit ID: 0 on VC: 4
-  -> Flit 0 assigned Outport: 2
-[STAGED] Router 42 | VC 4 | Staged Count: 1
-EXECUTE: Router 42 | Flit 0 crossing to Port 2
-CLEARING
 [TICK 2500] ROUTER 55 RECEIVED Flit ID: 0 on VC: 8
   -> Flit 0 assigned Outport: 3
-[STAGED] Router 55 | VC 8 | Staged Count: 1
-EXECUTE: Router 55 | Flit 0 crossing to Port 3
-CLEARING
-[TICK 2500] ROUTER 60 RECEIVED Flit ID: 0 on VC: 0
-  -> Flit 0 assigned Outport: 3
-[STAGED] Router 60 | VC 0 | Staged Count: 1
-EXECUTE: Router 60 | Flit 0 crossing to Port 3
-CLEARING
-[TICK 2500] ROUTER 61 RECEIVED Flit ID: 0 on VC: 0
-  -> Flit 0 assigned Outport: 3
-[STAGED] Router 61 | VC 0 | Staged Count: 1
-EXECUTE: Router 61 | Flit 0 crossing to Port 3
-CLEARING
-[ST-SUCCESS] Router 4 pushing Flit 0 to OutputUnit 3
-[ST-SUCCESS] Router 42 pushing Flit 0 to OutputUnit 2
-[ST-SUCCESS] Router 55 pushing Flit 0 to OutputUnit 3
-[ST-SUCCESS] Router 60 pushing Flit 0 to OutputUnit 3
-[ST-SUCCESS] Router 61 pushing Flit 0 to OutputUnit 3
-[FLUSH-DATA] Router 4 Port 3: Moving 2 flits to outBuffer at Tick 2500
-   -> Flit ID 0 is now on the Link.
-   -> Flit ID 0 is now on the Link.
-[FLUSH-WAKE] Router 4 Port 3: Scheduling Link Wakeup for next cycle.
-[FLUSH-DATA] Router 42 Port 2: Moving 2 flits to outBuffer at Tick 2500
-   -> Flit ID 0 is now on the Link.
-   -> Flit ID 0 is now on the Link.
-[FLUSH-WAKE] Router 42 Port 2: Scheduling Link Wakeup for next cycle.
-[FLUSH-DATA] Router 55 Port 3: Moving 2 flits to outBuffer at Tick 2500
-   -> Flit ID 0 is now on the Link.
-   -> Flit ID 0 is now on the Link.
-[FLUSH-WAKE] Router 55 Port 3: Scheduling Link Wakeup for next cycle.
-[FLUSH-DATA] Router 60 Port 3: Moving 2 flits to outBuffer at Tick 2500
-   -> Flit ID 0 is now on the Link.
-   -> Flit ID 0 is now on the Link.
-[FLUSH-WAKE] Router 60 Port 3: Scheduling Link Wakeup for next cycle.
-[FLUSH-DATA] Router 61 Port 3: Moving 2 flits to outBuffer at Tick 2500
-   -> Flit ID 0 is now on the Link.
-   -> Flit ID 0 is now on the Link.
-[FLUSH-WAKE] Router 61 Port 3: Scheduling Link Wakeup for next cycle.
-NI 22 sees message ready on Vnet 0
-CHECK 3: NI 22 attempting to flitisize at 2500
-NI 22 successfully flitisized message!
 NI 29 sees message ready on Vnet 1
 CHECK 3: NI 29 attempting to flitisize at 2500
 NI 29 successfully flitisized message!
 [TICK 3000] ROUTER 55 RECEIVED Flit ID: 1 on VC: 8
-gem5.opt: src/mem/ruby/network/garnet/VirtualChannel.cc:71: bool gem5::ruby::garnet::VirtualChannel::need_stage(gem5::ruby::garnet::flit_stage, gem5::Tick): Assertion `m_vc_state.first == ACTIVE_ && m_vc_state.second <= time' failed.
-Program aborted at tick 3000
---- BEGIN LIBC BACKTRACE ---
-./build/Garnet_standalone/gem5.opt(_ZN4gem515print_backtraceEv+0x30)[0x592a56fcfca0]
-./build/Garnet_standalone/gem5.opt(_ZN4gem512abortHandlerEi+0x4c)[0x592a56ffb4fc]
-/lib/x86_64-linux-gnu/libc.so.6(+0x45330)[0x7fec1d245330]
-/lib/x86_64-linux-gnu/libc.so.6(pthread_kill+0x11c)[0x7fec1d29eb2c]
-/lib/x86_64-linux-gnu/libc.so.6(gsignal+0x1e)[0x7fec1d24527e]
-/lib/x86_64-linux-gnu/libc.so.6(abort+0xdf)[0x7fec1d2288ff]
-/lib/x86_64-linux-gnu/libc.so.6(+0x2881b)[0x7fec1d22881b]
-/lib/x86_64-linux-gnu/libc.so.6(+0x3b517)[0x7fec1d23b517]
-./build/Garnet_standalone/gem5.opt(+0x1146bfe)[0x592a57805bfe]
-./build/Garnet_standalone/gem5.opt(_ZN4gem54ruby6garnet15SwitchAllocator17arbitrate_inportsEv+0x184)[0x592a57803f84]
-./build/Garnet_standalone/gem5.opt(_ZN4gem54ruby6garnet15SwitchAllocator6wakeupEv+0x11a)[0x592a57804c6a]
-./build/Garnet_standalone/gem5.opt(_ZN4gem54ruby6garnet6Router12computePhaseEv+0xeb)[0x592a577fc3cb]
-./build/Garnet_standalone/gem5.opt(+0x101cee6)[0x592a576dbee6]
-./build/Garnet_standalone/gem5.opt(_ZN4gem510EventQueue10serviceOneEv+0xb7)[0x592a56fe7b87]
-./build/Garnet_standalone/gem5.opt(_ZN4gem59doSimLoopEPNS_10EventQueueE+0x70)[0x592a57026230]
-./build/Garnet_standalone/gem5.opt(_ZN4gem58simulateEm+0x25e)[0x592a570269ce]
-./build/Garnet_standalone/gem5.opt(+0x1895b82)[0x592a57f54b82]
-./build/Garnet_standalone/gem5.opt(+0x69898a)[0x592a56d5798a]
-/lib/x86_64-linux-gnu/libpython3.12.so.1.0(+0x1df4b8)[0x7fec1e5df4b8]
-/lib/x86_64-linux-gnu/libpython3.12.so.1.0(_PyObject_Call+0x5c)[0x7fec1e58485c]
-/lib/x86_64-linux-gnu/libpython3.12.so.1.0(_PyEval_EvalFrameDefault+0x8ec)[0x7fec1e519dec]
-/lib/x86_64-linux-gnu/libpython3.12.so.1.0(PyEval_EvalCode+0x20f)[0x7fec1e6a091f]
-/lib/x86_64-linux-gnu/libpython3.12.so.1.0(+0x29c8b0)[0x7fec1e69c8b0]
-/lib/x86_64-linux-gnu/libpython3.12.so.1.0(+0x1dfadc)[0x7fec1e5dfadc]
-/lib/x86_64-linux-gnu/libpython3.12.so.1.0(PyObject_Vectorcall+0x5c)[0x7fec1e582b2c]
-/lib/x86_64-linux-gnu/libpython3.12.so.1.0(_PyEval_EvalFrameDefault+0x40ee)[0x7fec1e51d5ee]
-./build/Garnet_standalone/gem5.opt(+0x944289)[0x592a57003289]
-./build/Garnet_standalone/gem5.opt(main+0x218)[0x592a56d063b8]
-/lib/x86_64-linux-gnu/libc.so.6(+0x2a1ca)[0x7fec1d22a1ca]
-/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0x8b)[0x7fec1d22a28b]
-./build/Garnet_standalone/gem5.opt(_start+0x25)[0x592a56d43c35]
---- END LIBC BACKTRACE ---
-For more info on how to address this issue, please visit https://www.gem5.org/documentation/general_docs/common-errors/ 
-
+[TICK 3500] ROUTER 55 RECEIVED Flit ID: 2 on VC: 8
+[TICK 3500] ROUTER 29 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 3
+[TICK 4000] ROUTER 55 RECEIVED Flit ID: 3 on VC: 8
+NI 8 sees message ready on Vnet 1
+CHECK 3: NI 8 attempting to flitisize at 4500
+NI 8 successfully flitisized message!
+NI 12 sees message ready on Vnet 2
+CHECK 3: NI 12 attempting to flitisize at 4500
+NI 12 successfully flitisized message!
+[TICK 5500] ROUTER 8 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 4
+[TICK 5500] ROUTER 12 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 3
+NI 54 sees message ready on Vnet 0
+CHECK 3: NI 54 attempting to flitisize at 5500
+NI 54 successfully flitisized message!
+NI 51 sees message ready on Vnet 2
+CHECK 3: NI 51 attempting to flitisize at 5500
+NI 51 successfully flitisized message!
+NI 1 sees message ready on Vnet 0
+CHECK 3: NI 1 attempting to flitisize at 5500
+NI 1 successfully flitisized message!
+[TICK 6000] ROUTER 12 RECEIVED Flit ID: 1 on VC: 8
+[TICK 6500] ROUTER 12 RECEIVED Flit ID: 2 on VC: 8
+[TICK 6500] ROUTER 1 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+[TICK 6500] ROUTER 51 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 3
+[TICK 6500] ROUTER 54 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+NI 8 sees message ready on Vnet 1
+CHECK 3: NI 8 attempting to flitisize at 6500
+NI 8 successfully flitisized message!
+NI 9 sees message ready on Vnet 1
+CHECK 3: NI 9 attempting to flitisize at 6500
+NI 9 successfully flitisized message!
+NI 49 sees message ready on Vnet 1
+CHECK 3: NI 49 attempting to flitisize at 6500
+NI 49 successfully flitisized message!
+[TICK 7000] ROUTER 51 RECEIVED Flit ID: 1 on VC: 8
+[TICK 7000] ROUTER 12 RECEIVED Flit ID: 3 on VC: 8
+[TICK 7500] ROUTER 51 RECEIVED Flit ID: 2 on VC: 8
+[TICK 7500] ROUTER 8 RECEIVED Flit ID: 0 on VC: 5
+  -> Flit 0 assigned Outport: 3
+[TICK 7500] ROUTER 9 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 5
+[TICK 7500] ROUTER 49 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 4
+NI 31 sees message ready on Vnet 1
+CHECK 3: NI 31 attempting to flitisize at 7500
+NI 31 successfully flitisized message!
+NI 1 sees message ready on Vnet 1
+CHECK 3: NI 1 attempting to flitisize at 7500
+NI 1 successfully flitisized message!
+[TICK 8000] ROUTER 51 RECEIVED Flit ID: 3 on VC: 8
+[TICK 8500] ROUTER 1 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 3
+[TICK 8500] ROUTER 31 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 3
+NI 13 sees message ready on Vnet 2
+CHECK 3: NI 13 attempting to flitisize at 8500
+NI 13 successfully flitisized message!
+[TICK 9500] ROUTER 13 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 3
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 9500
+NI 13 successfully flitisized message!
+NI 14 sees message ready on Vnet 2
+CHECK 3: NI 14 attempting to flitisize at 9500
+NI 14 successfully flitisized message!
+[TICK 10000] ROUTER 13 RECEIVED Flit ID: 1 on VC: 8
+[TICK 10500] ROUTER 13 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+[TICK 10500] ROUTER 14 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 3
+NI 3 sees message ready on Vnet 1
+CHECK 3: NI 3 attempting to flitisize at 10500
+NI 3 successfully flitisized message!
+NI 8 sees message ready on Vnet 1
+CHECK 3: NI 8 attempting to flitisize at 10500
+NI 8 successfully flitisized message!
+NI 11 sees message ready on Vnet 0
+CHECK 3: NI 11 attempting to flitisize at 10500
+NI 11 successfully flitisized message!
+NI 29 sees message ready on Vnet 0
+CHECK 3: NI 29 attempting to flitisize at 10500
+NI 29 successfully flitisized message!
+NI 54 sees message ready on Vnet 2
+CHECK 3: NI 54 attempting to flitisize at 10500
+NI 54 successfully flitisized message!
+[TICK 11000] ROUTER 14 RECEIVED Flit ID: 1 on VC: 8
+[TICK 11000] ROUTER 13 RECEIVED Flit ID: 2 on VC: 8
+[TICK 11500] ROUTER 13 RECEIVED Flit ID: 3 on VC: 8
+[TICK 11500] ROUTER 14 RECEIVED Flit ID: 2 on VC: 8
+[TICK 11500] ROUTER 3 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 2
+[TICK 11500] ROUTER 8 RECEIVED Flit ID: 0 on VC: 6
+  -> Flit 0 assigned Outport: 3
+[TICK 11500] ROUTER 11 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+[TICK 11500] ROUTER 29 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+[TICK 11500] ROUTER 54 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 3
+NI 45 sees message ready on Vnet 0
+CHECK 3: NI 45 attempting to flitisize at 11500
+NI 45 successfully flitisized message!
+[TICK 12000] ROUTER 54 RECEIVED Flit ID: 1 on VC: 8
+[TICK 12000] ROUTER 14 RECEIVED Flit ID: 3 on VC: 8
+[TICK 12500] ROUTER 54 RECEIVED Flit ID: 2 on VC: 8
+[TICK 12500] ROUTER 45 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+NI 14 sees message ready on Vnet 1
+CHECK 3: NI 14 attempting to flitisize at 12500
+NI 14 successfully flitisized message!
+NI 28 sees message ready on Vnet 0
+CHECK 3: NI 28 attempting to flitisize at 12500
+NI 28 successfully flitisized message!
+NI 42 sees message ready on Vnet 0
+CHECK 3: NI 42 attempting to flitisize at 12500
+NI 42 successfully flitisized message!
+[TICK 13000] ROUTER 54 RECEIVED Flit ID: 3 on VC: 8
+[TICK 13500] ROUTER 14 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 3
+[TICK 13500] ROUTER 28 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+[TICK 13500] ROUTER 42 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 4
+NI 12 HEARTBEAT at 13500
+NI 52 sees message ready on Vnet 2
+CHECK 3: NI 52 attempting to flitisize at 13500
+NI 52 successfully flitisized message!
+NI 46 sees message ready on Vnet 0
+CHECK 3: NI 46 attempting to flitisize at 13500
+NI 46 successfully flitisized message!
+[TICK 14500] ROUTER 46 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+[TICK 14500] ROUTER 52 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 3
+NI 20 sees message ready on Vnet 1
+CHECK 3: NI 20 attempting to flitisize at 14500
+NI 20 successfully flitisized message!
+NI 26 sees message ready on Vnet 2
+CHECK 3: NI 26 attempting to flitisize at 14500
+NI 26 successfully flitisized message!
+NI 43 sees message ready on Vnet 0
+CHECK 3: NI 43 attempting to flitisize at 14500
+NI 43 successfully flitisized message!
+NI 59 sees message ready on Vnet 2
+CHECK 3: NI 59 attempting to flitisize at 14500
+NI 59 successfully flitisized message!
+NI 60 sees message ready on Vnet 1
+CHECK 3: NI 60 attempting to flitisize at 14500
+NI 60 successfully flitisized message!
+[TICK 15000] ROUTER 52 RECEIVED Flit ID: 1 on VC: 8
+[TICK 15500] ROUTER 52 RECEIVED Flit ID: 2 on VC: 8
+[TICK 15500] ROUTER 20 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 4
+[TICK 15500] ROUTER 26 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 4
+[TICK 15500] ROUTER 43 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+[TICK 15500] ROUTER 59 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 3
+[TICK 15500] ROUTER 60 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 3
+NI 20 sees message ready on Vnet 1
+CHECK 3: NI 20 attempting to flitisize at 15500
+NI 20 successfully flitisized message!
+NI 22 sees message ready on Vnet 2
+CHECK 3: NI 22 attempting to flitisize at 15500
+NI 22 successfully flitisized message!
+[TICK 16000] ROUTER 59 RECEIVED Flit ID: 1 on VC: 8
+[TICK 16000] ROUTER 26 RECEIVED Flit ID: 1 on VC: 8
+[TICK 16000] ROUTER 52 RECEIVED Flit ID: 3 on VC: 8
+[TICK 16500] ROUTER 26 RECEIVED Flit ID: 2 on VC: 8
+[TICK 16500] ROUTER 59 RECEIVED Flit ID: 2 on VC: 8
+[TICK 16500] ROUTER 20 RECEIVED Flit ID: 0 on VC: 5
+  -> Flit 0 assigned Outport: 3
+[TICK 16500] ROUTER 22 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 3
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 16500
+NI 13 successfully flitisized message!
+[TICK 17000] ROUTER 22 RECEIVED Flit ID: 1 on VC: 8
+[TICK 17000] ROUTER 26 RECEIVED Flit ID: 3 on VC: 8
+[TICK 17000] ROUTER 59 RECEIVED Flit ID: 3 on VC: 8
+[TICK 17500] ROUTER 22 RECEIVED Flit ID: 2 on VC: 8
+[TICK 17500] ROUTER 13 RECEIVED Flit ID: 0 on VC: 1
+  -> Flit 0 assigned Outport: 4
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 17500
+NI 13 successfully flitisized message!
+NI 59 sees message ready on Vnet 1
+CHECK 3: NI 59 attempting to flitisize at 17500
+NI 59 successfully flitisized message!
+NI 56 sees message ready on Vnet 1
+CHECK 3: NI 56 attempting to flitisize at 17500
+NI 56 successfully flitisized message!
+NI 4 sees message ready on Vnet 0
+CHECK 3: NI 4 attempting to flitisize at 17500
+NI 4 successfully flitisized message!
+NI 3 sees message ready on Vnet 1
+CHECK 3: NI 3 attempting to flitisize at 17500
+NI 3 successfully flitisized message!
+[TICK 18000] ROUTER 22 RECEIVED Flit ID: 3 on VC: 8
+[TICK 18500] ROUTER 59 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 4
+[TICK 18500] ROUTER 3 RECEIVED Flit ID: 0 on VC: 5
+  -> Flit 0 assigned Outport: 4
+[TICK 18500] ROUTER 4 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 2
+[TICK 18500] ROUTER 13 RECEIVED Flit ID: 0 on VC: 2
+  -> Flit 0 assigned Outport: 3
+[TICK 18500] ROUTER 56 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 3
+NI 12 HEARTBEAT at 18500
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 19500
+NI 13 successfully flitisized message!
+NI 14 sees message ready on Vnet 2
+CHECK 3: NI 14 attempting to flitisize at 19500
+NI 14 successfully flitisized message!
+NI 37 sees message ready on Vnet 0
+CHECK 3: NI 37 attempting to flitisize at 19500
+NI 37 successfully flitisized message!
+NI 5 sees message ready on Vnet 1
+CHECK 3: NI 5 attempting to flitisize at 19500
+NI 5 successfully flitisized message!
+[TICK 20500] ROUTER 5 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 2
+[TICK 20500] ROUTER 13 RECEIVED Flit ID: 0 on VC: 3
+  -> Flit 0 assigned Outport: 3
+[TICK 20500] ROUTER 14 RECEIVED Flit ID: 0 on VC: 9
+  -> Flit 0 assigned Outport: 3
+[TICK 20500] ROUTER 37 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+[TICK 21000] ROUTER 14 RECEIVED Flit ID: 1 on VC: 9
+[TICK 21500] ROUTER 14 RECEIVED Flit ID: 2 on VC: 9
+NI 52 sees message ready on Vnet 0
+CHECK 3: NI 52 attempting to flitisize at 21500
+NI 52 successfully flitisized message!
+NI 46 sees message ready on Vnet 1
+CHECK 3: NI 46 attempting to flitisize at 21500
+NI 46 successfully flitisized message!
+NI 39 sees message ready on Vnet 0
+CHECK 3: NI 39 attempting to flitisize at 21500
+NI 39 successfully flitisized message!
+NI 3 sees message ready on Vnet 0
+CHECK 3: NI 3 attempting to flitisize at 21500
+NI 3 successfully flitisized message!
+[TICK 22000] ROUTER 14 RECEIVED Flit ID: 3 on VC: 9
+[TICK 22500] ROUTER 52 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+[TICK 22500] ROUTER 3 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 4
+[TICK 22500] ROUTER 39 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 2
+[TICK 22500] ROUTER 46 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 3
+NI 56 sees message ready on Vnet 2
+CHECK 3: NI 56 attempting to flitisize at 22500
+NI 56 successfully flitisized message!
+NI 62 sees message ready on Vnet 2
+CHECK 3: NI 62 attempting to flitisize at 22500
+NI 62 successfully flitisized message!
+NI 26 HEARTBEAT at 23000
+[TICK 23500] ROUTER 56 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 3
+[TICK 23500] ROUTER 62 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 3
+NI 39 sees message ready on Vnet 2
+CHECK 3: NI 39 attempting to flitisize at 23500
+NI 39 successfully flitisized message!
+NI 20 sees message ready on Vnet 0
+CHECK 3: NI 20 attempting to flitisize at 23500
+NI 20 successfully flitisized message!
+[TICK 24000] ROUTER 62 RECEIVED Flit ID: 1 on VC: 8
+[TICK 24000] ROUTER 56 RECEIVED Flit ID: 1 on VC: 8
+[TICK 24500] ROUTER 56 RECEIVED Flit ID: 2 on VC: 8
+[TICK 24500] ROUTER 62 RECEIVED Flit ID: 2 on VC: 8
+[TICK 24500] ROUTER 20 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+[TICK 24500] ROUTER 39 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 3
+NI 41 sees message ready on Vnet 1
+CHECK 3: NI 41 attempting to flitisize at 24500
+NI 41 successfully flitisized message!
+[TICK 25000] ROUTER 39 RECEIVED Flit ID: 1 on VC: 8
+[TICK 25000] ROUTER 56 RECEIVED Flit ID: 3 on VC: 8
+[TICK 25000] ROUTER 62 RECEIVED Flit ID: 3 on VC: 8
+[TICK 25500] ROUTER 39 RECEIVED Flit ID: 2 on VC: 8
+[TICK 25500] ROUTER 41 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 4
+NI 61 sees message ready on Vnet 0
+CHECK 3: NI 61 attempting to flitisize at 25500
+NI 61 successfully flitisized message!
+NI 38 sees message ready on Vnet 2
+CHECK 3: NI 38 attempting to flitisize at 25500
+NI 38 successfully flitisized message!
+NI 0 sees message ready on Vnet 0
+CHECK 3: NI 0 attempting to flitisize at 25500
+NI 0 successfully flitisized message!
+[TICK 26000] ROUTER 39 RECEIVED Flit ID: 3 on VC: 8
+[TICK 26500] ROUTER 0 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 2
+[TICK 26500] ROUTER 38 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 4
+[TICK 26500] ROUTER 61 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+NI 13 sees message ready on Vnet 1
+CHECK 3: NI 13 attempting to flitisize at 26500
+NI 13 successfully flitisized message!
+NI 59 HEARTBEAT at 26500
+NI 40 sees message ready on Vnet 1
+CHECK 3: NI 40 attempting to flitisize at 26500
+NI 40 successfully flitisized message!
+[TICK 27000] ROUTER 38 RECEIVED Flit ID: 1 on VC: 8
+[TICK 27500] ROUTER 38 RECEIVED Flit ID: 2 on VC: 8
+[TICK 27500] ROUTER 13 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 4
+[TICK 27500] ROUTER 40 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 3
+NI 57 sees message ready on Vnet 1
+CHECK 3: NI 57 attempting to flitisize at 27500
+NI 57 successfully flitisized message!
+NI 28 sees message ready on Vnet 2
+CHECK 3: NI 28 attempting to flitisize at 27500
+NI 28 successfully flitisized message!
+NI 19 sees message ready on Vnet 0
+CHECK 3: NI 19 attempting to flitisize at 27500
+NI 19 successfully flitisized message!
+[TICK 28000] ROUTER 38 RECEIVED Flit ID: 3 on VC: 8
+[TICK 28500] ROUTER 19 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 4
+[TICK 28500] ROUTER 28 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 4
+[TICK 28500] ROUTER 57 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 4
+NI 45 sees message ready on Vnet 2
+CHECK 3: NI 45 attempting to flitisize at 28500
+NI 45 successfully flitisized message!
+NI 58 sees message ready on Vnet 0
+CHECK 3: NI 58 attempting to flitisize at 28500
+NI 58 successfully flitisized message!
+[TICK 29000] ROUTER 28 RECEIVED Flit ID: 1 on VC: 8
+[TICK 29500] ROUTER 28 RECEIVED Flit ID: 2 on VC: 8
+[TICK 29500] ROUTER 45 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 3
+[TICK 29500] ROUTER 58 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 4
+NI 12 sees message ready on Vnet 0
+CHECK 3: NI 12 attempting to flitisize at 29500
+NI 12 successfully flitisized message!
+NI 28 HEARTBEAT at 29500
+NI 21 sees message ready on Vnet 2
+CHECK 3: NI 21 attempting to flitisize at 29500
+NI 21 successfully flitisized message!
+NI 18 sees message ready on Vnet 0
+CHECK 3: NI 18 attempting to flitisize at 29500
+NI 18 successfully flitisized message!
+[TICK 30000] ROUTER 45 RECEIVED Flit ID: 1 on VC: 8
+[TICK 30000] ROUTER 28 RECEIVED Flit ID: 3 on VC: 8
+[TICK 30500] ROUTER 12 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+[TICK 30500] ROUTER 45 RECEIVED Flit ID: 2 on VC: 8
+[TICK 30500] ROUTER 18 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 4
+[TICK 30500] ROUTER 21 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 3
+NI 55 sees message ready on Vnet 0
+CHECK 3: NI 55 attempting to flitisize at 30500
+NI 55 successfully flitisized message!
+NI 40 sees message ready on Vnet 0
+CHECK 3: NI 40 attempting to flitisize at 30500
+NI 40 successfully flitisized message!
+[TICK 31000] ROUTER 21 RECEIVED Flit ID: 1 on VC: 8
+[TICK 31000] ROUTER 45 RECEIVED Flit ID: 3 on VC: 8
+[TICK 31500] ROUTER 55 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 2
+[TICK 31500] ROUTER 21 RECEIVED Flit ID: 2 on VC: 8
+[TICK 31500] ROUTER 40 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+NI 27 sees message ready on Vnet 1
+CHECK 3: NI 27 attempting to flitisize at 31500
+NI 27 successfully flitisized message!
+[TICK 32000] ROUTER 21 RECEIVED Flit ID: 3 on VC: 8
+[TICK 32500] ROUTER 27 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 4
+NI 22 HEARTBEAT at 32500
+NI 27 sees message ready on Vnet 2
+CHECK 3: NI 27 attempting to flitisize at 32500
+NI 27 successfully flitisized message!
+[TICK 33500] ROUTER 27 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 4
+NI 57 sees message ready on Vnet 0
+CHECK 3: NI 57 attempting to flitisize at 33500
+NI 57 successfully flitisized message!
+NI 37 sees message ready on Vnet 0
+CHECK 3: NI 37 attempting to flitisize at 33500
+NI 37 successfully flitisized message!
+NI 1 sees message ready on Vnet 1
+CHECK 3: NI 1 attempting to flitisize at 33500
+NI 1 successfully flitisized message!
+[TICK 34000] ROUTER 27 RECEIVED Flit ID: 1 on VC: 8
+[TICK 34500] ROUTER 27 RECEIVED Flit ID: 2 on VC: 8
+[TICK 34500] ROUTER 1 RECEIVED Flit ID: 0 on VC: 5
+  -> Flit 0 assigned Outport: 3
+[TICK 34500] ROUTER 37 RECEIVED Flit ID: 0 on VC: 1
+  -> Flit 0 assigned Outport: 3
+[TICK 34500] ROUTER 57 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+NI 56 sees message ready on Vnet 1
+CHECK 3: NI 56 attempting to flitisize at 34500
+NI 56 successfully flitisized message!
+NI 3 sees message ready on Vnet 2
+CHECK 3: NI 3 attempting to flitisize at 34500
+NI 3 successfully flitisized message!
+NI 5 sees message ready on Vnet 0
+CHECK 3: NI 5 attempting to flitisize at 34500
+NI 5 successfully flitisized message!
+NI 6 sees message ready on Vnet 2
+CHECK 3: NI 6 attempting to flitisize at 34500
+NI 6 successfully flitisized message!
+NI 17 sees message ready on Vnet 1
+CHECK 3: NI 17 attempting to flitisize at 34500
+NI 17 successfully flitisized message!
+NI 49 sees message ready on Vnet 0
+CHECK 3: NI 49 attempting to flitisize at 34500
+NI 49 successfully flitisized message!
+NI 59 HEARTBEAT at 35000
+[TICK 35000] ROUTER 27 RECEIVED Flit ID: 3 on VC: 8
+[TICK 35500] ROUTER 56 RECEIVED Flit ID: 0 on VC: 5
+  -> Flit 0 assigned Outport: 3
+[TICK 35500] ROUTER 3 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 2
+[TICK 35500] ROUTER 5 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 2
+[TICK 35500] ROUTER 6 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 2
+[TICK 35500] ROUTER 17 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 3
+[TICK 35500] ROUTER 49 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 4
+[TICK 36000] ROUTER 6 RECEIVED Flit ID: 1 on VC: 8
+[TICK 36000] ROUTER 3 RECEIVED Flit ID: 1 on VC: 8
+[TICK 36500] ROUTER 3 RECEIVED Flit ID: 2 on VC: 8
+[TICK 36500] ROUTER 6 RECEIVED Flit ID: 2 on VC: 8
+[TICK 37000] ROUTER 3 RECEIVED Flit ID: 3 on VC: 8
+[TICK 37000] ROUTER 6 RECEIVED Flit ID: 3 on VC: 8
+NI 54 sees message ready on Vnet 1
+CHECK 3: NI 54 attempting to flitisize at 37500
+NI 54 successfully flitisized message!
+NI 62 HEARTBEAT at 37500
+NI 6 sees message ready on Vnet 0
+CHECK 3: NI 6 attempting to flitisize at 37500
+NI 6 successfully flitisized message!
+NI 58 sees message ready on Vnet 0
+CHECK 3: NI 58 attempting to flitisize at 37500
+NI 58 successfully flitisized message!
+[TICK 38500] ROUTER 6 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+[TICK 38500] ROUTER 54 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 3
+[TICK 38500] ROUTER 58 RECEIVED Flit ID: 0 on VC: 1
+  -> Flit 0 assigned Outport: 4
+NI 6 sees message ready on Vnet 1
+CHECK 3: NI 6 attempting to flitisize at 38500
+NI 6 successfully flitisized message!
+NI 1 sees message ready on Vnet 2
+CHECK 3: NI 1 attempting to flitisize at 38500
+NI 1 successfully flitisized message!
+NI 31 sees message ready on Vnet 1
+CHECK 3: NI 31 attempting to flitisize at 38500
+NI 31 successfully flitisized message!
+[TICK 39500] ROUTER 1 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 3
+[TICK 39500] ROUTER 6 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 2
+[TICK 39500] ROUTER 31 RECEIVED Flit ID: 0 on VC: 5
+  -> Flit 0 assigned Outport: 3
+NI 52 sees message ready on Vnet 2
+CHECK 3: NI 52 attempting to flitisize at 39500
+NI 52 successfully flitisized message!
+NI 62 sees message ready on Vnet 2
+CHECK 3: NI 62 attempting to flitisize at 39500
+NI 62 successfully flitisized message!
+NI 60 sees message ready on Vnet 0
+CHECK 3: NI 60 attempting to flitisize at 39500
+NI 60 successfully flitisized message!
+NI 45 HEARTBEAT at 40000
+[TICK 40000] ROUTER 1 RECEIVED Flit ID: 1 on VC: 8
+[TICK 40500] ROUTER 62 RECEIVED Flit ID: 0 on VC: 9
+  -> Flit 0 assigned Outport: 3
+[TICK 40500] ROUTER 1 RECEIVED Flit ID: 2 on VC: 8
+[TICK 40500] ROUTER 52 RECEIVED Flit ID: 0 on VC: 9
+  -> Flit 0 assigned Outport: 3
+[TICK 40500] ROUTER 60 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 2
+NI 39 sees message ready on Vnet 0
+CHECK 3: NI 39 attempting to flitisize at 40500
+NI 39 successfully flitisized message!
+NI 24 sees message ready on Vnet 2
+CHECK 3: NI 24 attempting to flitisize at 40500
+NI 24 successfully flitisized message!
+NI 49 sees message ready on Vnet 2
+CHECK 3: NI 49 attempting to flitisize at 40500
+NI 49 successfully flitisized message!
+[TICK 41000] ROUTER 52 RECEIVED Flit ID: 1 on VC: 9
+[TICK 41000] ROUTER 1 RECEIVED Flit ID: 3 on VC: 8
+[TICK 41000] ROUTER 62 RECEIVED Flit ID: 1 on VC: 9
+[TICK 41500] ROUTER 39 RECEIVED Flit ID: 0 on VC: 1
+  -> Flit 0 assigned Outport: 3
+[TICK 41500] ROUTER 52 RECEIVED Flit ID: 2 on VC: 9
+[TICK 41500] ROUTER 62 RECEIVED Flit ID: 2 on VC: 9
+[TICK 41500] ROUTER 24 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 3
+[TICK 41500] ROUTER 49 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 3
+NI 13 sees message ready on Vnet 1
+CHECK 3: NI 13 attempting to flitisize at 41500
+NI 13 successfully flitisized message!
+NI 32 sees message ready on Vnet 0
+CHECK 3: NI 32 attempting to flitisize at 41500
+NI 32 successfully flitisized message!
+[TICK 42000] ROUTER 24 RECEIVED Flit ID: 1 on VC: 8
+NI 59 HEARTBEAT at 42000
+[TICK 42000] ROUTER 49 RECEIVED Flit ID: 1 on VC: 8
+[TICK 42000] ROUTER 52 RECEIVED Flit ID: 3 on VC: 9
+[TICK 42000] ROUTER 62 RECEIVED Flit ID: 3 on VC: 9
+[TICK 42500] ROUTER 24 RECEIVED Flit ID: 2 on VC: 8
+[TICK 42500] ROUTER 49 RECEIVED Flit ID: 2 on VC: 8
+[TICK 42500] ROUTER 13 RECEIVED Flit ID: 0 on VC: 5
+  -> Flit 0 assigned Outport: 4
+[TICK 42500] ROUTER 32 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+NI 14 sees message ready on Vnet 0
+CHECK 3: NI 14 attempting to flitisize at 42500
+NI 14 successfully flitisized message!
+NI 47 sees message ready on Vnet 0
+CHECK 3: NI 47 attempting to flitisize at 42500
+NI 47 successfully flitisized message!
+[TICK 43000] ROUTER 24 RECEIVED Flit ID: 3 on VC: 8
+[TICK 43000] ROUTER 49 RECEIVED Flit ID: 3 on VC: 8
+[TICK 43500] ROUTER 14 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 5
+[TICK 43500] ROUTER 47 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+NI 28 sees message ready on Vnet 1
+CHECK 3: NI 28 attempting to flitisize at 43500
+NI 28 successfully flitisized message!
+NI 16 sees message ready on Vnet 1
+CHECK 3: NI 16 attempting to flitisize at 43500
+NI 16 successfully flitisized message!
+NI 2 sees message ready on Vnet 2
+CHECK 3: NI 2 attempting to flitisize at 43500
+NI 2 successfully flitisized message!
+NI 14 HEARTBEAT at 44000
+[TICK 44500] ROUTER 28 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 3
+[TICK 44500] ROUTER 2 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 3
+[TICK 44500] ROUTER 16 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 3
+NI 2 sees message ready on Vnet 1
+CHECK 3: NI 2 attempting to flitisize at 44500
+NI 2 successfully flitisized message!
+NI 8 sees message ready on Vnet 0
+CHECK 3: NI 8 attempting to flitisize at 44500
+NI 8 successfully flitisized message!
+NI 11 sees message ready on Vnet 2
+CHECK 3: NI 11 attempting to flitisize at 44500
+NI 11 successfully flitisized message!
+NI 41 sees message ready on Vnet 0
+CHECK 3: NI 41 attempting to flitisize at 44500
+NI 41 successfully flitisized message!
+[TICK 45000] ROUTER 2 RECEIVED Flit ID: 1 on VC: 8
+[TICK 45500] ROUTER 2 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 3
+[TICK 45500] ROUTER 8 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+[TICK 45500] ROUTER 11 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 4
+[TICK 45500] ROUTER 41 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 4
+NI 21 sees message ready on Vnet 1
+CHECK 3: NI 21 attempting to flitisize at 45500
+NI 21 successfully flitisized message!
+NI 1 sees message ready on Vnet 0
+CHECK 3: NI 1 attempting to flitisize at 45500
+NI 1 successfully flitisized message!
+NI 60 sees message ready on Vnet 2
+CHECK 3: NI 60 attempting to flitisize at 45500
+NI 60 successfully flitisized message!
+NI 59 HEARTBEAT at 46000
+[TICK 46000] ROUTER 11 RECEIVED Flit ID: 1 on VC: 8
+[TICK 46000] ROUTER 2 RECEIVED Flit ID: 2 on VC: 8
+[TICK 46500] ROUTER 1 RECEIVED Flit ID: 0 on VC: 1
+  -> Flit 0 assigned Outport: 2
+[TICK 46500] ROUTER 21 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 4
+[TICK 46500] ROUTER 2 RECEIVED Flit ID: 3 on VC: 8
+[TICK 46500] ROUTER 11 RECEIVED Flit ID: 2 on VC: 8
+[TICK 46500] ROUTER 60 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 3
+NI 61 sees message ready on Vnet 1
+CHECK 3: NI 61 attempting to flitisize at 46500
+NI 61 successfully flitisized message!
+[TICK 47000] ROUTER 60 RECEIVED Flit ID: 1 on VC: 8
+[TICK 47000] ROUTER 11 RECEIVED Flit ID: 3 on VC: 8
+[TICK 47500] ROUTER 60 RECEIVED Flit ID: 2 on VC: 8
+[TICK 47500] ROUTER 61 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 3
+NI 32 sees message ready on Vnet 2
+CHECK 3: NI 32 attempting to flitisize at 47500
+NI 32 successfully flitisized message!
+NI 20 sees message ready on Vnet 2
+CHECK 3: NI 20 attempting to flitisize at 47500
+NI 20 successfully flitisized message!
+NI 10 sees message ready on Vnet 2
+CHECK 3: NI 10 attempting to flitisize at 47500
+NI 10 successfully flitisized message!
+NI 6 HEARTBEAT at 48000
+[TICK 48000] ROUTER 60 RECEIVED Flit ID: 3 on VC: 8
+[TICK 48500] ROUTER 10 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 4
+[TICK 48500] ROUTER 20 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 3
+[TICK 48500] ROUTER 32 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 4
+NI 10 sees message ready on Vnet 2
+CHECK 3: NI 10 attempting to flitisize at 48500
+NI 10 successfully flitisized message!
+NI 4 sees message ready on Vnet 0
+CHECK 3: NI 4 attempting to flitisize at 48500
+NI 4 successfully flitisized message!
+NI 40 sees message ready on Vnet 1
+CHECK 3: NI 40 attempting to flitisize at 48500
+NI 40 successfully flitisized message!
+[TICK 49000] ROUTER 10 RECEIVED Flit ID: 1 on VC: 8
+[TICK 49000] ROUTER 20 RECEIVED Flit ID: 1 on VC: 8
+[TICK 49000] ROUTER 32 RECEIVED Flit ID: 1 on VC: 8
+[TICK 49500] ROUTER 10 RECEIVED Flit ID: 0 on VC: 9
+  -> Flit 0 assigned Outport: 4
+[TICK 49500] ROUTER 20 RECEIVED Flit ID: 2 on VC: 8
+[TICK 49500] ROUTER 32 RECEIVED Flit ID: 2 on VC: 8
+[TICK 49500] ROUTER 4 RECEIVED Flit ID: 0 on VC: 1
+  -> Flit 0 assigned Outport: 3
+[TICK 49500] ROUTER 40 RECEIVED Flit ID: 0 on VC: 5
+  -> Flit 0 assigned Outport: 3
+NI 1 HEARTBEAT at 49500
+NI 1 sees message ready on Vnet 0
+CHECK 3: NI 1 attempting to flitisize at 49500
+NI 1 successfully flitisized message!
+NI 44 sees message ready on Vnet 2
+CHECK 3: NI 44 attempting to flitisize at 49500
+NI 44 successfully flitisized message!
+[TICK 50000] ROUTER 10 RECEIVED Flit ID: 2 on VC: 8
+[TICK 50000] ROUTER 20 RECEIVED Flit ID: 3 on VC: 8
+[TICK 50000] ROUTER 32 RECEIVED Flit ID: 3 on VC: 8
+[TICK 50500] ROUTER 10 RECEIVED Flit ID: 1 on VC: 9
+[TICK 50500] ROUTER 1 RECEIVED Flit ID: 0 on VC: 2
+  -> Flit 0 assigned Outport: 4
+[TICK 50500] ROUTER 44 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 3
+NI 52 sees message ready on Vnet 2
+CHECK 3: NI 52 attempting to flitisize at 50500
+NI 52 successfully flitisized message!
+NI 9 sees message ready on Vnet 2
+CHECK 3: NI 9 attempting to flitisize at 50500
+NI 9 successfully flitisized message!
+NI 15 sees message ready on Vnet 2
+CHECK 3: NI 15 attempting to flitisize at 50500
+NI 15 successfully flitisized message!
+NI 40 sees message ready on Vnet 1
+CHECK 3: NI 40 attempting to flitisize at 50500
+NI 40 successfully flitisized message!
+NI 53 sees message ready on Vnet 2
+CHECK 3: NI 53 attempting to flitisize at 50500
+NI 53 successfully flitisized message!
+[TICK 51000] ROUTER 44 RECEIVED Flit ID: 1 on VC: 8
+NI 52 HEARTBEAT at 51000
+[TICK 51000] ROUTER 10 RECEIVED Flit ID: 3 on VC: 8
+[TICK 51500] ROUTER 52 RECEIVED Flit ID: 0 on VC: 10
+  -> Flit 0 assigned Outport: 5
+[TICK 51500] ROUTER 10 RECEIVED Flit ID: 2 on VC: 9
+[TICK 51500] ROUTER 44 RECEIVED Flit ID: 2 on VC: 8
+[TICK 51500] ROUTER 9 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 4
+[TICK 51500] ROUTER 15 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 3
+[TICK 51500] ROUTER 40 RECEIVED Flit ID: 0 on VC: 6
+  -> Flit 0 assigned Outport: 3
+[TICK 51500] ROUTER 53 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 4
+NI 15 sees message ready on Vnet 0
+CHECK 3: NI 15 attempting to flitisize at 51500
+NI 15 successfully flitisized message!
+[TICK 52000] ROUTER 53 RECEIVED Flit ID: 1 on VC: 8
+[TICK 52000] ROUTER 15 RECEIVED Flit ID: 1 on VC: 8
+[TICK 52000] ROUTER 9 RECEIVED Flit ID: 1 on VC: 8
+[TICK 52000] ROUTER 10 RECEIVED Flit ID: 3 on VC: 9
+[TICK 52000] ROUTER 44 RECEIVED Flit ID: 3 on VC: 8
+[TICK 52000] ROUTER 52 RECEIVED Flit ID: 1 on VC: 10
+[TICK 52500] ROUTER 9 RECEIVED Flit ID: 2 on VC: 8
+[TICK 52500] ROUTER 15 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+[TICK 52500] ROUTER 52 RECEIVED Flit ID: 2 on VC: 10
+[TICK 52500] ROUTER 53 RECEIVED Flit ID: 2 on VC: 8
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 52500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 52500
+NI 54 sees message ready on Vnet 0
+CHECK 3: NI 54 attempting to flitisize at 52500
+NI 54 successfully flitisized message!
+NI 39 sees message ready on Vnet 0
+CHECK 3: NI 39 attempting to flitisize at 52500
+NI 39 successfully flitisized message!
+NI 28 sees message ready on Vnet 2
+CHECK 3: NI 28 attempting to flitisize at 52500
+NI 28 successfully flitisized message!
+NI 20 HEARTBEAT at 52500
+NI 25 sees message ready on Vnet 0
+CHECK 3: NI 25 attempting to flitisize at 52500
+NI 25 successfully flitisized message!
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 53000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 53000
+[TICK 53000] ROUTER 9 RECEIVED Flit ID: 3 on VC: 8
+[TICK 53000] ROUTER 15 RECEIVED Flit ID: 2 on VC: 8
+[TICK 53000] ROUTER 52 RECEIVED Flit ID: 3 on VC: 10
+[TICK 53000] ROUTER 53 RECEIVED Flit ID: 3 on VC: 8
+[TICK 53500] ROUTER 15 RECEIVED Flit ID: 3 on VC: 8
+[TICK 53500] ROUTER 25 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 4
+[TICK 53500] ROUTER 28 RECEIVED Flit ID: 0 on VC: 9
+  -> Flit 0 assigned Outport: 3
+[TICK 53500] ROUTER 39 RECEIVED Flit ID: 0 on VC: 2
+  -> Flit 0 assigned Outport: 1
+[TICK 53500] ROUTER 54 RECEIVED Flit ID: 0 on VC: 1
+  -> Flit 0 assigned Outport: 3
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 53500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 53500
+NI 54 HEARTBEAT at 54000
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 54000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 54000
+[TICK 54000] ROUTER 28 RECEIVED Flit ID: 1 on VC: 9
+[TICK 54500] ROUTER 28 RECEIVED Flit ID: 2 on VC: 9
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 54500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 54500
+NI 11 sees message ready on Vnet 2
+CHECK 3: NI 11 attempting to flitisize at 54500
+NI 11 successfully flitisized message!
+NI 20 sees message ready on Vnet 0
+CHECK 3: NI 20 attempting to flitisize at 54500
+NI 20 successfully flitisized message!
+NI 25 sees message ready on Vnet 0
+CHECK 3: NI 25 attempting to flitisize at 54500
+NI 25 successfully flitisized message!
+NI 46 sees message ready on Vnet 2
+CHECK 3: NI 46 attempting to flitisize at 54500
+NI 46 successfully flitisized message!
+NI 47 sees message ready on Vnet 0
+CHECK 3: NI 47 attempting to flitisize at 54500
+NI 47 successfully flitisized message!
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 55000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 55000
+[TICK 55000] ROUTER 28 RECEIVED Flit ID: 3 on VC: 9
+[TICK 55500] ROUTER 11 RECEIVED Flit ID: 0 on VC: 9
+  -> Flit 0 assigned Outport: 3
+[TICK 55500] ROUTER 20 RECEIVED Flit ID: 0 on VC: 1
+  -> Flit 0 assigned Outport: 3
+[TICK 55500] ROUTER 25 RECEIVED Flit ID: 0 on VC: 1
+  -> Flit 0 assigned Outport: 3
+[TICK 55500] ROUTER 46 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 3
+[TICK 55500] ROUTER 47 RECEIVED Flit ID: 0 on VC: 1
+  -> Flit 0 assigned Outport: 3
+NI 12 sees message ready on Vnet 1
+CHECK 3: NI 12 attempting to flitisize at 55500
+NI 12 successfully flitisized message!
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 55500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 55500
+NI 14 sees message ready on Vnet 1
+CHECK 3: NI 14 attempting to flitisize at 55500
+NI 14 successfully flitisized message!
+NI 59 sees message ready on Vnet 0
+CHECK 3: NI 59 attempting to flitisize at 55500
+NI 59 successfully flitisized message!
+NI 62 sees message ready on Vnet 0
+CHECK 3: NI 62 attempting to flitisize at 55500
+NI 62 successfully flitisized message!
+NI 11 HEARTBEAT at 55500
+NI 50 sees message ready on Vnet 2
+CHECK 3: NI 50 attempting to flitisize at 55500
+NI 50 successfully flitisized message!
+NI 42 sees message ready on Vnet 2
+CHECK 3: NI 42 attempting to flitisize at 55500
+NI 42 successfully flitisized message!
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 56000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 56000
+[TICK 56000] ROUTER 46 RECEIVED Flit ID: 1 on VC: 8
+[TICK 56000] ROUTER 11 RECEIVED Flit ID: 1 on VC: 9
+[TICK 56500] ROUTER 62 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+[TICK 56500] ROUTER 11 RECEIVED Flit ID: 2 on VC: 9
+[TICK 56500] ROUTER 46 RECEIVED Flit ID: 2 on VC: 8
+[TICK 56500] ROUTER 12 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 3
+[TICK 56500] ROUTER 14 RECEIVED Flit ID: 0 on VC: 5
+  -> Flit 0 assigned Outport: 3
+[TICK 56500] ROUTER 42 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 4
+[TICK 56500] ROUTER 50 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 4
+[TICK 56500] ROUTER 59 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 56500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 56500
+NI 52 sees message ready on Vnet 1
+CHECK 3: NI 52 attempting to flitisize at 56500
+NI 52 successfully flitisized message!
+NI 22 sees message ready on Vnet 1
+CHECK 3: NI 22 attempting to flitisize at 56500
+NI 22 successfully flitisized message!
+NI 7 sees message ready on Vnet 1
+CHECK 3: NI 7 attempting to flitisize at 56500
+NI 7 successfully flitisized message!
+NI 35 sees message ready on Vnet 2
+CHECK 3: NI 35 attempting to flitisize at 56500
+NI 35 successfully flitisized message!
+[TICK 57000] ROUTER 50 RECEIVED Flit ID: 1 on VC: 8
+NI 49 HEARTBEAT at 57000
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 57000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 57000
+[TICK 57000] ROUTER 42 RECEIVED Flit ID: 1 on VC: 8
+[TICK 57000] ROUTER 11 RECEIVED Flit ID: 3 on VC: 9
+[TICK 57000] ROUTER 46 RECEIVED Flit ID: 3 on VC: 8
+[TICK 57500] ROUTER 22 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 3
+[TICK 57500] ROUTER 52 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 3
+[TICK 57500] ROUTER 42 RECEIVED Flit ID: 2 on VC: 8
+[TICK 57500] ROUTER 50 RECEIVED Flit ID: 2 on VC: 8
+[TICK 57500] ROUTER 7 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 2
+[TICK 57500] ROUTER 35 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 3
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 57500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+NI 13 sees message ready on Vnet 1
+CHECK 3: NI 13 attempting to flitisize at 57500
+NI 13 successfully flitisized message!
+CHECK 3: NI 13 attempting to flitisize at 57500
+NI 22 sees message ready on Vnet 2
+CHECK 3: NI 22 attempting to flitisize at 57500
+NI 22 successfully flitisized message!
+NI 3 sees message ready on Vnet 2
+CHECK 3: NI 3 attempting to flitisize at 57500
+NI 3 successfully flitisized message!
+NI 6 sees message ready on Vnet 0
+CHECK 3: NI 6 attempting to flitisize at 57500
+NI 6 successfully flitisized message!
+NI 50 sees message ready on Vnet 2
+CHECK 3: NI 50 attempting to flitisize at 57500
+NI 50 successfully flitisized message!
+NI 25 sees message ready on Vnet 0
+CHECK 3: NI 25 attempting to flitisize at 57500
+NI 25 successfully flitisized message!
+[TICK 58000] ROUTER 35 RECEIVED Flit ID: 1 on VC: 8
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 58000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 58000
+[TICK 58000] ROUTER 42 RECEIVED Flit ID: 3 on VC: 8
+[TICK 58000] ROUTER 50 RECEIVED Flit ID: 3 on VC: 8
+[TICK 58500] ROUTER 3 RECEIVED Flit ID: 0 on VC: 9
+  -> Flit 0 assigned Outport: 4
+[TICK 58500] ROUTER 35 RECEIVED Flit ID: 2 on VC: 8
+[TICK 58500] ROUTER 50 RECEIVED Flit ID: 0 on VC: 9
+  -> Flit 0 assigned Outport: 4
+[TICK 58500] ROUTER 6 RECEIVED Flit ID: 0 on VC: 1
+  -> Flit 0 assigned Outport: 2
+[TICK 58500] ROUTER 13 RECEIVED Flit ID: 0 on VC: 6
+  -> Flit 0 assigned Outport: 3
+[TICK 58500] ROUTER 22 RECEIVED Flit ID: 0 on VC: 9
+  -> Flit 0 assigned Outport: 3
+[TICK 58500] ROUTER 25 RECEIVED Flit ID: 0 on VC: 2
+  -> Flit 0 assigned Outport: 4
+NI 51 HEARTBEAT at 58500
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 58500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 58500
+NI 20 sees message ready on Vnet 2
+CHECK 3: NI 20 attempting to flitisize at 58500
+NI 20 successfully flitisized message!
+NI 29 sees message ready on Vnet 2
+CHECK 3: NI 29 attempting to flitisize at 58500
+NI 29 successfully flitisized message!
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 59000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 59000
+[TICK 59000] ROUTER 22 RECEIVED Flit ID: 1 on VC: 9
+[TICK 59000] ROUTER 3 RECEIVED Flit ID: 1 on VC: 9
+[TICK 59000] ROUTER 35 RECEIVED Flit ID: 3 on VC: 8
+[TICK 59000] ROUTER 50 RECEIVED Flit ID: 1 on VC: 9
+[TICK 59500] ROUTER 3 RECEIVED Flit ID: 2 on VC: 9
+[TICK 59500] ROUTER 22 RECEIVED Flit ID: 2 on VC: 9
+[TICK 59500] ROUTER 50 RECEIVED Flit ID: 2 on VC: 9
+[TICK 59500] ROUTER 20 RECEIVED Flit ID: 0 on VC: 9
+  -> Flit 0 assigned Outport: 3
+[TICK 59500] ROUTER 29 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 4
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 59500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 59500
+NI 3 sees message ready on Vnet 0
+CHECK 3: NI 3 attempting to flitisize at 59500
+NI 3 successfully flitisized message!
+NI 32 HEARTBEAT at 59500
+NI 61 sees message ready on Vnet 0
+CHECK 3: NI 61 attempting to flitisize at 59500
+NI 61 successfully flitisized message!
+NI 17 sees message ready on Vnet 2
+CHECK 3: NI 17 attempting to flitisize at 59500
+NI 17 successfully flitisized message!
+NI 0 sees message ready on Vnet 1
+CHECK 3: NI 0 attempting to flitisize at 59500
+NI 0 successfully flitisized message!
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 60000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 60000
+[TICK 60000] ROUTER 20 RECEIVED Flit ID: 1 on VC: 9
+[TICK 60000] ROUTER 29 RECEIVED Flit ID: 1 on VC: 8
+[TICK 60000] ROUTER 3 RECEIVED Flit ID: 3 on VC: 9
+[TICK 60000] ROUTER 22 RECEIVED Flit ID: 3 on VC: 9
+[TICK 60000] ROUTER 50 RECEIVED Flit ID: 3 on VC: 9
+[TICK 60500] ROUTER 3 RECEIVED Flit ID: 0 on VC: 1
+  -> Flit 0 assigned Outport: 2
+[TICK 60500] ROUTER 20 RECEIVED Flit ID: 2 on VC: 9
+[TICK 60500] ROUTER 29 RECEIVED Flit ID: 2 on VC: 8
+[TICK 60500] ROUTER 0 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 2
+[TICK 60500] ROUTER 17 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 2
+[TICK 60500] ROUTER 61 RECEIVED Flit ID: 0 on VC: 1
+  -> Flit 0 assigned Outport: 3
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 60500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 60500
+NI 29 sees message ready on Vnet 0
+CHECK 3: NI 29 attempting to flitisize at 60500
+NI 29 successfully flitisized message!
+NI 15 HEARTBEAT at 61000
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 61000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 61000
+[TICK 61000] ROUTER 17 RECEIVED Flit ID: 1 on VC: 8
+[TICK 61000] ROUTER 20 RECEIVED Flit ID: 3 on VC: 9
+[TICK 61000] ROUTER 29 RECEIVED Flit ID: 3 on VC: 8
+[TICK 61500] ROUTER 17 RECEIVED Flit ID: 2 on VC: 8
+[TICK 61500] ROUTER 29 RECEIVED Flit ID: 0 on VC: 1
+  -> Flit 0 assigned Outport: 3
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 61500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 61500
+NI 42 sees message ready on Vnet 2
+CHECK 3: NI 42 attempting to flitisize at 61500
+NI 42 successfully flitisized message!
+NI 22 HEARTBEAT at 62000
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 62000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 62000
+[TICK 62000] ROUTER 17 RECEIVED Flit ID: 3 on VC: 8
+[TICK 62500] ROUTER 42 RECEIVED Flit ID: 0 on VC: 9
+  -> Flit 0 assigned Outport: 4
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 62500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 62500
+NI 52 sees message ready on Vnet 0
+CHECK 3: NI 52 attempting to flitisize at 62500
+NI 52 successfully flitisized message!
+NI 56 sees message ready on Vnet 2
+CHECK 3: NI 56 attempting to flitisize at 62500
+NI 56 successfully flitisized message!
+NI 37 sees message ready on Vnet 1
+CHECK 3: NI 37 attempting to flitisize at 62500
+NI 37 successfully flitisized message!
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 63000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 63000
+[TICK 63000] ROUTER 42 RECEIVED Flit ID: 1 on VC: 9
+[TICK 63500] ROUTER 42 RECEIVED Flit ID: 2 on VC: 9
+[TICK 63500] ROUTER 37 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 3
+[TICK 63500] ROUTER 52 RECEIVED Flit ID: 0 on VC: 1
+  -> Flit 0 assigned Outport: 4
+[TICK 63500] ROUTER 56 RECEIVED Flit ID: 0 on VC: 9
+  -> Flit 0 assigned Outport: 1
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 63500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 63500
+NI 62 HEARTBEAT at 63500
+NI 15 sees message ready on Vnet 0
+CHECK 3: NI 15 attempting to flitisize at 63500
+NI 15 successfully flitisized message!
+NI 57 sees message ready on Vnet 1
+CHECK 3: NI 57 attempting to flitisize at 63500
+NI 57 successfully flitisized message!
+NI 16 sees message ready on Vnet 0
+CHECK 3: NI 16 attempting to flitisize at 63500
+NI 16 successfully flitisized message!
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 64000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 64000
+[TICK 64000] ROUTER 56 RECEIVED Flit ID: 1 on VC: 9
+[TICK 64000] ROUTER 42 RECEIVED Flit ID: 3 on VC: 9
+[TICK 64500] ROUTER 56 RECEIVED Flit ID: 2 on VC: 9
+[TICK 64500] ROUTER 15 RECEIVED Flit ID: 0 on VC: 1
+  -> Flit 0 assigned Outport: 3
+[TICK 64500] ROUTER 16 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+[TICK 64500] ROUTER 57 RECEIVED Flit ID: 0 on VC: 5
+  -> Flit 0 assigned Outport: 4
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 64500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 64500
+NI 22 sees message ready on Vnet 0
+CHECK 3: NI 22 attempting to flitisize at 64500
+NI 22 successfully flitisized message!
+NI 2 sees message ready on Vnet 2
+CHECK 3: NI 2 attempting to flitisize at 64500
+NI 2 successfully flitisized message!
+NI 10 sees message ready on Vnet 0
+CHECK 3: NI 10 attempting to flitisize at 64500
+NI 10 successfully flitisized message!
+NI 9 sees message ready on Vnet 2
+CHECK 3: NI 9 attempting to flitisize at 64500
+NI 9 successfully flitisized message!
+NI 15 HEARTBEAT at 64500
+NI 30 sees message ready on Vnet 2
+CHECK 3: NI 30 attempting to flitisize at 64500
+NI 30 successfully flitisized message!
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 65000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 65000
+[TICK 65000] ROUTER 56 RECEIVED Flit ID: 3 on VC: 9
+[TICK 65500] ROUTER 9 RECEIVED Flit ID: 0 on VC: 9
+  -> Flit 0 assigned Outport: 4
+[TICK 65500] ROUTER 10 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 4
+[TICK 65500] ROUTER 22 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+[TICK 65500] ROUTER 2 RECEIVED Flit ID: 0 on VC: 9
+  -> Flit 0 assigned Outport: 3
+[TICK 65500] ROUTER 30 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 3
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 65500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 65500
+NI 42 sees message ready on Vnet 1
+CHECK 3: NI 42 attempting to flitisize at 65500
+NI 42 successfully flitisized message!
+NI 19 sees message ready on Vnet 0
+CHECK 3: NI 19 attempting to flitisize at 65500
+NI 19 successfully flitisized message!
+[TICK 66000] ROUTER 30 RECEIVED Flit ID: 1 on VC: 8
+NI 44 HEARTBEAT at 66000
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 66000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 66000
+[TICK 66000] ROUTER 2 RECEIVED Flit ID: 1 on VC: 9
+[TICK 66000] ROUTER 9 RECEIVED Flit ID: 1 on VC: 9
+[TICK 66500] ROUTER 42 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 2
+[TICK 66500] ROUTER 2 RECEIVED Flit ID: 2 on VC: 9
+[TICK 66500] ROUTER 9 RECEIVED Flit ID: 2 on VC: 9
+[TICK 66500] ROUTER 30 RECEIVED Flit ID: 2 on VC: 8
+[TICK 66500] ROUTER 19 RECEIVED Flit ID: 0 on VC: 1
+  -> Flit 0 assigned Outport: 4
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 66500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 66500
+NI 6 sees message ready on Vnet 1
+CHECK 3: NI 6 attempting to flitisize at 66500
+NI 6 successfully flitisized message!
+NI 53 sees message ready on Vnet 1
+CHECK 3: NI 53 attempting to flitisize at 66500
+NI 53 successfully flitisized message!
+NI 22 HEARTBEAT at 67000
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 67000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 67000
+[TICK 67000] ROUTER 2 RECEIVED Flit ID: 3 on VC: 9
+[TICK 67000] ROUTER 9 RECEIVED Flit ID: 3 on VC: 9
+[TICK 67000] ROUTER 30 RECEIVED Flit ID: 3 on VC: 8
+[TICK 67500] ROUTER 53 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 4
+[TICK 67500] ROUTER 6 RECEIVED Flit ID: 0 on VC: 5
+  -> Flit 0 assigned Outport: 4
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 67500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 67500
+NI 54 sees message ready on Vnet 2
+CHECK 3: NI 54 attempting to flitisize at 67500
+NI 54 successfully flitisized message!
+NI 49 sees message ready on Vnet 1
+CHECK 3: NI 49 attempting to flitisize at 67500
+NI 49 successfully flitisized message!
+NI 41 sees message ready on Vnet 0
+CHECK 3: NI 41 attempting to flitisize at 67500
+NI 41 successfully flitisized message!
+NI 5 sees message ready on Vnet 0
+CHECK 3: NI 5 attempting to flitisize at 67500
+NI 5 successfully flitisized message!
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 68000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 68000
+[TICK 68500] ROUTER 49 RECEIVED Flit ID: 0 on VC: 5
+  -> Flit 0 assigned Outport: 4
+[TICK 68500] ROUTER 5 RECEIVED Flit ID: 0 on VC: 1
+  -> Flit 0 assigned Outport: 2
+[TICK 68500] ROUTER 41 RECEIVED Flit ID: 0 on VC: 1
+  -> Flit 0 assigned Outport: 4
+[TICK 68500] ROUTER 54 RECEIVED Flit ID: 0 on VC: 9
+  -> Flit 0 assigned Outport: 3
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 68500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 68500
+NI 59 HEARTBEAT at 68500
+NI 37 sees message ready on Vnet 2
+CHECK 3: NI 37 attempting to flitisize at 68500
+NI 37 successfully flitisized message!
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 69000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 69000
+[TICK 69000] ROUTER 54 RECEIVED Flit ID: 1 on VC: 9
+[TICK 69500] ROUTER 54 RECEIVED Flit ID: 2 on VC: 9
+[TICK 69500] ROUTER 37 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 2
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 69500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 69500
+NI 14 sees message ready on Vnet 0
+CHECK 3: NI 14 attempting to flitisize at 69500
+NI 14 successfully flitisized message!
+NI 6 sees message ready on Vnet 0
+CHECK 3: NI 6 attempting to flitisize at 69500
+NI 6 successfully flitisized message!
+NI 32 HEARTBEAT at 69500
+NI 32 sees message ready on Vnet 0
+CHECK 3: NI 32 attempting to flitisize at 69500
+NI 32 successfully flitisized message!
+NI 34 sees message ready on Vnet 0
+CHECK 3: NI 34 attempting to flitisize at 69500
+NI 34 successfully flitisized message!
+NI 33 sees message ready on Vnet 0
+CHECK 3: NI 33 attempting to flitisize at 69500
+NI 33 successfully flitisized message!
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 70000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 70000
+[TICK 70000] ROUTER 37 RECEIVED Flit ID: 1 on VC: 8
+[TICK 70000] ROUTER 54 RECEIVED Flit ID: 3 on VC: 9
+[TICK 70500] ROUTER 32 RECEIVED Flit ID: 0 on VC: 1
+  -> Flit 0 assigned Outport: 2
+[TICK 70500] ROUTER 37 RECEIVED Flit ID: 2 on VC: 8
+[TICK 70500] ROUTER 6 RECEIVED Flit ID: 0 on VC: 2
+  -> Flit 0 assigned Outport: 2
+[TICK 70500] ROUTER 14 RECEIVED Flit ID: 0 on VC: 1
+  -> Flit 0 assigned Outport: 3
+[TICK 70500] ROUTER 33 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 4
+[TICK 70500] ROUTER 34 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 4
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 70500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 70500
+NI 28 sees message ready on Vnet 2
+CHECK 3: NI 28 attempting to flitisize at 70500
+NI 28 successfully flitisized message!
+NI 21 sees message ready on Vnet 0
+CHECK 3: NI 21 attempting to flitisize at 70500
+NI 21 successfully flitisized message!
+NI 32 sees message ready on Vnet 0
+CHECK 3: NI 32 attempting to flitisize at 70500
+NI 32 successfully flitisized message!
+NI 42 sees message ready on Vnet 2
+CHECK 3: NI 42 attempting to flitisize at 70500
+NI 42 successfully flitisized message!
+NI 30 HEARTBEAT at 71000
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 71000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 71000
+[TICK 71000] ROUTER 37 RECEIVED Flit ID: 3 on VC: 8
+[TICK 71500] ROUTER 28 RECEIVED Flit ID: 0 on VC: 10
+  -> Flit 0 assigned Outport: 4
+[TICK 71500] ROUTER 21 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+[TICK 71500] ROUTER 32 RECEIVED Flit ID: 0 on VC: 2
+  -> Flit 0 assigned Outport: 3
+[TICK 71500] ROUTER 42 RECEIVED Flit ID: 0 on VC: 10
+  -> Flit 0 assigned Outport: 4
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 71500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 71500
+NI 16 sees message ready on Vnet 1
+CHECK 3: NI 16 attempting to flitisize at 71500
+NI 16 successfully flitisized message!
+NI 49 HEARTBEAT at 72000
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 72000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 72000
+[TICK 72000] ROUTER 42 RECEIVED Flit ID: 1 on VC: 10
+[TICK 72000] ROUTER 28 RECEIVED Flit ID: 1 on VC: 10
+[TICK 72500] ROUTER 28 RECEIVED Flit ID: 2 on VC: 10
+[TICK 72500] ROUTER 42 RECEIVED Flit ID: 2 on VC: 10
+[TICK 72500] ROUTER 16 RECEIVED Flit ID: 0 on VC: 5
+  -> Flit 0 assigned Outport: 3
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 72500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 72500
+NI 45 sees message ready on Vnet 2
+CHECK 3: NI 45 attempting to flitisize at 72500
+NI 45 successfully flitisized message!
+NI 8 sees message ready on Vnet 1
+CHECK 3: NI 8 attempting to flitisize at 72500
+NI 8 successfully flitisized message!
+NI 54 HEARTBEAT at 73000
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 73000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 73000
+[TICK 73000] ROUTER 28 RECEIVED Flit ID: 3 on VC: 10
+[TICK 73000] ROUTER 42 RECEIVED Flit ID: 3 on VC: 10
+[TICK 73500] ROUTER 45 RECEIVED Flit ID: 0 on VC: 9
+  -> Flit 0 assigned Outport: 4
+[TICK 73500] ROUTER 8 RECEIVED Flit ID: 0 on VC: 7
+  -> Flit 0 assigned Outport: 3
+NI 55 sees message ready on Vnet 1
+CHECK 3: NI 55 attempting to flitisize at 73500
+NI 55 successfully flitisized message!
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 73500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 73500
+NI 39 sees message ready on Vnet 0
+CHECK 3: NI 39 attempting to flitisize at 73500
+NI 39 successfully flitisized message!
+NI 32 sees message ready on Vnet 0
+CHECK 3: NI 32 attempting to flitisize at 73500
+NI 32 successfully flitisized message!
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 74000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 74000
+[TICK 74000] ROUTER 45 RECEIVED Flit ID: 1 on VC: 9
+[TICK 74500] ROUTER 45 RECEIVED Flit ID: 2 on VC: 9
+[TICK 74500] ROUTER 32 RECEIVED Flit ID: 0 on VC: 3
+  -> Flit 0 assigned Outport: 3
+[TICK 74500] ROUTER 39 RECEIVED Flit ID: 0 on VC: 3
+  -> Flit 0 assigned Outport: 3
+[TICK 74500] ROUTER 55 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 3
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 74500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 74500
+NI 39 HEARTBEAT at 74500
+NI 3 sees message ready on Vnet 0
+CHECK 3: NI 3 attempting to flitisize at 74500
+NI 3 successfully flitisized message!
+NI 25 sees message ready on Vnet 1
+CHECK 3: NI 25 attempting to flitisize at 74500
+NI 25 successfully flitisized message!
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 75000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 75000
+[TICK 75000] ROUTER 45 RECEIVED Flit ID: 3 on VC: 9
+[TICK 75500] ROUTER 3 RECEIVED Flit ID: 0 on VC: 2
+  -> Flit 0 assigned Outport: 4
+[TICK 75500] ROUTER 25 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 4
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 75500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 75500
+NI 6 sees message ready on Vnet 1
+CHECK 3: NI 6 attempting to flitisize at 75500
+NI 6 successfully flitisized message!
+NI 44 HEARTBEAT at 75500
+NI 43 sees message ready on Vnet 1
+CHECK 3: NI 43 attempting to flitisize at 75500
+NI 43 successfully flitisized message!
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 76000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 76000
+[TICK 76500] ROUTER 6 RECEIVED Flit ID: 0 on VC: 6
+  -> Flit 0 assigned Outport: 2
+[TICK 76500] ROUTER 43 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 4
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 76500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 76500
+NI 42 HEARTBEAT at 77000
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 77000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 77000
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 77500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 77500
+NI 41 sees message ready on Vnet 1
+CHECK 3: NI 41 attempting to flitisize at 77500
+NI 41 successfully flitisized message!
+NI 4 sees message ready on Vnet 2
+CHECK 3: NI 4 attempting to flitisize at 77500
+NI 4 successfully flitisized message!
+NI 1 HEARTBEAT at 78000
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 78000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 78000
+[TICK 78500] ROUTER 4 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 3
+[TICK 78500] ROUTER 41 RECEIVED Flit ID: 0 on VC: 5
+  -> Flit 0 assigned Outport: 4
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 78500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 78500
+NI 7 sees message ready on Vnet 1
+CHECK 3: NI 7 attempting to flitisize at 78500
+NI 7 successfully flitisized message!
+NI 54 HEARTBEAT at 79000
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 79000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 79000
+[TICK 79000] ROUTER 4 RECEIVED Flit ID: 1 on VC: 8
+[TICK 79500] ROUTER 4 RECEIVED Flit ID: 2 on VC: 8
+[TICK 79500] ROUTER 7 RECEIVED Flit ID: 0 on VC: 5
+  -> Flit 0 assigned Outport: 2
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 79500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 79500
+NI 27 sees message ready on Vnet 1
+CHECK 3: NI 27 attempting to flitisize at 79500
+NI 27 successfully flitisized message!
+NI 61 sees message ready on Vnet 1
+CHECK 3: NI 61 attempting to flitisize at 79500
+NI 61 successfully flitisized message!
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 80000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 80000
+[TICK 80000] ROUTER 4 RECEIVED Flit ID: 3 on VC: 8
+[TICK 80500] ROUTER 27 RECEIVED Flit ID: 0 on VC: 5
+  -> Flit 0 assigned Outport: 4
+[TICK 80500] ROUTER 61 RECEIVED Flit ID: 0 on VC: 5
+  -> Flit 0 assigned Outport: 3
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 80500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 80500
+NI 22 HEARTBEAT at 80500
+NI 53 sees message ready on Vnet 0
+CHECK 3: NI 53 attempting to flitisize at 80500
+NI 53 successfully flitisized message!
+NI 18 sees message ready on Vnet 0
+CHECK 3: NI 18 attempting to flitisize at 80500
+NI 18 successfully flitisized message!
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 81000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 81000
+[TICK 81500] ROUTER 18 RECEIVED Flit ID: 0 on VC: 1
+  -> Flit 0 assigned Outport: 4
+[TICK 81500] ROUTER 53 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 5
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 81500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 81500
+NI 11 HEARTBEAT at 81500
+NI 47 sees message ready on Vnet 0
+CHECK 3: NI 47 attempting to flitisize at 81500
+NI 47 successfully flitisized message!
+NI 25 sees message ready on Vnet 1
+CHECK 3: NI 25 attempting to flitisize at 81500
+NI 25 successfully flitisized message!
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 82000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 82000
+[TICK 82500] ROUTER 25 RECEIVED Flit ID: 0 on VC: 5
+  -> Flit 0 assigned Outport: 4
+[TICK 82500] ROUTER 47 RECEIVED Flit ID: 0 on VC: 2
+  -> Flit 0 assigned Outport: 3
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 82500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 82500
+NI 15 sees message ready on Vnet 2
+CHECK 3: NI 15 attempting to flitisize at 82500
+NI 15 successfully flitisized message!
+NI 17 HEARTBEAT at 82500
+NI 0 sees message ready on Vnet 1
+CHECK 3: NI 0 attempting to flitisize at 82500
+NI 0 successfully flitisized message!
+NI 48 sees message ready on Vnet 0
+CHECK 3: NI 48 attempting to flitisize at 82500
+NI 48 successfully flitisized message!
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 83000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 83000
+[TICK 83500] ROUTER 0 RECEIVED Flit ID: 0 on VC: 5
+  -> Flit 0 assigned Outport: 3
+[TICK 83500] ROUTER 15 RECEIVED Flit ID: 0 on VC: 9
+  -> Flit 0 assigned Outport: 3
+[TICK 83500] ROUTER 48 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 2
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 83500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 83500
+NI 62 sees message ready on Vnet 0
+CHECK 3: NI 62 attempting to flitisize at 83500
+NI 62 successfully flitisized message!
+NI 5 sees message ready on Vnet 2
+CHECK 3: NI 5 attempting to flitisize at 83500
+NI 5 successfully flitisized message!
+NI 46 HEARTBEAT at 84000
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 84000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 84000
+[TICK 84000] ROUTER 15 RECEIVED Flit ID: 1 on VC: 9
+[TICK 84500] ROUTER 15 RECEIVED Flit ID: 2 on VC: 9
+[TICK 84500] ROUTER 5 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 2
+[TICK 84500] ROUTER 62 RECEIVED Flit ID: 0 on VC: 1
+  -> Flit 0 assigned Outport: 3
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 84500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 84500
+NI 44 sees message ready on Vnet 1
+CHECK 3: NI 44 attempting to flitisize at 84500
+NI 44 successfully flitisized message!
+NI 6 HEARTBEAT at 85000
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 85000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 85000
+[TICK 85000] ROUTER 5 RECEIVED Flit ID: 1 on VC: 8
+[TICK 85000] ROUTER 15 RECEIVED Flit ID: 3 on VC: 9
+[TICK 85500] ROUTER 44 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 3
+[TICK 85500] ROUTER 5 RECEIVED Flit ID: 2 on VC: 8
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 85500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 85500
+NI 48 sees message ready on Vnet 2
+CHECK 3: NI 48 attempting to flitisize at 85500
+NI 48 successfully flitisized message!
+NI 23 sees message ready on Vnet 0
+CHECK 3: NI 23 attempting to flitisize at 85500
+NI 23 successfully flitisized message!
+NI 59 HEARTBEAT at 86000
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 86000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 86000
+[TICK 86000] ROUTER 5 RECEIVED Flit ID: 3 on VC: 8
+[TICK 86500] ROUTER 23 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+[TICK 86500] ROUTER 48 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 3
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 86500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 86500
+NI 62 sees message ready on Vnet 2
+CHECK 3: NI 62 attempting to flitisize at 86500
+NI 62 successfully flitisized message!
+NI 10 sees message ready on Vnet 1
+CHECK 3: NI 10 attempting to flitisize at 86500
+NI 10 successfully flitisized message!
+NI 50 sees message ready on Vnet 0
+CHECK 3: NI 50 attempting to flitisize at 86500
+NI 50 successfully flitisized message!
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 87000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 87000
+[TICK 87000] ROUTER 48 RECEIVED Flit ID: 1 on VC: 8
+[TICK 87500] ROUTER 50 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 5
+[TICK 87500] ROUTER 48 RECEIVED Flit ID: 2 on VC: 8
+[TICK 87500] ROUTER 10 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 4
+[TICK 87500] ROUTER 62 RECEIVED Flit ID: 0 on VC: 10
+  -> Flit 0 assigned Outport: 3
+NI 13 HEARTBEAT at 87500
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 87500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 87500
+NI 49 sees message ready on Vnet 0
+CHECK 3: NI 49 attempting to flitisize at 87500
+NI 49 successfully flitisized message!
+NI 34 sees message ready on Vnet 2
+CHECK 3: NI 34 attempting to flitisize at 87500
+NI 34 successfully flitisized message!
+NI 31 sees message ready on Vnet 0
+CHECK 3: NI 31 attempting to flitisize at 87500
+NI 31 successfully flitisized message!
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 88000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 88000
+[TICK 88000] ROUTER 62 RECEIVED Flit ID: 1 on VC: 10
+[TICK 88000] ROUTER 48 RECEIVED Flit ID: 3 on VC: 8
+[TICK 88500] ROUTER 62 RECEIVED Flit ID: 2 on VC: 10
+[TICK 88500] ROUTER 31 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+[TICK 88500] ROUTER 34 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 4
+[TICK 88500] ROUTER 49 RECEIVED Flit ID: 0 on VC: 1
+  -> Flit 0 assigned Outport: 2
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 88500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 88500
+NI 56 sees message ready on Vnet 0
+CHECK 3: NI 56 attempting to flitisize at 88500
+NI 56 successfully flitisized message!
+NI 39 HEARTBEAT at 88500
+NI 27 sees message ready on Vnet 1
+CHECK 3: NI 27 attempting to flitisize at 88500
+NI 27 successfully flitisized message!
+NI 20 sees message ready on Vnet 0
+CHECK 3: NI 20 attempting to flitisize at 88500
+NI 20 successfully flitisized message!
+NI 50 sees message ready on Vnet 0
+CHECK 3: NI 50 attempting to flitisize at 88500
+NI 50 successfully flitisized message!
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 89000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 89000
+[TICK 89000] ROUTER 34 RECEIVED Flit ID: 1 on VC: 8
+[TICK 89000] ROUTER 62 RECEIVED Flit ID: 3 on VC: 10
+[TICK 89500] ROUTER 20 RECEIVED Flit ID: 0 on VC: 2
+  -> Flit 0 assigned Outport: 3
+[TICK 89500] ROUTER 56 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+[TICK 89500] ROUTER 34 RECEIVED Flit ID: 2 on VC: 8
+[TICK 89500] ROUTER 27 RECEIVED Flit ID: 0 on VC: 6
+  -> Flit 0 assigned Outport: 3
+[TICK 89500] ROUTER 50 RECEIVED Flit ID: 0 on VC: 1
+  -> Flit 0 assigned Outport: 3
+NI 12 sees message ready on Vnet 0
+CHECK 3: NI 12 attempting to flitisize at 89500
+NI 12 successfully flitisized message!
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 89500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 89500
+NI 56 sees message ready on Vnet 0
+CHECK 3: NI 56 attempting to flitisize at 89500
+NI 56 successfully flitisized message!
+NI 49 HEARTBEAT at 89500
+NI 43 sees message ready on Vnet 0
+CHECK 3: NI 43 attempting to flitisize at 89500
+NI 43 successfully flitisized message!
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 90000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 90000
+[TICK 90000] ROUTER 34 RECEIVED Flit ID: 3 on VC: 8
+[TICK 90500] ROUTER 12 RECEIVED Flit ID: 0 on VC: 1
+  -> Flit 0 assigned Outport: 3
+[TICK 90500] ROUTER 43 RECEIVED Flit ID: 0 on VC: 1
+  -> Flit 0 assigned Outport: 3
+[TICK 90500] ROUTER 56 RECEIVED Flit ID: 0 on VC: 1
+  -> Flit 0 assigned Outport: 2
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 90500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 90500
+NI 32 sees message ready on Vnet 2
+CHECK 3: NI 32 attempting to flitisize at 90500
+NI 32 successfully flitisized message!
+NI 15 HEARTBEAT at 90500
+NI 42 sees message ready on Vnet 1
+CHECK 3: NI 42 attempting to flitisize at 90500
+NI 42 successfully flitisized message!
+NI 7 sees message ready on Vnet 2
+CHECK 3: NI 7 attempting to flitisize at 90500
+NI 7 successfully flitisized message!
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 91000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 91000
+[TICK 91500] ROUTER 42 RECEIVED Flit ID: 0 on VC: 5
+  -> Flit 0 assigned Outport: 4
+[TICK 91500] ROUTER 7 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 2
+[TICK 91500] ROUTER 32 RECEIVED Flit ID: 0 on VC: 9
+  -> Flit 0 assigned Outport: 3
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 91500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 91500
+NI 28 sees message ready on Vnet 1
+CHECK 3: NI 28 attempting to flitisize at 91500
+NI 28 successfully flitisized message!
+NI 30 HEARTBEAT at 91500
+NI 58 sees message ready on Vnet 0
+CHECK 3: NI 58 attempting to flitisize at 91500
+NI 58 successfully flitisized message!
+NI 40 sees message ready on Vnet 1
+CHECK 3: NI 40 attempting to flitisize at 91500
+NI 40 successfully flitisized message!
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 92000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 92000
+[TICK 92000] ROUTER 7 RECEIVED Flit ID: 1 on VC: 8
+[TICK 92000] ROUTER 32 RECEIVED Flit ID: 1 on VC: 9
+[TICK 92500] ROUTER 28 RECEIVED Flit ID: 0 on VC: 5
+  -> Flit 0 assigned Outport: 4
+[TICK 92500] ROUTER 7 RECEIVED Flit ID: 2 on VC: 8
+[TICK 92500] ROUTER 32 RECEIVED Flit ID: 2 on VC: 9
+[TICK 92500] ROUTER 40 RECEIVED Flit ID: 0 on VC: 7
+  -> Flit 0 assigned Outport: 3
+[TICK 92500] ROUTER 58 RECEIVED Flit ID: 0 on VC: 2
+  -> Flit 0 assigned Outport: 4
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 92500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 92500
+NI 3 sees message ready on Vnet 1
+CHECK 3: NI 3 attempting to flitisize at 92500
+NI 3 successfully flitisized message!
+NI 7 HEARTBEAT at 92500
+NI 7 sees message ready on Vnet 1
+CHECK 3: NI 7 attempting to flitisize at 92500
+NI 7 successfully flitisized message!
+NI 58 sees message ready on Vnet 1
+CHECK 3: NI 58 attempting to flitisize at 92500
+NI 58 successfully flitisized message!
+NI 33 sees message ready on Vnet 2
+CHECK 3: NI 33 attempting to flitisize at 92500
+NI 33 successfully flitisized message!
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 93000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 93000
+[TICK 93000] ROUTER 7 RECEIVED Flit ID: 3 on VC: 8
+[TICK 93000] ROUTER 32 RECEIVED Flit ID: 3 on VC: 9
+[TICK 93500] ROUTER 7 RECEIVED Flit ID: 0 on VC: 6
+  -> Flit 0 assigned Outport: 2
+[TICK 93500] ROUTER 3 RECEIVED Flit ID: 0 on VC: 6
+  -> Flit 0 assigned Outport: 2
+[TICK 93500] ROUTER 33 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 3
+[TICK 93500] ROUTER 58 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 3
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 93500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 93500
+NI 19 sees message ready on Vnet 1
+CHECK 3: NI 19 attempting to flitisize at 93500
+NI 19 successfully flitisized message!
+NI 34 HEARTBEAT at 94000
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 94000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 94000
+[TICK 94000] ROUTER 33 RECEIVED Flit ID: 1 on VC: 8
+[TICK 94500] ROUTER 33 RECEIVED Flit ID: 2 on VC: 8
+[TICK 94500] ROUTER 19 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 2
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 94500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 94500
+NI 54 sees message ready on Vnet 2
+CHECK 3: NI 54 attempting to flitisize at 94500
+NI 54 successfully flitisized message!
+NI 39 sees message ready on Vnet 1
+CHECK 3: NI 39 attempting to flitisize at 94500
+NI 39 successfully flitisized message!
+NI 27 sees message ready on Vnet 0
+CHECK 3: NI 27 attempting to flitisize at 94500
+NI 27 successfully flitisized message!
+NI 17 HEARTBEAT at 95000
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 95000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 95000
+[TICK 95000] ROUTER 33 RECEIVED Flit ID: 3 on VC: 8
+[TICK 95500] ROUTER 54 RECEIVED Flit ID: 0 on VC: 10
+  -> Flit 0 assigned Outport: 3
+[TICK 95500] ROUTER 27 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+[TICK 95500] ROUTER 39 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 4
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 95500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 95500
+NI 7 sees message ready on Vnet 1
+CHECK 3: NI 7 attempting to flitisize at 95500
+NI 7 successfully flitisized message!
+NI 18 sees message ready on Vnet 2
+CHECK 3: NI 18 attempting to flitisize at 95500
+NI 18 successfully flitisized message!
+NI 50 HEARTBEAT at 96000
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 96000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 96000
+[TICK 96000] ROUTER 54 RECEIVED Flit ID: 1 on VC: 10
+[TICK 96500] ROUTER 54 RECEIVED Flit ID: 2 on VC: 10
+[TICK 96500] ROUTER 7 RECEIVED Flit ID: 0 on VC: 7
+  -> Flit 0 assigned Outport: 2
+[TICK 96500] ROUTER 18 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 4
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 96500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 96500
+NI 9 HEARTBEAT at 97000
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 97000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 97000
+[TICK 97000] ROUTER 18 RECEIVED Flit ID: 1 on VC: 8
+[TICK 97000] ROUTER 54 RECEIVED Flit ID: 3 on VC: 10
+[TICK 97500] ROUTER 18 RECEIVED Flit ID: 2 on VC: 8
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 97500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 97500
+NI 26 sees message ready on Vnet 0
+CHECK 3: NI 26 attempting to flitisize at 97500
+NI 26 successfully flitisized message!
+NI 56 sees message ready on Vnet 0
+CHECK 3: NI 56 attempting to flitisize at 97500
+NI 56 successfully flitisized message!
+NI 24 sees message ready on Vnet 1
+CHECK 3: NI 24 attempting to flitisize at 97500
+NI 24 successfully flitisized message!
+NI 61 sees message ready on Vnet 1
+CHECK 3: NI 61 attempting to flitisize at 97500
+NI 61 successfully flitisized message!
+NI 20 HEARTBEAT at 98000
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 98000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 98000
+[TICK 98000] ROUTER 18 RECEIVED Flit ID: 3 on VC: 8
+[TICK 98500] ROUTER 24 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 3
+[TICK 98500] ROUTER 26 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 5
+[TICK 98500] ROUTER 56 RECEIVED Flit ID: 0 on VC: 2
+  -> Flit 0 assigned Outport: 3
+[TICK 98500] ROUTER 61 RECEIVED Flit ID: 0 on VC: 6
+  -> Flit 0 assigned Outport: 2
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 98500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 98500
+NI 19 sees message ready on Vnet 1
+CHECK 3: NI 19 attempting to flitisize at 98500
+NI 19 successfully flitisized message!
+NI 11 HEARTBEAT at 99000
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 99000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 99000
+[TICK 99500] ROUTER 19 RECEIVED Flit ID: 0 on VC: 5
+  -> Flit 0 assigned Outport: 5
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 99500
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 99500
+NI 42 sees message ready on Vnet 1
+CHECK 3: NI 42 attempting to flitisize at 99500
+NI 42 successfully flitisized message!
+NI 29 sees message ready on Vnet 0
+CHECK 3: NI 29 attempting to flitisize at 99500
+NI 29 successfully flitisized message!
+NI 36 sees message ready on Vnet 1
+CHECK 3: NI 36 attempting to flitisize at 99500
+NI 36 successfully flitisized message!
+NI 24 HEARTBEAT at 100000
+NI 13 sees message ready on Vnet 0
+CHECK 3: NI 13 attempting to flitisize at 100000
+NI 13 FAILED flitisize: NO CREDITS from Router.
+CHECK 3: NI 13 attempting to flitisize at 100000
+Exiting @ tick 100000 because Network Tester completed simCycles
