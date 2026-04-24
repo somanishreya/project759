@@ -74,7 +74,7 @@ namespace garnet
 std::mutex GarnetNetwork::g_scheduling_mutex;
 
 GarnetNetwork::GarnetNetwork(const Params &p)
-    : Network(p), globalWakeupEvent([this]{ globalWakeup(); }, name())
+    : Network(p), globalWakeupEvent([this]{ globalWakeup(); }, name(), false, (Event::Priority) (Event::Default_Pri + 1))
 {
     m_num_rows = p.num_rows;
     m_ni_flit_size = p.ni_flit_size;
