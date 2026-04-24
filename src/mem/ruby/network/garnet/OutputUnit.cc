@@ -70,15 +70,28 @@ OutputUnit::decrement_credit(int out_vc)
     outVcState[out_vc].decrement_credit();
 }
 
+//void
+//OutputUnit::increment_credit(int out_vc)
+//{
+//    DPRINTF(RubyNetwork, "Router %d OutputUnit %s incrementing credit:%d for "
+//            "outvc %d at time: %lld from:%s\n", m_router->get_id(),
+//            m_router->getPortDirectionName(get_direction()),
+//            outVcState[out_vc].get_credit_count(),
+//            out_vc, m_router->curCycle(), m_credit_link->name());
+//
+//    outVcState[out_vc].increment_credit();
+//}
+
+
+
+
 void
 OutputUnit::increment_credit(int out_vc)
 {
-    DPRINTF(RubyNetwork, "Router %d OutputUnit %s incrementing credit:%d for "
-            "outvc %d at time: %lld from:%s\n", m_router->get_id(),
-            m_router->getPortDirectionName(get_direction()),
-            outVcState[out_vc].get_credit_count(),
-            out_vc, m_router->curCycle(), m_credit_link->name());
+    // Protect the counter from parallel race conditions
+    std::lock_guard<std::mutex> lock(m_credit_lock);
 
+    // FIXED: Using outVcState instead of m_outvc_state
     outVcState[out_vc].increment_credit();
 }
 
@@ -148,25 +161,39 @@ OutputUnit::select_free_vc(int vnet)
 //    }
 //}
 
+
+
+
 void
 OutputUnit::wakeup()
 {
-    if (m_credit_link->isReady(curTick())) {
-        Credit *t_credit = (Credit*) m_credit_link->consumeLink();
-        increment_credit(t_credit->get_vc());
+    std::lock_guard<std::mutex> lock(m_credit_lock); 
 
-        if (t_credit->is_free_signal())
-            set_vc_state(IDLE_, t_credit->get_vc(), curTick());
+    while (m_credit_link->getBuffer()->isReady(m_router->clockEdge())) {
+        flit *f = m_credit_link->getBuffer()->getTopFlit();
+        if (!f) break;
 
-        delete t_credit;
+        Credit *t_credit = static_cast<Credit *>(f);
+        int vc = t_credit->get_vc();
 
-        if (m_credit_link->isReady(curTick())) {
-            // --- CS 759: Mutex Removed! ---
-            // Instead of scheduling locally and locking, tell the router to stage it.
-            m_router->schedule_wakeup(Cycles(1));
+        outVcState[vc].increment_credit(); 
+
+        // CRITICAL CHANGE: 
+        // Only set the VC to IDLE if we have received a FREE signal 
+        // AND all credits have returned to the router.
+        if (t_credit->is_free_signal()) {
+            if (outVcState[vc].get_credit_count() == outVcState[vc].get_max_credit_count()) {
+                outVcState[vc].setState(IDLE_, m_router->clockEdge());
+            }
         }
+        delete t_credit;
     }
 }
+
+
+
+
+
 
 flitBuffer*
 OutputUnit::getOutQueue()
@@ -211,20 +238,32 @@ OutputUnit::updatePhase()
 }
 
 
+
+
 void
 OutputUnit::flushStagedEvents()
 {
-    // 1. Move flits from the temporary parallel stage to the actual buffer
-    // This is safe because only the main thread is running this loop.
-    for (auto& t_flit : m_staged_flits) {
-        outBuffer.insert(t_flit);
+    // 1. Move flits from the temporary parallel stage to the actual outBuffer
+    if (!m_staged_flits.empty()) {
+        std::cout << "[FLUSH-DATA] Router " << m_router->get_id() 
+                  << " Port " << m_id << ": Moving " << m_staged_flits.size() 
+                  << " flits to outBuffer at Tick " << m_router->clockEdge() << std::endl;
+
+        for (auto& t_flit : m_staged_flits) {
+            // This print tracks a specific flit ID leaving the router
+            std::cout << "   -> Flit ID " << t_flit->get_id() << " is now on the Link." << std::endl;
+            
+            outBuffer.insert(t_flit);
+        }
+        m_staged_flits.clear();
     }
-    m_staged_flits.clear();
 
     // 2. Handle the link wakeup
     if (m_staged_link_wakeup) {
-        // This modifies the gem5 global event queue (scheduleEventAbsolute).
-        // MUST be done here, sequentially.
+        std::cout << "[FLUSH-WAKE] Router " << m_router->get_id() 
+                  << " Port " << m_id << ": Scheduling Link Wakeup for next cycle." << std::endl;
+
+        // CRITICAL: Tells the physical link to process the outBuffer
         m_out_link->scheduleEventAbsolute(m_router->clockEdge(Cycles(1)));
         m_staged_link_wakeup = false;
     }

@@ -59,6 +59,7 @@ SwitchAllocator::SwitchAllocator(Router *router)
 
     m_input_arbiter_activity = 0;
     m_output_arbiter_activity = 0;
+    m_last_cycle = Tick(-1);
 
     // Now reserve based on the initialized value
     m_staged_decisions.reserve(m_num_inports);
@@ -78,15 +79,22 @@ SwitchAllocator::init()
 }
 
 
+
 void
 SwitchAllocator::wakeup()
 {
+    // --- THE FIX: TICK GUARD ---
+    // If we already did work this cycle, STOP.
+    if (m_last_cycle == m_router->curCycle()) {
+        return;
+    }
+    m_last_cycle = m_router->curCycle();
+    // ---------------------------
+
     arbitrate_inports();
     arbitrate_outports();
 
-    // --- ADD THIS LINE ---
     updatePhase(); 
-    // ---------------------
 
     clear_request_vector();
     check_for_wakeup();
@@ -97,28 +105,26 @@ SwitchAllocator::arbitrate_inports()
 {
     for (int inport = 0; inport < m_num_inports; inport++) {
         auto input_unit = m_router->getInputUnit(inport);
-
-        // CRITICAL: Check if the unit exists AND if it has VCs
-        if (!input_unit || input_unit->get_num_vcs() == 0) {
-            continue;
-        }
+        if (!input_unit || input_unit->get_num_vcs() == 0) continue;
 
         int actual_vcs = input_unit->get_num_vcs();
         int invc = m_round_robin_invc[inport] % actual_vcs;
 
         for (int invc_iter = 0; invc_iter < actual_vcs; invc_iter++) {
-            // If the code crashes HERE, it means the pointer returned by
-            // getInputUnit is pointing to deleted memory.
-            assert(invc >= 0 && invc < actual_vcs);
+            // DEBUG: See if there is a flit waiting for SA
             if (input_unit->need_stage(invc, SA_, m_router->clockEdge())) {
                 int outport = input_unit->get_outport(invc);
                 int outvc = input_unit->get_outvc(invc);
 
                 if (send_allowed(inport, invc, outport, outvc)) {
-                    m_input_arbiter_activity++;
+                    // Success! This inport is making a request
                     m_port_requests[inport] = outport;
                     m_vc_winners[inport] = invc;
                     break;
+                } else {
+                    // DEBUG: Request exists but outport/outvc is blocked (no credits)
+                    // std::cout << "Router " << m_router->get_id() << " Inport " << inport 
+                    //           << " blocked by send_allowed for outport " << outport << std::endl;
                 }
             }
             invc = (invc + 1) % actual_vcs;
@@ -129,104 +135,96 @@ SwitchAllocator::arbitrate_inports()
 void
 SwitchAllocator::arbitrate_outports()
 {
-    // Use parallel for to speed up the search across outports
-    #pragma omp parallel for
+    Tick current_time = m_router->clockEdge();
+    // This MUST stay outside the outport loop to work
+    std::vector<bool> inport_busy(m_num_inports, false);
+
     for (int outport = 0; outport < m_num_outports; outport++) {
         int inport = m_round_robin_inport[outport];
 
         for (int inport_iter = 0; inport_iter < m_num_inports; inport_iter++) {
-            bool found_winner = false;
-
-            // Step 1: Check if this inport is requesting this outport
-            if (m_port_requests[inport] == outport) {
+            
+            // CRITICAL CHECK: Has another outport already taken this inport?
+            if (!inport_busy[inport] && m_port_requests[inport] == outport) {
+                
                 auto input_unit = m_router->getInputUnit(inport);
                 int invc = m_vc_winners[inport];
-                int outvc = input_unit->get_outvc(invc);
 
-                // Step 2: Allocate VC if not already allocated
-                if (outvc == -1) {
-                    #pragma omp critical(vc_alloc)
-                    {
-                        outvc = vc_allocate(outport, inport, invc);
-                    }
-                }
+                // DOUBLE CHECK: Is the VC actually ready? 
+                // If it was already staged by Port 2, it shouldn't be ready for Port 3.
+                if (input_unit->get_vc_ptr(invc)->get_state() == ACTIVE_) {
+                    
+                    int outvc = input_unit->get_outvc(invc);
+                    if (outvc == -1) outvc = vc_allocate(outport, inport, invc);
 
-                if (outvc != -1) {
-                    // Step 3: THE FIX - Atomic Reservation
-                    #pragma omp critical(switch_decisions)
-                    {
-                        auto output_unit = m_router->getOutputUnit(outport);
+                    if (outvc != -1 && m_router->getOutputUnit(outport)->has_credit(outvc)) {
                         
-                        // Check if a credit is available
-                        if (output_unit->has_credit(outvc)) {
-                            // Check if the inport is still available (hasn't been taken by another outport)
-                            if (m_port_requests[inport] == outport) {
-                                
-                                // CLAIM THE CREDIT NOW: This prevents "Double Booking"
-                                output_unit->decrement_credit(outvc);
+                        // 1. Mark port as busy so no other outport can touch it
+                        inport_busy[inport] = true;
+                        
+                        // 2. Mark the VC as "IDLE" or "WAITING" so the next loop 
+                        // for a different outport doesn't see it as a candidate.
+                        input_unit->get_vc_ptr(invc)->set_state(IDLE_, current_time);
 
-                                // STAGE THE MOVE
-                                m_staged_decisions.push_back({inport, invc, outport, outvc});
-                                
-                                // Mark the inport as "taken" so other threads skip it
-                                m_port_requests[inport] = -1; 
-                                found_winner = true;
-                            }
-                        }
-                    }
-
-                    if (found_winner) {
-                        m_round_robin_inport[outport] = (inport + 1) % m_num_inports;
+                        m_router->getOutputUnit(outport)->decrement_credit(outvc);
+                        m_staged_decisions.push_back({inport, invc, outport, outvc});
+                        
+                        break; // Move to the next outport
                     }
                 }
             }
-
-            if (found_winner) break;
-
-            inport++;
-            if (inport >= m_num_inports) inport = 0;
+            inport = (inport + 1) % m_num_inports;
         }
     }
 }
 
 
+
+
+
 void
 SwitchAllocator::updatePhase()
 {
-    Tick current_time = m_router->clockEdge();
+    if (m_staged_decisions.empty()) return;
 
-    // This runs sequentially on the main thread
     for (auto& decision : m_staged_decisions) {
         auto input_unit = m_router->getInputUnit(decision.inport);
+        auto output_unit = m_router->getOutputUnit(decision.outport);
 
-        // Fetch the flit from the buffer
-        flit *t_flit = input_unit->getTopFlit(decision.invc);
+        // This call BOTH returns the pointer AND removes it from the buffer
+        flit *t_flit = input_unit->get_vc_ptr(decision.invc)->getTopFlit();
         
-        // Safety check: if the flit is missing, we have a logic error elsewhere
-        if (!t_flit) {
-             continue;
-        }
+        if (t_flit) {
+            // Now we use the pointer we just grabbed
+            bool is_tail = (t_flit->get_type() == TAIL_ || 
+                            t_flit->get_type() == HEAD_TAIL_);
+            
+            // 1. Tell upstream a slot is free
+            input_unit->increment_credit(decision.invc, is_tail, m_router->clockEdge());
 
-        // 1. Physically update the flit's location and state
-        t_flit->set_outport(decision.outport);
-        t_flit->set_vc(decision.outvc);
-        t_flit->advance_stage(ST_, current_time);
+            // 2. Execute crossing logic
+            std::cout << "EXECUTE: Router " << m_router->get_id() 
+                      << " | Flit " << t_flit->get_id() 
+                      << " crossing to Port " << decision.outport << std::endl;
+            
+            m_router->grant_switch(decision.inport, t_flit); 
 
-        // 2. Pass the flit to the switch (DO NOT decrement credit here!)
-        m_router->grant_switch(decision.inport, t_flit);
-        m_output_arbiter_activity++;
+            t_flit->set_outport(decision.outport);
+            t_flit->set_vc(decision.outvc);
+            t_flit->advance_stage(ST_, m_router->clockEdge());
 
-        // 3. Handle credit returns for the source router
-        if ((t_flit->get_type() == TAIL_) || t_flit->get_type() == HEAD_TAIL_) {
-            input_unit->set_vc_idle(decision.invc, current_time);
-            input_unit->increment_credit(decision.invc, true, current_time);
+            // 3. Move flit to OutputUnit
+            output_unit->insert_flit(t_flit);
+            output_unit->wakeup(); 
+            
         } else {
-            input_unit->increment_credit(decision.invc, false, current_time);
+            // This should only happen if another thread or function 
+            // emptied the buffer unexpectedly
+            std::cerr << "ERROR: VC " << decision.invc << " was empty!" << std::endl;
         }
     }
-    
-    // Clear the staging buffer for the next simulation cycle
     m_staged_decisions.clear();
+    std::cout << "CLEARING" << std::endl;
 }
 
 bool

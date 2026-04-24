@@ -242,16 +242,37 @@ Router::schedule_wakeup(Cycles time)
     // scheduleEvent(time);
 
     // Thread-safe local staging instead of global min-heap insertion
-    m_staged_wakeups.push_back(time);
+    #pragma omp critical(router_wakeup_lock)
+    {
+        m_staged_wakeups.push_back(time);
+    }
 }
+
+
+
+
 
 void
 Router::flushStagedEvents()
 {
+    // 1. Handle Router's internal pipeline wakeups
     for (Cycles t : m_staged_wakeups) {
         scheduleEvent(t);
     }
     m_staged_wakeups.clear();
+
+    // 2. Handle Flits (Forward Path)
+    // Tells each OutputUnit to push flits to the next router/NI
+    for (auto& out_unit : m_output_unit) {
+        out_unit->flushStagedEvents(); 
+    }
+
+    // 3. Handle Credits (Backward Path)
+    // Tells each InputUnit to push credits back to the previous router/NI
+    // CHANGED: Now calling flushStagedEvents instead of just flushStagedCredits
+    for (auto& in_unit : m_input_unit) {
+        in_unit->flushStagedEvents();
+    }
 }
 
 std::string

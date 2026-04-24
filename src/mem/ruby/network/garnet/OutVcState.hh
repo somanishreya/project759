@@ -49,6 +49,7 @@ class OutVcState
     OutVcState(int id, GarnetNetwork *network_ptr, uint32_t consumerVcs);
 
     int get_credit_count()          { return m_credit_count; }
+    int get_max_credit_count()      { return m_max_credit_count; }
     inline bool has_credit()       { return (m_credit_count > 0); }
     void increment_credit();
     void decrement_credit();

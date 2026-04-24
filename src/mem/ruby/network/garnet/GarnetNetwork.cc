@@ -210,44 +210,41 @@ GarnetNetwork::globalWakeup()
     trace::Logger *old_logger = trace::getDebugLogger();
     trace::setDebugLogger(buffered_logger);
 
-    // --- PHASE 1: Parallel Compute ---
-    // All routers perform logic and arbitration in parallel.
+    // --- PHASE 1: ARBITRATION (Parallel) ---
     #pragma omp parallel for
     for (int i = 0; i < m_routers.size(); i++) {
         gem5::curEventQueue(eq);
         BufferedLogger::currentContext = m_routers[i]->name();
-
-        m_routers[i]->computePhase(); // This is the new compute logic
-
+        m_routers[i]->computePhase(); 
         BufferedLogger::currentContext = "";
     }
 
-    // --- PHASE 2: Parallel Update ---
-    // All routers move flits internally and to output staging.
+    // --- PHASE 2: INTERNAL MOVEMENT (Parallel) ---
     #pragma omp parallel for
     for (int i = 0; i < m_routers.size(); i++) {
         gem5::curEventQueue(eq);
-        m_routers[i]->updatePhase();
+        m_routers[i]->updatePhase(); 
     }
 
-    // --- PHASE 3: Sequential Flush (Safety Barrier) ---
-    // The main thread pushes all events to the gem5 global queue.
-    // This MUST NOT be parallelized.
+    // --- PHASE 3: SEQUENTIAL FLUSH (The "Link" Barrier) ---
+    // We REMOVED the manual m_nis[i]->wakeup() loop.
+    // Pushing events here schedules them for Tick 8501+.
     for (int i = 0; i < m_routers.size(); i++) {
-        m_routers[i]->flushStagedEvents();
+        m_routers[i]->flushStagedEvents(); 
     }
 
+    // --- CLEANUP & RESCHEDULE ---
     trace::setDebugLogger(old_logger);
-
-    // Print buffered messages in order of router name
     for (auto const& [name, message] : buffered_logger->buffer) {
         old_logger->getOstream() << message;
     }
     delete buffered_logger;
 
-    // Reschedule for the next cycle
     schedule(globalWakeupEvent, clockEdge(Cycles(1)));
 }
+
+
+
 
 /*
  * This function creates a link from the Network Interface (NI)

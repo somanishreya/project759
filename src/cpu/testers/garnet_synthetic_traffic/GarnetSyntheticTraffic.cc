@@ -142,6 +142,7 @@ GarnetSyntheticTraffic::completeRequest(PacketPtr pkt)
 void
 GarnetSyntheticTraffic::tick()
 {
+    //std::cout << "CHECK 1: Traffic Gen Tick at " << curTick() << std::endl;
     if (++noResponseCycles >= responseLimit) {
         fatal("%s deadlocked at cycle %d\n", name(), curTick());
     }

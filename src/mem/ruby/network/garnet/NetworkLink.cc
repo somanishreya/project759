@@ -79,6 +79,8 @@ NetworkLink::setSourceQueue(flitBuffer *src_queue, ClockedObject *srcClockObj)
     src_object = srcClockObj;
 }
 
+
+
 void
 NetworkLink::wakeup()
 {
@@ -86,20 +88,29 @@ NetworkLink::wakeup()
         src_object->name());
     assert(link_srcQueue != nullptr);
     assert(curTick() == clockEdge());
+    
     if (link_srcQueue->isReady(curTick())) {
         flit *t_flit = link_srcQueue->getTopFlit();
+        
         DPRINTF(RubyNetwork, "Transmission will finish at %ld :%s\n",
                 clockEdge(m_latency), *t_flit);
+        
         if (m_type != NUM_LINK_TYPES_) {
-            // Only for assertions and debug messages
-            assert(t_flit->m_width == bitWidth);
+            // FIX: Only assert width if the flit is NOT a credit.
+            // Credits do not occupy the full data bus width.
+            if (t_flit->get_type() != CREDIT_) { 
+                assert(t_flit->m_width == bitWidth);
+            }
+
             assert((std::find(mVnets.begin(), mVnets.end(),
                 t_flit->get_vnet()) != mVnets.end()) ||
                 (mVnets.size() == 0));
         }
+        
         t_flit->set_time(clockEdge(m_latency));
         linkBuffer.insert(t_flit);
         link_consumer->scheduleEventAbsolute(clockEdge(m_latency));
+        
         m_link_utilized++;
         m_vc_load[t_flit->get_vc()]++;
     }

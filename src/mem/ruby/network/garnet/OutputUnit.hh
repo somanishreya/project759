@@ -124,6 +124,7 @@ class OutputUnit : public Consumer
 
     std::vector<flit*> m_staged_flits; //ECE 759: Local Staging Buffer
     bool m_staged_link_wakeup = false;
+    std::mutex m_credit_lock;
 };
 
 } // namespace garnet

@@ -191,6 +191,32 @@ NetworkInterface::incrementStats(flit *t_flit)
 void
 NetworkInterface::wakeup()
 {
+    // --- EMERGENCY DEBUG PRINT ---
+    static int ni_heartbeat = 0;
+    if (ni_heartbeat++ % 100 == 0) {
+        std::cout << "NI " << m_id << " HEARTBEAT at " << curTick() << std::endl;
+    }
+
+    // Checking for messages coming from the protocol
+    // Checking for messages coming from the protocol
+    for (int vnet = 0; vnet < inNode_ptr.size(); ++vnet) {
+        MessageBuffer *b = inNode_ptr[vnet];
+        if (b != nullptr && b->isReady(clockEdge())) {
+             std::cout << "NI " << m_id << " sees message ready on Vnet " << vnet << std::endl;
+             
+             // --- FIX: Use MsgPtr here ---
+             MsgPtr msg_ptr = b->peekMsgPtr(); 
+
+             if (flitisizeMessage(msg_ptr, vnet)) {
+                 std::cout << "NI " << m_id << " successfully flitisized message!" << std::endl;
+                 b->dequeue(clockEdge());
+             } else {
+                 // If this prints, it means the NI has no credits to send to the router!
+                 std::cout << "NI " << m_id << " FAILED flitisize: NO CREDITS from Router." << std::endl;
+             }
+        }
+    }
+    
     std::ostringstream oss;
     for (auto &oPort: outPorts) {
         oss << oPort->routerID() << "[" << oPort->printVnets() << "] ";
@@ -231,8 +257,15 @@ NetworkInterface::wakeup()
         if (inNetLink->isReady(curTick())) {
             flit *t_flit = inNetLink->consumeLink();
             DPRINTF(RubyNetwork, "Recieved flit:%s\n", *t_flit);
-            assert(t_flit->m_width == iPort->bitWidth());
-
+            //assert(t_flit->m_width == iPort->bitWidth());
+            
+            // --- FIX START ---
+            // Bypass the width assertion if the flit is a CREDIT
+            if (t_flit->get_type() != CREDIT_) {
+                 assert(t_flit->m_width == iPort->bitWidth());
+            }
+            // --- FIX END ---
+           
             int vnet = t_flit->get_vnet();
             t_flit->set_dequeue_time(curTick());
 
@@ -373,6 +406,7 @@ NetworkInterface::checkStallQueue()
 bool
 NetworkInterface::flitisizeMessage(MsgPtr msg_ptr, int vnet)
 {
+    std::cout << "CHECK 3: NI " << m_id << " attempting to flitisize at " << curTick() << std::endl;
     Message *net_msg_ptr = msg_ptr.get();
     NetDest net_msg_dest = net_msg_ptr->getDestination();
 

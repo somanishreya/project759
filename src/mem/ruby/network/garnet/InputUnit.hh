@@ -34,10 +34,12 @@
 
 #include <iostream>
 #include <vector>
+#include <mutex>
 
 #include "mem/ruby/common/Consumer.hh"
 #include "mem/ruby/network/garnet/CommonTypes.hh"
 #include "mem/ruby/network/garnet/CreditLink.hh"
+#include "mem/ruby/network/garnet/Credit.hh"
 #include "mem/ruby/network/garnet/NetworkLink.hh"
 #include "mem/ruby/network/garnet/Router.hh"
 #include "mem/ruby/network/garnet/VirtualChannel.hh"
@@ -60,6 +62,7 @@ class InputUnit : public Consumer
 {
   public:
     int get_num_vcs() const { return virtualChannels.size(); }
+    VirtualChannel* get_vc_ptr(int vc) { return &virtualChannels[vc]; }
     InputUnit(int id, PortDirection direction, Router *router);
     ~InputUnit() = default;
 
@@ -183,6 +186,7 @@ class InputUnit : public Consumer
 
     std::vector<Credit*> m_staged_credits;
     bool m_staged_credit_wakeup = false;
+    std::mutex m_credit_lock;
 };
 
 } // namespace garnet

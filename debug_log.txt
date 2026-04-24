@@ -1,0 +1,318 @@
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: L1Cache_Controller is deprecated. Use Garnet_standalone_L1Cache_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+warn: Directory_Controller is deprecated. Use Garnet_standalone_Directory_Controller instead
+Global frequency set at 1000000000000 ticks per second
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (8 Mbytes)
+src/base/statistics.hh:279: warn: One of the stats is a legacy stat. Legacy stat is a stat that does not belong to any statistics::Group. Legacy stat is deprecated.
+src/base/statistics.hh:279: warn: One of the stats is a legacy stat. Legacy stat is a stat that does not belong to any statistics::Group. Legacy stat is deprecated.
+src/base/statistics.hh:279: warn: One of the stats is a legacy stat. Legacy stat is a stat that does not belong to any statistics::Group. Legacy stat is deprecated.
+src/base/statistics.hh:279: warn: One of the stats is a legacy stat. Legacy stat is a stat that does not belong to any statistics::Group. Legacy stat is deprecated.
+src/mem/ruby/network/garnet/GarnetNetwork.cc:119: info: Garnet version 3.0
+gem5 Simulator System.  https://www.gem5.org
+gem5 is copyrighted software; use the --copyright option for details.
+
+gem5 version 25.1.0.0
+gem5 compiled Apr 23 2026 22:53:22
+gem5 started Apr 23 2026 22:54:28
+gem5 executing on DESKTOP-D0O9BA6, pid 480961
+command line: ./build/Garnet_standalone/gem5.opt configs/example/garnet_synth_traffic.py --num-cpus=64 --num-dirs=64 --network=garnet --topology=Mesh_XY --mesh-rows=8 --sim-cycles=100000 --synthetic=uniform_random --injectionrate=0.1
+
+src/mem/ruby/system/Sequencer.cc:707: warn: Replacement policy updates recently became the responsibility of SLICC state machines. Make sure to setMRU() near callbacks in .sm files!
+NI 61 HEARTBEAT at 1500
+NI 61 sees message ready on Vnet 0
+CHECK 3: NI 61 attempting to flitisize at 1500
+NI 61 successfully flitisized message!
+NI 60 sees message ready on Vnet 0
+CHECK 3: NI 60 attempting to flitisize at 1500
+NI 60 successfully flitisized message!
+NI 55 sees message ready on Vnet 2
+CHECK 3: NI 55 attempting to flitisize at 1500
+NI 55 successfully flitisized message!
+NI 42 sees message ready on Vnet 1
+CHECK 3: NI 42 attempting to flitisize at 1500
+NI 42 successfully flitisized message!
+NI 4 sees message ready on Vnet 1
+CHECK 3: NI 4 attempting to flitisize at 1500
+NI 4 successfully flitisized message!
+[TICK 2500] ROUTER 4 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 3
+[STAGED] Router 4 | VC 4 | Staged Count: 1
+EXECUTE: Router 4 | Flit 0 crossing to Port 3
+CLEARING
+[TICK 2500] ROUTER 42 RECEIVED Flit ID: 0 on VC: 4
+  -> Flit 0 assigned Outport: 2
+[STAGED] Router 42 | VC 4 | Staged Count: 1
+EXECUTE: Router 42 | Flit 0 crossing to Port 2
+CLEARING
+[TICK 2500] ROUTER 55 RECEIVED Flit ID: 0 on VC: 8
+  -> Flit 0 assigned Outport: 3
+[STAGED] Router 55 | VC 8 | Staged Count: 1
+EXECUTE: Router 55 | Flit 0 crossing to Port 3
+CLEARING
+[TICK 2500] ROUTER 60 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+[STAGED] Router 60 | VC 0 | Staged Count: 1
+EXECUTE: Router 60 | Flit 0 crossing to Port 3
+CLEARING
+[TICK 2500] ROUTER 61 RECEIVED Flit ID: 0 on VC: 0
+  -> Flit 0 assigned Outport: 3
+[STAGED] Router 61 | VC 0 | Staged Count: 1
+EXECUTE: Router 61 | Flit 0 crossing to Port 3
+CLEARING
+[ST-SUCCESS] Router 4 pushing Flit 0 to OutputUnit 3
+[ST-SUCCESS] Router 42 pushing Flit 0 to OutputUnit 2
+[ST-SUCCESS] Router 55 pushing Flit 0 to OutputUnit 3
+[ST-SUCCESS] Router 60 pushing Flit 0 to OutputUnit 3
+[ST-SUCCESS] Router 61 pushing Flit 0 to OutputUnit 3
+[FLUSH-DATA] Router 4 Port 3: Moving 2 flits to outBuffer at Tick 2500
+   -> Flit ID 0 is now on the Link.
+   -> Flit ID 0 is now on the Link.
+[FLUSH-WAKE] Router 4 Port 3: Scheduling Link Wakeup for next cycle.
+[FLUSH-DATA] Router 42 Port 2: Moving 2 flits to outBuffer at Tick 2500
+   -> Flit ID 0 is now on the Link.
+   -> Flit ID 0 is now on the Link.
+[FLUSH-WAKE] Router 42 Port 2: Scheduling Link Wakeup for next cycle.
+[FLUSH-DATA] Router 55 Port 3: Moving 2 flits to outBuffer at Tick 2500
+   -> Flit ID 0 is now on the Link.
+   -> Flit ID 0 is now on the Link.
+[FLUSH-WAKE] Router 55 Port 3: Scheduling Link Wakeup for next cycle.
+[FLUSH-DATA] Router 60 Port 3: Moving 2 flits to outBuffer at Tick 2500
+   -> Flit ID 0 is now on the Link.
+   -> Flit ID 0 is now on the Link.
+[FLUSH-WAKE] Router 60 Port 3: Scheduling Link Wakeup for next cycle.
+[FLUSH-DATA] Router 61 Port 3: Moving 2 flits to outBuffer at Tick 2500
+   -> Flit ID 0 is now on the Link.
+   -> Flit ID 0 is now on the Link.
+[FLUSH-WAKE] Router 61 Port 3: Scheduling Link Wakeup for next cycle.
+NI 22 sees message ready on Vnet 0
+CHECK 3: NI 22 attempting to flitisize at 2500
+NI 22 successfully flitisized message!
+NI 29 sees message ready on Vnet 1
+CHECK 3: NI 29 attempting to flitisize at 2500
+NI 29 successfully flitisized message!
+[TICK 3000] ROUTER 55 RECEIVED Flit ID: 1 on VC: 8
+gem5.opt: src/mem/ruby/network/garnet/VirtualChannel.cc:71: bool gem5::ruby::garnet::VirtualChannel::need_stage(gem5::ruby::garnet::flit_stage, gem5::Tick): Assertion `m_vc_state.first == ACTIVE_ && m_vc_state.second <= time' failed.
+Program aborted at tick 3000
+--- BEGIN LIBC BACKTRACE ---
+./build/Garnet_standalone/gem5.opt(_ZN4gem515print_backtraceEv+0x30)[0x592a56fcfca0]
+./build/Garnet_standalone/gem5.opt(_ZN4gem512abortHandlerEi+0x4c)[0x592a56ffb4fc]
+/lib/x86_64-linux-gnu/libc.so.6(+0x45330)[0x7fec1d245330]
+/lib/x86_64-linux-gnu/libc.so.6(pthread_kill+0x11c)[0x7fec1d29eb2c]
+/lib/x86_64-linux-gnu/libc.so.6(gsignal+0x1e)[0x7fec1d24527e]
+/lib/x86_64-linux-gnu/libc.so.6(abort+0xdf)[0x7fec1d2288ff]
+/lib/x86_64-linux-gnu/libc.so.6(+0x2881b)[0x7fec1d22881b]
+/lib/x86_64-linux-gnu/libc.so.6(+0x3b517)[0x7fec1d23b517]
+./build/Garnet_standalone/gem5.opt(+0x1146bfe)[0x592a57805bfe]
+./build/Garnet_standalone/gem5.opt(_ZN4gem54ruby6garnet15SwitchAllocator17arbitrate_inportsEv+0x184)[0x592a57803f84]
+./build/Garnet_standalone/gem5.opt(_ZN4gem54ruby6garnet15SwitchAllocator6wakeupEv+0x11a)[0x592a57804c6a]
+./build/Garnet_standalone/gem5.opt(_ZN4gem54ruby6garnet6Router12computePhaseEv+0xeb)[0x592a577fc3cb]
+./build/Garnet_standalone/gem5.opt(+0x101cee6)[0x592a576dbee6]
+./build/Garnet_standalone/gem5.opt(_ZN4gem510EventQueue10serviceOneEv+0xb7)[0x592a56fe7b87]
+./build/Garnet_standalone/gem5.opt(_ZN4gem59doSimLoopEPNS_10EventQueueE+0x70)[0x592a57026230]
+./build/Garnet_standalone/gem5.opt(_ZN4gem58simulateEm+0x25e)[0x592a570269ce]
+./build/Garnet_standalone/gem5.opt(+0x1895b82)[0x592a57f54b82]
+./build/Garnet_standalone/gem5.opt(+0x69898a)[0x592a56d5798a]
+/lib/x86_64-linux-gnu/libpython3.12.so.1.0(+0x1df4b8)[0x7fec1e5df4b8]
+/lib/x86_64-linux-gnu/libpython3.12.so.1.0(_PyObject_Call+0x5c)[0x7fec1e58485c]
+/lib/x86_64-linux-gnu/libpython3.12.so.1.0(_PyEval_EvalFrameDefault+0x8ec)[0x7fec1e519dec]
+/lib/x86_64-linux-gnu/libpython3.12.so.1.0(PyEval_EvalCode+0x20f)[0x7fec1e6a091f]
+/lib/x86_64-linux-gnu/libpython3.12.so.1.0(+0x29c8b0)[0x7fec1e69c8b0]
+/lib/x86_64-linux-gnu/libpython3.12.so.1.0(+0x1dfadc)[0x7fec1e5dfadc]
+/lib/x86_64-linux-gnu/libpython3.12.so.1.0(PyObject_Vectorcall+0x5c)[0x7fec1e582b2c]
+/lib/x86_64-linux-gnu/libpython3.12.so.1.0(_PyEval_EvalFrameDefault+0x40ee)[0x7fec1e51d5ee]
+./build/Garnet_standalone/gem5.opt(+0x944289)[0x592a57003289]
+./build/Garnet_standalone/gem5.opt(main+0x218)[0x592a56d063b8]
+/lib/x86_64-linux-gnu/libc.so.6(+0x2a1ca)[0x7fec1d22a1ca]
+/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0x8b)[0x7fec1d22a28b]
+./build/Garnet_standalone/gem5.opt(_start+0x25)[0x592a56d43c35]
+--- END LIBC BACKTRACE ---
+For more info on how to address this issue, please visit https://www.gem5.org/documentation/general_docs/common-errors/ 
+

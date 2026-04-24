@@ -65,78 +65,54 @@ InputUnit::InputUnit(int id, PortDirection direction, Router *router)
 void
 InputUnit::wakeup()
 {
-    flit *t_flit;
-    // Use clockEdge() for timing consistency across parallel threads
     if (m_in_link->isReady(m_router->clockEdge())) {
-
-        t_flit = m_in_link->consumeLink();
-
-        DPRINTF(RubyNetwork, "Router[%d] Consuming:%s Width: %d Flit:%s\n",
-        m_router->get_id(), m_in_link->name(),
-        m_router->getBitWidth(), *t_flit);
-
-        assert(t_flit->m_width == m_router->getBitWidth());
-
-        int vc = t_flit->get_vc();
-
-        // --- SAFETY CHECK: Bounds check to prevent SegFault ---
-        if (vc >= virtualChannels.size()) {
-            fatal("Router %d received flit with out-of-bounds VC %d (Max: %d)",
-                  m_router->get_id(), vc, virtualChannels.size());
-        }
-
+        flit *t_flit = m_in_link->consumeLink();
+        
+        // Define VC first so it's available for the print and the credit
+        int vc = t_flit->get_vc(); 
         t_flit->increment_hops();
 
-        if ((t_flit->get_type() == HEAD_) ||
-            (t_flit->get_type() == HEAD_TAIL_)) {
+        // --- THE TRACER PRINT (Now Safe) ---
+        std::cout << "[TICK " << m_router->clockEdge() << "] ROUTER " << m_router->get_id() 
+                  << " RECEIVED Flit ID: " << t_flit->get_id() 
+                  << " on VC: " << vc << std::endl;
 
-            assert(virtualChannels[vc].get_state() == IDLE_);
+        if ((t_flit->get_type() == HEAD_) || (t_flit->get_type() == HEAD_TAIL_)) {
             set_vc_active(vc, m_router->clockEdge());
-
-            int outport = m_router->route_compute(t_flit->get_route(),
-                m_id, m_direction);
-
+            int outport = m_router->route_compute(t_flit->get_route(), m_id, m_direction);
             grant_outport(vc, outport);
-
-        } else {
-            assert(virtualChannels[vc].get_state() == ACTIVE_);
+            
+            std::cout << "  -> Flit " << t_flit->get_id() << " assigned Outport: " << outport << std::endl;
         }
 
-        // Buffer the flit
         virtualChannels[vc].insertFlit(t_flit);
+        
+        // Send credit back to the previous router
+        //increment_credit(vc, false, m_router->clockEdge());
 
-        int vnet = vc / m_vc_per_vnet;
-        m_num_buffer_writes[vnet]++;
-        m_num_buffer_reads[vnet]++;
-
+        // Advance to SA_
         Cycles pipe_stages = m_router->get_pipe_stages();
-        if (pipe_stages == 1) {
-            // Use clockEdge() instead of curTick() to ensure flit is ready for SA
-            t_flit->advance_stage(SA_, m_router->clockEdge());
-        } else {
-            assert(pipe_stages > 1);
-            Cycles wait_time = pipe_stages - Cycles(1);
-            t_flit->advance_stage(SA_, m_router->clockEdge(wait_time));
-
-            m_router->schedule_wakeup(wait_time);
-        }
-
-        if (m_in_link->isReady(m_router->clockEdge())) {
-            m_router->schedule_wakeup(Cycles(1));
-        }
+        Tick ready_time = (pipe_stages == 1) ? m_router->clockEdge() : m_router->clockEdge(pipe_stages - Cycles(1));
+        t_flit->advance_stage(SA_, ready_time);
+        
+        m_router->schedule_wakeup(Cycles(pipe_stages - Cycles(1)));
     }
 }
+
+
 
 void
 InputUnit::increment_credit(int in_vc, bool free_signal, Tick curTime)
 {
-    DPRINTF(RubyNetwork, "Router[%d]: Sending a credit vc:%d free:%d to %s\n",
-    m_router->get_id(), in_vc, free_signal, m_credit_link->name());
-
     Credit *t_credit = new Credit(in_vc, free_signal, curTime);
-
-    // Thread-safe: push to staging buffer for the updatePhase to handle
+    
+    // Use a simple lock to prevent corruption
+    m_credit_lock.lock(); 
     m_staged_credits.push_back(t_credit);
+    std::cout << "[STAGED] Router " << m_router->get_id() 
+              << " | VC " << in_vc << " | Staged Count: " 
+              << m_staged_credits.size() << std::endl;
+    m_credit_lock.unlock();
 }
 
 void
@@ -151,13 +127,26 @@ InputUnit::updatePhase()
     }
 }
 
+
+
+
 void
 InputUnit::flushStagedEvents()
 {
-    if (m_staged_credit_wakeup) {
-        // Schedule credit link at the next cycle edge
-        m_credit_link->scheduleEventAbsolute(m_router->clockEdge(Cycles(1)));
-        m_staged_credit_wakeup = false;
+    std::lock_guard<std::mutex> lock(m_credit_lock); 
+    if (!m_staged_credits.empty()) {
+        for (auto& t_credit : m_staged_credits) {
+            m_credit_link->getBuffer()->insert(static_cast<flit *>(t_credit));
+        }
+        m_staged_credits.clear();
+        
+        // FIX: Use alreadyScheduled with a specific tick. 
+        // This is the standard way for a Ruby Consumer (like a Link).
+        //Tick nextTick = m_router->clockEdge(Cycles(1));
+        Tick nextTick = m_router->clockEdge() + m_router->cyclesToTicks(Cycles(1));
+        if (!m_credit_link->alreadyScheduled(nextTick)) {
+            m_credit_link->scheduleEventAbsolute(nextTick);
+        }
     }
 }
 

@@ -100,36 +100,45 @@ CrossbarSwitch::wakeup()
     // our switchBuffers via update_sw_winner().
 }
 
+
+
+
+
 void
 CrossbarSwitch::updatePhase()
 {
-    // --- CS 759: Update Phase ---
-    // This runs sequentially or via thread-parallelism per-router.
-    // We physically move flits from the Crossbar to the OutputUnits.
+    for (int i = 0; i < switchBuffers.size(); ++i) {
+        auto& switch_buffer = switchBuffers[i];
+        
+        if (switch_buffer.isEmpty()) continue;
 
-    for (auto& switch_buffer : switchBuffers) {
         if (!switch_buffer.isReady(curTick())) {
             continue;
         }
 
         flit *t_flit = switch_buffer.peekTopFlit();
 
-        // Ensure the flit is actually ready for Switch Traversal
         if (t_flit->is_stage(ST_, curTick())) {
             int outport = t_flit->get_outport();
 
-            // Advance flit to Link Traversal (LT_) for the next cycle
+            // ADVANCE: Move to LT_
             t_flit->advance_stage(LT_, m_router->clockEdge(Cycles(1)));
             t_flit->set_time(m_router->clockEdge(Cycles(1)));
 
-            // Hand the flit over to the OutputUnit.
-            // Note: OutputUnit::insert_flit is now thread-safe because
-            // it only touches the OutputUnit's internal staging buffer.
+            std::cout << "[ST-SUCCESS] Router " << m_router->get_id() 
+                      << " pushing Flit " << t_flit->get_id() 
+                      << " to OutputUnit " << outport << std::endl;
+
             m_router->getOutputUnit(outport)->insert_flit(t_flit);
 
-            // Pop the flit from the crossbar buffer
             switch_buffer.getTopFlit();
             m_crossbar_activity++;
+        } else {
+            // FIXED: Accessing .first (the stage) and .second (the tick)
+             std::cout << "[ST-STAGE-FAIL] Router " << m_router->get_id() 
+                       << " Flit " << t_flit->get_id() << " is in stage " 
+                       << t_flit->get_stage().first << " at time " 
+                       << t_flit->get_stage().second << " not ST_" << std::endl;
         }
     }
 }

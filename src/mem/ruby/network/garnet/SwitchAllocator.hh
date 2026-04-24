@@ -99,6 +99,7 @@ class SwitchAllocator : public Consumer
     std::vector<int> m_round_robin_inport;
     std::vector<int> m_port_requests;
     std::vector<int> m_vc_winners;
+    Tick m_last_cycle;
 
     // --- CS 759: Staging buffer for allocator decisions ---
     std::vector<SwitchDecision> m_staged_decisions;

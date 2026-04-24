@@ -66,6 +66,9 @@ OutVcState::OutVcState(int id, GarnetNetwork *network_ptr,
 void
 OutVcState::increment_credit()
 {
+ 
+    std::cout << "[RECEIVING] VC " << m_id << " | Current: " << m_credit_count 
+              << " | Max: " << m_max_credit_count << " | Tick: " << curTick() << std::endl; 
     m_credit_count++;
     assert(m_credit_count <= m_max_credit_count);
 }
