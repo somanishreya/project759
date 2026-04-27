@@ -117,6 +117,10 @@ GarnetNetwork::GarnetNetwork(const Params &p)
 
     // Print Garnet version
     inform("Garnet version %s\n", garnetVersion);
+
+    for (int i = 0; i < 128; i++) {
+        m_wakeup_mask[i].mask = 0;
+    }
 }
 
 void
@@ -201,6 +205,12 @@ class BufferedLogger : public trace::Logger
 thread_local std::string BufferedLogger::currentContext = "";
 
 void
+GarnetNetwork::registerWakeup(int router_id, Tick tick)
+{
+    m_wakeup_mask[(tick / clockPeriod()) % 128].mask.fetch_or(1ULL << router_id);
+}
+
+void
 GarnetNetwork::globalWakeup()
 {
     gem5::EventQueue *eq = gem5::curEventQueue();
@@ -209,14 +219,28 @@ GarnetNetwork::globalWakeup()
     trace::setDebugLogger(buffered_logger);
 
     Tick current_tick = curTick();
+    uint64_t mask = m_wakeup_mask[(current_tick / clockPeriod()) % 128].mask.exchange(0);
+
+    if (mask == 0) {
+        schedule(globalWakeupEvent, clockEdge(Cycles(1)));
+        return;
+    }
+
+    std::vector<int> work_list;
+    while (mask) {
+        int id = __builtin_ctzll(mask);
+        work_list.push_back(id);
+        mask &= ~(1ULL << id);
+    }
 
     #pragma omp parallel for
-    for (int i = 0; i < m_routers.size(); i++) {
+    for (int i = 0; i < work_list.size(); i++) {
+        int id = work_list[i];
         gem5::curEventQueue(eq);
-        if (m_routers[i]->alreadyScheduled(current_tick)) {
-            m_routers[i]->descheduleTick(current_tick);
-            BufferedLogger::currentContext = m_routers[i]->name();
-            m_routers[i]->wakeup();
+        if (m_routers[id]->alreadyScheduled(current_tick)) {
+            m_routers[id]->descheduleTick(current_tick);
+            BufferedLogger::currentContext = m_routers[id]->name();
+            m_routers[id]->wakeup();
             BufferedLogger::currentContext = "";
         }
     }

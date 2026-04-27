@@ -174,7 +174,9 @@ void
 Router::schedule_wakeup(Cycles time)
 {
     // wake up after time cycles
+    Tick target_tick = clockEdge(time);
     recordEvent(time);
+    m_network_ptr->registerWakeup(m_id, target_tick);
 }
 
 std::string

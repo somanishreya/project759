@@ -101,6 +101,8 @@ class GarnetNetwork : public Network
     static std::mutex g_scheduling_mutex;
     int get_router_id(int ni, int vnet);
 
+    void registerWakeup(int router_id, Tick tick);
+
 
     // Methods used by Topology to setup the network
     void makeExtOutLink(SwitchID src, NodeID dest, BasicLink* link,
@@ -231,6 +233,14 @@ class GarnetNetwork : public Network
     GarnetNetwork& operator=(const GarnetNetwork& obj);
 
     std::mutex stats_mutex;
+
+    struct alignas(64) PaddedMask {
+        std::atomic<uint64_t> mask;
+
+        PaddedMask() : mask(0) {}
+    };
+
+    PaddedMask m_wakeup_mask[128];
 
     std::vector<VNET_type > m_vnet_type;
     std::vector<Router *> m_routers;   // All Routers in Network
