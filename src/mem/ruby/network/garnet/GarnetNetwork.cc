@@ -214,9 +214,14 @@ void
 GarnetNetwork::globalWakeup()
 {
     gem5::EventQueue *eq = gem5::curEventQueue();
-    BufferedLogger *buffered_logger = new BufferedLogger();
-    trace::Logger *old_logger = trace::getDebugLogger();
+    BufferedLogger *buffered_logger = nullptr;
+    trace::Logger *old_logger = nullptr;
+
+    if (GEM5_UNLIKELY(debug::RubyNetwork)) {
+        buffered_logger = new BufferedLogger();
+        old_logger = trace::getDebugLogger();
     trace::setDebugLogger(buffered_logger);
+    }
 
     Tick current_tick = curTick();
     uint64_t mask = m_wakeup_mask[(current_tick / clockPeriod()) % 128].mask.exchange(0);
@@ -245,6 +250,7 @@ GarnetNetwork::globalWakeup()
         }
     }
 
+    if (buffered_logger) {
     trace::setDebugLogger(old_logger);
 
     // Print buffered messages in order of router name
@@ -252,6 +258,7 @@ GarnetNetwork::globalWakeup()
         old_logger->getOstream() << message;
     }
     delete buffered_logger;
+    }
 
     schedule(globalWakeupEvent, clockEdge(Cycles(1)));
 }
