@@ -33,8 +33,11 @@
 #define __MEM_RUBY_NETWORK_GARNET_0_GARNETNETWORK_HH__
 
 #include <atomic>
+#include <condition_variable>
 #include <iostream>
+#include <memory>
 #include <mutex>
+#include <thread>
 #include <vector>
 
 #include "mem/ruby/network/Network.hh"
@@ -65,7 +68,7 @@ class GarnetNetwork : public Network
   public:
     typedef GarnetNetworkParams Params;
     GarnetNetwork(const Params &p);
-    ~GarnetNetwork() = default;
+    ~GarnetNetwork();
 
     void init();
 
@@ -249,6 +252,30 @@ class GarnetNetwork : public Network
     std::vector<CreditLink *> m_creditlinks; // All credit links in the network
     std::vector<NetworkInterface *> m_nis;   // All NI's in Network
     std::atomic<int> m_next_packet_id; // static vairable for packet id allocation
+
+    // Thread pool for parallel router execution
+    struct WorkerState {
+        std::mutex mutex;
+        std::condition_variable cv;
+        uint64_t task_generation;
+        WorkerState() : task_generation(0) {}
+    };
+
+    int m_num_threads;
+    std::vector<std::thread> m_worker_threads;
+    std::vector<std::unique_ptr<WorkerState>> m_worker_states;
+    std::mutex m_done_mutex;
+    std::condition_variable m_done_cv;
+    std::atomic<int> m_workers_finished;
+    std::atomic<bool> m_terminate_workers;
+    const std::vector<int>* m_current_work_list;
+    gem5::EventQueue* m_current_event_queue;
+    Tick m_current_tick;
+    uint64_t m_task_generation;
+    std::atomic<int> m_next_work_index;
+    int m_active_threads_for_task;
+
+    void workerLoop(int thread_id);
 };
 
 inline std::ostream&

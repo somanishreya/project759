@@ -73,6 +73,39 @@ namespace garnet
 
 std::mutex GarnetNetwork::g_scheduling_mutex;
 
+class BufferedLogger : public trace::Logger
+{
+  public:
+    void logMessage(Tick when, const std::string &name,
+                    const std::string &flag,
+                    const std::string &message) override
+    {
+        std::stringstream ss;
+        if (!debug::FmtTicksOff && (when != MaxTick))
+            ss << std::setw(7) << when << ": ";
+        if (debug::FmtFlag && !flag.empty())
+            ss << flag << ": ";
+        
+        // Use thread-local context name if available
+        std::string context_name = currentRouter ? currentRouter->name() : name;
+        if (!context_name.empty())
+            ss << context_name << ": ";
+            
+        ss << message;
+        
+        std::lock_guard<std::mutex> lock(mutex);
+        buffer[context_name] += ss.str();
+    }
+
+    std::ostream &getOstream() override { return std::cerr; }
+
+    static thread_local const Router* currentRouter;
+    std::map<std::string, std::string> buffer;
+    std::mutex mutex;
+};
+
+thread_local const Router* BufferedLogger::currentRouter = nullptr;
+
 GarnetNetwork::GarnetNetwork(const Params &p)
     : Network(p), globalWakeupEvent([this]{ globalWakeup(); }, name(), false, (Event::Priority) (Event::Default_Pri + 1))
 {
@@ -120,6 +153,40 @@ GarnetNetwork::GarnetNetwork(const Params &p)
 
     for (int i = 0; i < 128; i++) {
         m_wakeup_mask[i].mask = 0;
+    }
+
+    // Initialize thread pool
+    m_num_threads = p.num_threads;
+    if (m_num_threads <= 0) {
+        m_num_threads = std::thread::hardware_concurrency();
+    }
+    m_terminate_workers = false;
+    m_workers_finished = 0;
+    m_current_work_list = nullptr;
+    m_task_generation = 0;
+
+    for (int i = 0; i < m_num_threads; i++) {
+        m_worker_states.push_back(std::make_unique<WorkerState>());
+    }
+
+    for (int i = 0; i < m_num_threads; i++) {
+        m_worker_threads.emplace_back(&GarnetNetwork::workerLoop, this, i);
+    }
+}
+
+GarnetNetwork::~GarnetNetwork()
+{
+    m_terminate_workers = true;
+    for (int i = 0; i < m_num_threads; i++) {
+        {
+            std::lock_guard<std::mutex> lock(m_worker_states[i]->mutex);
+            m_worker_states[i]->task_generation++;
+        }
+        m_worker_states[i]->cv.notify_one();
+    }
+    for (auto& thread : m_worker_threads) {
+        if (thread.joinable())
+            thread.join();
     }
 }
 
@@ -171,43 +238,52 @@ GarnetNetwork::init()
     schedule(globalWakeupEvent, clockEdge(Cycles(1)));
 }
 
-class BufferedLogger : public trace::Logger
-{
-  public:
-    void logMessage(Tick when, const std::string &name,
-                    const std::string &flag,
-                    const std::string &message) override
-    {
-        std::lock_guard<std::mutex> lock(mutex);
-        std::stringstream ss;
-        if (!debug::FmtTicksOff && (when != MaxTick))
-            ss << std::setw(7) << when << ": ";
-        if (debug::FmtFlag && !flag.empty())
-            ss << flag << ": ";
-        
-        // Use thread-local context name if available
-        std::string context_name = currentContext.empty() ? name : currentContext;
-        if (!context_name.empty())
-            ss << context_name << ": ";
-            
-        ss << message;
-        
-        buffer[context_name] += ss.str();
-    }
-
-    std::ostream &getOstream() override { return std::cerr; }
-
-    static thread_local std::string currentContext;
-    std::map<std::string, std::string> buffer;
-    std::mutex mutex;
-};
-
-thread_local std::string BufferedLogger::currentContext = "";
-
 void
 GarnetNetwork::registerWakeup(int router_id, Tick tick)
 {
     m_wakeup_mask[(tick / clockPeriod()) % 128].mask.fetch_or(1ULL << router_id);
+}
+
+void
+GarnetNetwork::workerLoop(int thread_id)
+{
+    uint64_t last_generation = 0;
+    while (true) {
+        {
+            std::unique_lock<std::mutex> lock(m_worker_states[thread_id]->mutex);
+            m_worker_states[thread_id]->cv.wait(lock, [this, thread_id, last_generation] { 
+                return m_terminate_workers || m_worker_states[thread_id]->task_generation > last_generation; 
+            });
+        }
+
+        if (m_terminate_workers) return;
+
+        last_generation = m_worker_states[thread_id]->task_generation;
+
+        gem5::curEventQueue(m_current_event_queue);
+        Tick current_tick = m_current_tick;
+        const std::vector<int>* work_list = m_current_work_list;
+        int size = work_list->size();
+
+        while (true) {
+            int i = m_next_work_index.fetch_add(1, std::memory_order_relaxed);
+            if (i >= size) break;
+            
+            int id = (*work_list)[i];
+            if (m_routers[id]->alreadyScheduled(current_tick)) {
+                m_routers[id]->descheduleTick(current_tick);
+                BufferedLogger::currentRouter = m_routers[id];
+                m_routers[id]->wakeup();
+                BufferedLogger::currentRouter = nullptr;
+            }
+        }
+
+        int finished = m_workers_finished.fetch_add(1, std::memory_order_acq_rel) + 1;
+        if (finished == m_active_threads_for_task) {
+            std::lock_guard<std::mutex> lock(m_done_mutex);
+            m_done_cv.notify_one();
+        }
+    }
 }
 
 void
@@ -220,7 +296,7 @@ GarnetNetwork::globalWakeup()
     if (GEM5_UNLIKELY(debug::RubyNetwork)) {
         buffered_logger = new BufferedLogger();
         old_logger = trace::getDebugLogger();
-    trace::setDebugLogger(buffered_logger);
+        trace::setDebugLogger(buffered_logger);
     }
 
     Tick current_tick = curTick();
@@ -238,26 +314,53 @@ GarnetNetwork::globalWakeup()
         mask &= ~(1ULL << id);
     }
 
-    #pragma omp parallel for
-    for (int i = 0; i < work_list.size(); i++) {
-        int id = work_list[i];
-        gem5::curEventQueue(eq);
-        if (m_routers[id]->alreadyScheduled(current_tick)) {
-            m_routers[id]->descheduleTick(current_tick);
-            BufferedLogger::currentContext = m_routers[id]->name();
-            m_routers[id]->wakeup();
-            BufferedLogger::currentContext = "";
+    if (work_list.size() < 16) {
+        // Run sequentially in the master thread to avoid sync overhead for small tasks
+        for (int id : work_list) {
+            if (m_routers[id]->alreadyScheduled(current_tick)) {
+                m_routers[id]->descheduleTick(current_tick);
+                BufferedLogger::currentRouter = m_routers[id];
+                m_routers[id]->wakeup();
+                BufferedLogger::currentRouter = nullptr;
+            }
+        }
+    } else {
+        // Use the thread pool for larger workloads
+        m_next_work_index.store(0, std::memory_order_relaxed);
+        m_current_work_list = &work_list;
+        m_current_tick = current_tick;
+        m_current_event_queue = eq;
+        
+        m_task_generation++;
+        int active_threads = std::min(m_num_threads, (int)work_list.size());
+        m_active_threads_for_task = active_threads;
+        m_workers_finished.store(0, std::memory_order_relaxed);
+
+        for (int i = 0; i < active_threads; i++) {
+            {
+                std::lock_guard<std::mutex> lock(m_worker_states[i]->mutex);
+                m_worker_states[i]->task_generation = m_task_generation;
+            }
+            m_worker_states[i]->cv.notify_one();
+        }
+
+        {
+            std::unique_lock<std::mutex> lock(m_done_mutex);
+            m_done_cv.wait(lock, [this, active_threads] { 
+                return m_workers_finished.load(std::memory_order_acquire) == active_threads; 
+            });
+            m_current_work_list = nullptr;
         }
     }
 
     if (buffered_logger) {
-    trace::setDebugLogger(old_logger);
+        trace::setDebugLogger(old_logger);
 
-    // Print buffered messages in order of router name
-    for (auto const& [name, message] : buffered_logger->buffer) {
-        old_logger->getOstream() << message;
-    }
-    delete buffered_logger;
+        // Print buffered messages in order of router name
+        for (auto const& [name, message] : buffered_logger->buffer) {
+            old_logger->getOstream() << message;
+        }
+        delete buffered_logger;
     }
 
     schedule(globalWakeupEvent, clockEdge(Cycles(1)));

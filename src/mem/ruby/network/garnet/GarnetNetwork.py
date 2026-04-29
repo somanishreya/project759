@@ -52,6 +52,7 @@ class GarnetNetwork(RubyNetwork):
     garnet_deadlock_threshold = Param.UInt32(
         50000, "network-level deadlock threshold"
     )
+    num_threads = Param.Int(0, "number of threads for parallel router wakeup")
 
 
 class GarnetNetworkInterface(ClockedObject):

@@ -123,6 +123,13 @@ def define_options(parser):
         help="""SimpleNetwork links uses a separate physical
             channel for each virtual network""",
     )
+    parser.add_argument(
+        "--router-threads",
+        action="store",
+        type=int,
+        default=0,
+        help="number of parallel threads for router wakeup (0 = hardware concurrency)",
+    )
 
 
 def create_network(options, ruby):
@@ -172,6 +179,7 @@ def init_network(options, network, InterfaceClass):
         network.ni_flit_size = options.link_width_bits / 8
         network.routing_algorithm = options.routing_algorithm
         network.garnet_deadlock_threshold = options.garnet_deadlock_threshold
+        network.num_threads = options.router_threads
 
         # Create Bridges and connect them to the corresponding links
         for intLink in network.int_links:
