@@ -223,11 +223,18 @@ Router::regStats()
 void
 Router::collateStats()
 {
-    for (int j = 0; j < m_virtual_networks; j++) {
-        for (int i = 0; i < m_input_unit.size(); i++) {
-            m_buffer_reads += m_input_unit[i]->get_buf_read_activity(j);
-            m_buffer_writes += m_input_unit[i]->get_buf_write_activity(j);
-        }
+    //for (int j = 0; j < m_virtual_networks; j++) {
+    //    for (int i = 0; i < m_input_unit.size(); i++) {
+    //        m_buffer_reads += m_input_unit[i]->get_buf_read_activity(j);
+    //        m_buffer_writes += m_input_unit[i]->get_buf_write_activity(j);
+    //    }
+    //}
+
+    for (int i = 0; i< m_input_unit.size();i++) {
+        InputUnit::InputUnitStats s = m_input_unit[i]->collateStats();
+
+        m_buffer_reads  += s.total_reads;
+        m_buffer_writes += s.total_writes;
     }
 
     m_sw_input_arbiter_activity = switchAllocator.get_input_arbiter_activity();

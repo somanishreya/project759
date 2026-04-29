@@ -155,7 +155,12 @@ class InputUnit : public Consumer
     bool functionalRead(Packet *pkt, WriteMask &mask);
     uint32_t functionalWrite(Packet *pkt);
 
+    struct InputUnitStats {
+    uint64_t total_reads;
+    uint64_t total_writes;};
+
     void resetStats();
+    InputUnitStats collateStats();
 
   private:
     Router *m_router;
@@ -172,6 +177,10 @@ class InputUnit : public Consumer
     // Statistical variables
     std::vector<double> m_num_buffer_writes;
     std::vector<double> m_num_buffer_reads;
+
+    //Local stats
+    std::vector<uint64_t> m_local_buffer_writes;
+    std::vector<uint64_t> m_local_buffer_reads;
 };
 
 } // namespace garnet

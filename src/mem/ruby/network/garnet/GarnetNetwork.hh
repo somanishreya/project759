@@ -127,56 +127,56 @@ class GarnetNetwork : public Network
 
     // increment counters
     void increment_injected_packets(int vnet) { 
-        std::lock_guard<std::mutex> lock(stats_mutex);
-        m_packets_injected[vnet]++; 
+        //std::lock_guard<std::mutex> lock(stats_mutex);
+        //m_packets_injected[vnet]++; 
     }
     void increment_received_packets(int vnet) { 
-        std::lock_guard<std::mutex> lock(stats_mutex);
-        m_packets_received[vnet]++; 
+        //std::lock_guard<std::mutex> lock(stats_mutex);
+        //m_packets_received[vnet]++; 
     }
 
     void
     increment_packet_network_latency(Tick latency, int vnet)
     {
-        std::lock_guard<std::mutex> lock(stats_mutex);
-        m_packet_network_latency[vnet] += latency;
+        //std::lock_guard<std::mutex> lock(stats_mutex);
+        //m_packet_network_latency[vnet] += latency;
     }
 
     void
     increment_packet_queueing_latency(Tick latency, int vnet)
     {
-        std::lock_guard<std::mutex> lock(stats_mutex);
-        m_packet_queueing_latency[vnet] += latency;
+        //std::lock_guard<std::mutex> lock(stats_mutex);
+        //m_packet_queueing_latency[vnet] += latency;
     }
 
     void increment_injected_flits(int vnet) { 
-        std::lock_guard<std::mutex> lock(stats_mutex);
-        m_flits_injected[vnet]++; 
+        //std::lock_guard<std::mutex> lock(stats_mutex);
+        //m_flits_injected[vnet]++; 
     }
     void increment_received_flits(int vnet) { 
-        std::lock_guard<std::mutex> lock(stats_mutex);
-        m_flits_received[vnet]++; 
+        //std::lock_guard<std::mutex> lock(stats_mutex);
+        //m_flits_received[vnet]++; 
     }
 
     void
     increment_flit_network_latency(Tick latency, int vnet)
     {
-        std::lock_guard<std::mutex> lock(stats_mutex);
-        m_flit_network_latency[vnet] += latency;
+        //std::lock_guard<std::mutex> lock(stats_mutex);
+        //m_flit_network_latency[vnet] += latency;
     }
 
     void
     increment_flit_queueing_latency(Tick latency, int vnet)
     {
-        std::lock_guard<std::mutex> lock(stats_mutex);
-        m_flit_queueing_latency[vnet] += latency;
+        //std::lock_guard<std::mutex> lock(stats_mutex);
+        //m_flit_queueing_latency[vnet] += latency;
     }
 
     void
     increment_total_hops(int hops)
     {
-        std::lock_guard<std::mutex> lock(stats_mutex);
-        m_total_hops += hops;
+        //std::lock_guard<std::mutex> lock(stats_mutex);
+        //m_total_hops += hops;
     }
 
     void update_traffic_distribution(RouteInfo route);

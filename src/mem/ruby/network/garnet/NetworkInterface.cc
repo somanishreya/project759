@@ -61,6 +61,16 @@ NetworkInterface::NetworkInterface(const Params &p)
 {
     m_stall_count.resize(m_virtual_networks);
     niOutVcs.resize(0);
+
+    m_local_flits_injected.resize(m_virtual_networks, 0); //local stat collector
+    m_local_flits_received.resize(m_virtual_networks, 0);
+    m_local_flit_network_latency.resize(m_virtual_networks, 0);
+    m_local_flit_queueing_latency.resize(m_virtual_networks, 0);
+    m_local_packets_injected.resize(m_virtual_networks, 0);
+    m_local_packets_received.resize(m_virtual_networks, 0);
+    m_local_packet_network_latency.resize(m_virtual_networks, 0);
+    m_local_packet_queueing_latency.resize(m_virtual_networks, 0);
+    
 }
 
 void
@@ -157,7 +167,8 @@ NetworkInterface::incrementStats(flit *t_flit)
     int vnet = t_flit->get_vnet();
 
     // Latency
-    m_net_ptr->increment_received_flits(vnet);
+    //m_net_ptr->increment_received_flits(vnet);
+    m_local_flits_received[vnet]++;
     Tick network_delay =
         t_flit->get_dequeue_time() -
         t_flit->get_enqueue_time() - cyclesToTicks(Cycles(1));
@@ -165,17 +176,25 @@ NetworkInterface::incrementStats(flit *t_flit)
     Tick dest_queueing_delay = (curTick() - t_flit->get_dequeue_time());
     Tick queueing_delay = src_queueing_delay + dest_queueing_delay;
 
-    m_net_ptr->increment_flit_network_latency(network_delay, vnet);
-    m_net_ptr->increment_flit_queueing_latency(queueing_delay, vnet);
+    //m_net_ptr->increment_flit_network_latency(network_delay, vnet);
+    m_local_flit_network_latency[vnet] += network_delay;
+    //m_net_ptr->increment_flit_queueing_latency(queueing_delay, vnet);
+    m_local_flit_queueing_latency[vnet] += queueing_delay;
+    
 
     if (t_flit->get_type() == TAIL_ || t_flit->get_type() == HEAD_TAIL_) {
-        m_net_ptr->increment_received_packets(vnet);
-        m_net_ptr->increment_packet_network_latency(network_delay, vnet);
-        m_net_ptr->increment_packet_queueing_latency(queueing_delay, vnet);
+        //m_net_ptr->increment_received_packets(vnet);
+        m_local_packets_received[vnet]++;
+        //m_net_ptr->increment_packet_network_latency(network_delay, vnet);
+        m_local_packet_network_latency[vnet] += network_delay;
+        //m_net_ptr->increment_packet_queueing_latency(queueing_delay, vnet);
+        m_local_packet_queueing_latency[vnet] += queueing_delay;
     }
 
     // Hops
-    m_net_ptr->increment_total_hops(t_flit->get_route().hops_traversed);
+    //m_net_ptr->increment_total_hops(t_flit->get_route().hops_traversed);
+    m_local_total_hops += t_flit->get_route().hops_traversed;
+    
 }
 
 /*
@@ -443,11 +462,14 @@ NetworkInterface::flitisizeMessage(MsgPtr msg_ptr, int vnet)
         // so that the first router increments it to 0
         route.hops_traversed = -1;
 
-        m_net_ptr->increment_injected_packets(vnet);
+        //m_net_ptr->increment_injected_packets(vnet);
+        m_local_packets_injected[vnet]++;
+        
         m_net_ptr->update_traffic_distribution(route);
         int packet_id = m_net_ptr->getNextPacketID();
         for (int i = 0; i < num_flits; i++) {
-            m_net_ptr->increment_injected_flits(vnet);
+            //m_net_ptr->increment_injected_flits(vnet);
+            m_local_flits_injected[vnet]++;
             flit *fl = new flit(packet_id,
                 i, vc, vnet, route, num_flits, new_msg_ptr,
                 m_net_ptr->MessageSizeType_to_int(

@@ -55,6 +55,8 @@ InputUnit::InputUnit(int id, PortDirection direction, Router *router)
         m_num_buffer_reads[i] = 0;
         m_num_buffer_writes[i] = 0;
     }
+    m_local_buffer_writes.resize(m_num_buffer_writes.size(), 0);
+    m_local_buffer_reads.resize(m_num_buffer_reads.size(), 0);
 
     // Instantiating the virtual channels
     virtualChannels.reserve(m_num_vcs);
@@ -113,8 +115,10 @@ InputUnit::wakeup()
         int vnet = vc/m_vc_per_vnet;
         // number of writes same as reads
         // any flit that is written will be read only once
-        m_num_buffer_writes[vnet]++;
-        m_num_buffer_reads[vnet]++;
+        //m_num_buffer_writes[vnet]++;
+        //m_num_buffer_reads[vnet]++;
+        m_local_buffer_writes[vnet]++;
+        m_local_buffer_reads[vnet]++;
 
         Cycles pipe_stages = m_router->get_pipe_stages();
         if (pipe_stages == 1) {
@@ -183,8 +187,32 @@ InputUnit::resetStats()
     for (int j = 0; j < m_num_buffer_reads.size(); j++) {
         m_num_buffer_reads[j] = 0;
         m_num_buffer_writes[j] = 0;
+        m_local_buffer_writes[j] = 0;
+        m_local_buffer_reads[j] = 0;
+        //sum_writes = 0;
+        //sum_reads = 0;
     }
 }
+
+
+
+InputUnit::InputUnitStats
+InputUnit::collateStats()
+{
+    uint64_t sum_reads = 0;
+    uint64_t sum_writes = 0;
+
+    for (int vnet = 0; vnet < m_local_buffer_reads.size(); vnet++) {
+        m_num_buffer_reads[vnet]  += m_local_buffer_reads[vnet];
+        m_num_buffer_writes[vnet] += m_local_buffer_writes[vnet];
+
+        sum_reads  += m_local_buffer_reads[vnet];
+        sum_writes += m_local_buffer_writes[vnet];
+    }
+
+    return {sum_reads, sum_writes};
+}
+
 
 } // namespace garnet
 } // namespace ruby

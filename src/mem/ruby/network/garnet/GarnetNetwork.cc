@@ -691,6 +691,32 @@ GarnetNetwork::collateStats()
     for (int i = 0; i < m_routers.size(); i++) {
         m_routers[i]->collateStats();
     }
+
+    //Collect injected and recieved flits from each network interface
+    for (int ni_id = 0; ni_id < m_nodes; ++ni_id) {
+        auto* ni = m_nis[ni_id];
+
+        const auto& inj = ni->getLocalFlitsInjected();
+        const auto& rec = ni->getLocalFlitsReceived();
+        const auto& lat = ni->getLocalFlitNetworkLatency();
+        const auto& qlat = ni->getLocalFlitQueueingLatency();
+        const auto& pkts_inj = ni->getLocalPacketsInjected();
+        const auto& pkts_recv = ni->getLocalPacketsReceived();
+        const auto& pkt_lat = ni->getLocalPacketNetworkLatency();
+        const auto& pkt_qlat = ni->getLocalPacketQueueingLatency();
+
+        for (int v = 0; v < inj.size(); ++v) {
+            m_flits_injected[v] += inj[v];
+            m_flits_received[v] += rec[v];
+            m_flit_network_latency[v] += lat[v];
+            m_flit_queueing_latency[v]  += qlat[v];
+            m_packets_injected[v] += pkts_inj[v];
+            m_packets_received[v] += pkts_recv[v];
+            m_packet_network_latency[v] += pkt_lat[v];
+            m_packet_queueing_latency[v] += pkt_qlat[v];
+        }
+        m_total_hops += ni->getLocalTotalHops();
+    }
 }
 
 void

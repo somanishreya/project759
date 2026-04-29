@@ -91,6 +91,53 @@ class NetworkInterface : public ClockedObject, public Consumer
         return oPort->routerID();
     }
 
+    const std::vector<uint64_t>&
+    getLocalFlitsInjected() const
+    {
+        return m_local_flits_injected;
+    }
+
+    const std::vector<uint64_t>& 
+    getLocalFlitsReceived() const {
+        return m_local_flits_received;
+    }
+ 
+    const std::vector<Tick>& 
+    getLocalFlitNetworkLatency() const {
+        return m_local_flit_network_latency;
+    }
+
+    const std::vector<Tick>& 
+    getLocalFlitQueueingLatency() const {
+        return m_local_flit_queueing_latency;
+    }
+   
+    uint64_t getLocalTotalHops() const {
+        return m_local_total_hops;
+    }
+
+    const std::vector<uint64_t>& 
+    getLocalPacketsInjected() const {
+        return m_local_packets_injected;
+    }
+
+    const std::vector<uint64_t>& 
+    getLocalPacketsReceived() const {
+        return m_local_packets_received;
+    }
+
+    const std::vector<Tick>& 
+    getLocalPacketNetworkLatency() const {
+        return m_local_packet_network_latency;
+    }
+
+    const std::vector<Tick>& 
+    getLocalPacketQueueingLatency() const {
+        return m_local_packet_queueing_latency;
+    }
+    
+    
+
     class OutputPort
     {
       public:
@@ -308,6 +355,19 @@ class NetworkInterface : public ClockedObject, public Consumer
     OutputPort *getOutportForVnet(int vnet);
 
     int MachineType_base_number(const MachineType& obj);
+
+    // per-vnet local flit injection counters
+    std::vector<uint64_t> m_local_flits_injected;
+    std::vector<uint64_t> m_local_flits_received;
+    std::vector<Tick> m_local_flit_network_latency;
+    std::vector<Tick> m_local_flit_queueing_latency;
+    uint64_t m_local_total_hops = 0;
+    std::vector<uint64_t> m_local_packets_injected;
+    std::vector<uint64_t> m_local_packets_received;
+    std::vector<Tick> m_local_packet_network_latency;
+    std::vector<Tick> m_local_packet_queueing_latency;
+    
+    
 };
 
 } // namespace garnet
