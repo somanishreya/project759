@@ -94,6 +94,8 @@ Router::wakeup()
 
     // Switch Traversal
     crossbarSwitch.wakeup();
+
+    
 }
 
 void

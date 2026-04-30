@@ -363,6 +363,11 @@ GarnetNetwork::globalWakeup()
         delete buffered_logger;
     }
 
+    // === FLUSH ROUTER PENDING EVENTS (serial or parallel) ===
+    
+    
+    
+
     schedule(globalWakeupEvent, clockEdge(Cycles(1)));
 }
 

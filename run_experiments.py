@@ -34,7 +34,8 @@ def run_simulation(num_cpus, injection_rate):
         f"--mesh-rows={rows}",
         f"--sim-cycles={SIM_CYCLES}",
         f"--synthetic={SYNTHETIC}",
-        f"--injectionrate={injection_rate}"
+        f"--injectionrate={injection_rate}",
+        f"--num-threads=4"
     ]
     
     print(f"Running: {' '.join(cmd)}")

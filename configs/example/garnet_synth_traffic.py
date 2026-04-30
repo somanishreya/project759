@@ -120,6 +120,13 @@ parser.add_argument(
                         Set to -1 to inject randomly in all vnets.",
 )
 
+parser.add_argument(
+    "--num-threads",
+    type=int,
+    default=1,
+    help="Number of worker threads for parallel router wakeup"
+)
+
 #
 # Add the ruby specific and protocol specific options
 #
@@ -154,6 +161,8 @@ system.clk_domain = SrcClockDomain(
 )
 
 Ruby.create_system(args, False, system)
+
+system.ruby.network.num_threads = args.num_threads
 
 # Create a seperate clock domain for Ruby
 system.ruby.clk_domain = SrcClockDomain(

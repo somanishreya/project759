@@ -30886,6 +30886,7 @@
                 ],
                 "ni_flit_size": 16,
                 "num_rows": 4,
+                "num_threads": 4,
                 "number_of_virtual_networks": 3,
                 "power_model": [],
                 "power_state": {
