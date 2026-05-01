@@ -85,14 +85,14 @@ class BufferedLogger : public trace::Logger
             ss << std::setw(7) << when << ": ";
         if (debug::FmtFlag && !flag.empty())
             ss << flag << ": ";
-        
+
         // Use thread-local context name if available
         std::string context_name = currentRouter ? currentRouter->name() : name;
         if (!context_name.empty())
             ss << context_name << ": ";
-            
+
         ss << message;
-        
+
         std::lock_guard<std::mutex> lock(mutex);
         buffer[context_name] += ss.str();
     }
@@ -251,8 +251,8 @@ GarnetNetwork::workerLoop(int thread_id)
     while (true) {
         {
             std::unique_lock<std::mutex> lock(m_worker_states[thread_id]->mutex);
-            m_worker_states[thread_id]->cv.wait(lock, [this, thread_id, last_generation] { 
-                return m_terminate_workers || m_worker_states[thread_id]->task_generation > last_generation; 
+            m_worker_states[thread_id]->cv.wait(lock, [this, thread_id, last_generation] {
+                return m_terminate_workers || m_worker_states[thread_id]->task_generation > last_generation;
             });
         }
 
@@ -268,7 +268,7 @@ GarnetNetwork::workerLoop(int thread_id)
         while (true) {
             int i = m_next_work_index.fetch_add(1, std::memory_order_relaxed);
             if (i >= size) break;
-            
+
             int id = (*work_list)[i];
             if (m_routers[id]->alreadyScheduled(current_tick)) {
                 m_routers[id]->descheduleTick(current_tick);
@@ -314,6 +314,34 @@ GarnetNetwork::globalWakeup()
         mask &= ~(1ULL << id);
     }
 
+
+    // 1. FLUSH ROUTER PENDING EVENTS FIRST
+    //for (int id : work_list) {
+    //    Router* r = m_routers[id];
+
+    //    for (auto& ev : r->m_router_pending_events) {
+    //        switch (ev.type) {
+    //          case PendingEvent::OutLinkEvent:
+    //            ev.out_link->scheduleEventAbsolute(
+    //                r->clockEdge(Cycles(1)));
+    //            break;
+
+    //          case PendingEvent::CreditEvent:
+    //            ev.credit_link->scheduleEventAbsolute(
+    //                r->clockEdge(Cycles(1)));
+    //            break;
+
+              //case PendingEvent::RouterWakeupEvent: {
+              //  Tick target_tick = r->clockEdge(ev.delay);
+              //  registerWakeup(r->get_id(), target_tick);
+              //  break;
+              //}
+    //        }
+    //    }
+
+    //    r->m_router_pending_events.clear();
+    //}
+
     if (work_list.size() < 16) {
         // Run sequentially in the master thread to avoid sync overhead for small tasks
         for (int id : work_list) {
@@ -330,7 +358,7 @@ GarnetNetwork::globalWakeup()
         m_current_work_list = &work_list;
         m_current_tick = current_tick;
         m_current_event_queue = eq;
-        
+
         m_task_generation++;
         int active_threads = std::min(m_num_threads, (int)work_list.size());
         m_active_threads_for_task = active_threads;
@@ -346,8 +374,8 @@ GarnetNetwork::globalWakeup()
 
         {
             std::unique_lock<std::mutex> lock(m_done_mutex);
-            m_done_cv.wait(lock, [this, active_threads] { 
-                return m_workers_finished.load(std::memory_order_acquire) == active_threads; 
+            m_done_cv.wait(lock, [this, active_threads] {
+                return m_workers_finished.load(std::memory_order_acquire) == active_threads;
             });
             m_current_work_list = nullptr;
         }
@@ -363,10 +391,9 @@ GarnetNetwork::globalWakeup()
         delete buffered_logger;
     }
 
-    // === FLUSH ROUTER PENDING EVENTS (serial or parallel) ===
     
-    
-    
+
+
 
     schedule(globalWakeupEvent, clockEdge(Cycles(1)));
 }
@@ -420,10 +447,10 @@ GarnetNetwork::makeExtInLink(NodeID global_src, SwitchID dest, BasicLink* link,
         m_nis[local_src]->
         addOutPort(n_bridge,
                    garnet_link->extCredBridge[LinkDirection_In],
-                   dest, m_routers[dest]->get_vc_per_vnet());
+                   dest, m_routers[dest],m_routers[dest]->get_vc_per_vnet());
         m_networkbridges.push_back(n_bridge);
     } else {
-        m_nis[local_src]->addOutPort(net_link, credit_link, dest,
+        m_nis[local_src]->addOutPort(net_link, credit_link, dest, m_routers[dest],
             m_routers[dest]->get_vc_per_vnet());
     }
 

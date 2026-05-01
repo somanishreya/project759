@@ -64,22 +64,24 @@ class InputUnit;
 class OutputUnit;
 
 
-struct PendingEvent {
-    enum Type {
-        CreditEvent,
-        OutLinkEvent
-    } type;
 
-    Tick time;
-    NetworkLink* out_link = nullptr;
-    CreditLink* credit_link = nullptr;
+//struct PendingEvent
+//{
+//    enum Type {
+//        CreditEvent,
+//        OutLinkEvent
+//    } type;
 
-    PendingEvent(Type t, Tick when, NetworkLink* ol)
-        : type(t), time(when), out_link(ol) {}
+//    CreditLink* credit_link = nullptr;
+//    NetworkLink* out_link = nullptr;
+    //Cycles delay = Cycles(0); // for wakeups if needed
 
-    PendingEvent(Type t, Tick when, CreditLink* cl)
-        : type(t), time(when), credit_link(cl) {}
-};
+//    PendingEvent(Type t) : type(t) {}
+//    PendingEvent(Type t, CreditLink* cl)
+//        : type(t), credit_link(cl) {}
+//    PendingEvent(Type t, NetworkLink* ol)
+//        : type(t), out_link(ol) {}
+//};
 
 class Router : public BasicRouter, public Consumer
 {
@@ -160,7 +162,7 @@ class Router : public BasicRouter, public Consumer
     bool functionalRead(Packet *pkt, WriteMask &mask);
     uint32_t functionalWrite(Packet *);
 
-    std::vector<PendingEvent> m_router_pending_events;
+    //std::vector<PendingEvent> m_router_pending_events;
 
   private:
     Cycles m_latency;

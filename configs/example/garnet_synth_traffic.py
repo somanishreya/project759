@@ -124,7 +124,7 @@ parser.add_argument(
     "--num-threads",
     type=int,
     default=1,
-    help="Number of worker threads for parallel router wakeup"
+    help="Number of worker threads for parallel router wakeup",
 )
 
 #

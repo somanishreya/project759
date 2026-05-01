@@ -129558,7 +129558,7 @@
                 ],
                 "ni_flit_size": 16,
                 "num_rows": 8,
-                "num_threads": 4,
+                "num_threads": 1,
                 "number_of_virtual_networks": 3,
                 "power_model": [],
                 "power_state": {

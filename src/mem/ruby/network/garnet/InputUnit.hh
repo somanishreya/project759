@@ -162,9 +162,9 @@ class InputUnit : public Consumer
     void resetStats();
     InputUnitStats collateStats();
 
-    
 
-    std::vector<PendingEvent> m_pending_events;
+
+    //std::vector<PendingEvent> m_pending_events;
 
   private:
     Router *m_router;

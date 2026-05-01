@@ -95,7 +95,7 @@ Router::wakeup()
     // Switch Traversal
     crossbarSwitch.wakeup();
 
-    
+
 }
 
 void
@@ -179,6 +179,8 @@ Router::schedule_wakeup(Cycles time)
     Tick target_tick = clockEdge(time);
     recordEvent(time);
     m_network_ptr->registerWakeup(m_id, target_tick);
+    //m_router_pending_events.emplace_back(
+    //    PendingEvent::RouterWakeupEvent, time);
 }
 
 std::string

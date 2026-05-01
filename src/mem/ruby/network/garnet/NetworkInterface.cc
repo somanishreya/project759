@@ -42,6 +42,7 @@
 #include "mem/ruby/network/garnet/flitBuffer.hh"
 #include "mem/ruby/slicc_interface/Message.hh"
 #include "mem/ruby/system/RubySystem.hh"
+#include "mem/ruby/network/garnet/Router.hh"
 
 namespace gem5
 {
@@ -94,8 +95,13 @@ NetworkInterface::addInPort(NetworkLink *in_link,
 void
 NetworkInterface::addOutPort(NetworkLink *out_link,
                              CreditLink *credit_link,
-                             SwitchID router_id, uint32_t consumerVcs)
+                             SwitchID router_id, Router* router_ptr, uint32_t consumerVcs)
 {
+    
+    // NEW: set router pointer the first time we learn it
+    if (m_router == nullptr) {
+        m_router = router_ptr;
+    }
     OutputPort *newOutPort = new OutputPort(out_link, credit_link, router_id);
     outPorts.push_back(newOutPort);
 
@@ -159,6 +165,9 @@ NetworkInterface::dequeueCallback()
     // on the same cycle as the dequeue. Schedule a wake at the soonest
     // possible time (next cycle).
     scheduleEventAbsolute(clockEdge(Cycles(1)));
+    //m_router->m_router_pending_events.emplace_back(
+    //    PendingEvent::RouterWakeupEvent, Cycles(1));
+    
 }
 
 void
@@ -210,6 +219,7 @@ NetworkInterface::incrementStats(flit *t_flit)
 void
 NetworkInterface::wakeup()
 {
+    assert(m_router != nullptr);
     std::ostringstream oss;
     for (auto &oPort: outPorts) {
         oss << oPort->routerID() << "[" << oPort->printVnets() << "] ";
@@ -329,6 +339,9 @@ NetworkInterface::wakeup()
             iPort->outCreditLink()->name(), clockEdge(Cycles(1)));
             iPort->outCreditLink()->
                 scheduleEventAbsolute(clockEdge(Cycles(1)));
+            //m_router->m_router_pending_events.emplace_back(
+            //    PendingEvent::CreditEvent, iPort->outCreditLink());
+            
         }
     }
     checkReschedule();
@@ -620,6 +633,7 @@ NetworkInterface::getOutportForVnet(int vnet)
 void
 NetworkInterface::scheduleFlit(flit *t_flit)
 {
+    assert(m_router != nullptr);
     OutputPort *oPort = getOutportForVnet(t_flit->get_vnet());
 
     if (oPort) {
@@ -628,6 +642,13 @@ NetworkInterface::scheduleFlit(flit *t_flit)
         *t_flit, *(t_flit->get_msg_ptr()));
         oPort->outFlitQueue()->insert(t_flit);
         oPort->outNetLink()->scheduleEventAbsolute(clockEdge(Cycles(1)));
+        //m_router->m_router_pending_events.emplace_back(
+        //    PendingEvent::OutLinkEvent, oPort->outNetLink());
+
+        //Tick target = m_router->clockEdge(Cycles(1));
+        Tick target = clockEdge(Cycles(1)); 
+        m_net_ptr->registerWakeup(m_router->get_id(), target);
+        
         return;
     }
 
@@ -662,6 +683,9 @@ NetworkInterface::checkReschedule()
 
         while (it->isReady(clockEdge())) { // Is there a message waiting
             scheduleEvent(Cycles(1));
+            //m_router->m_router_pending_events.emplace_back(
+            //    PendingEvent::RouterWakeupEvent, Cycles(1));
+            
             return;
         }
     }
@@ -669,6 +693,9 @@ NetworkInterface::checkReschedule()
     for (auto& ni_out_vc : niOutVcs) {
         if (ni_out_vc.isReady(clockEdge(Cycles(1)))) {
             scheduleEvent(Cycles(1));
+            //m_router->m_router_pending_events.emplace_back(
+            //    PendingEvent::RouterWakeupEvent, Cycles(1));
+            
             return;
         }
     }
@@ -680,6 +707,9 @@ NetworkInterface::checkReschedule()
         NetworkLink *inNetLink = iPort->inNetLink();
         if (inNetLink->isReady(curTick())) {
             scheduleEvent(Cycles(1));
+            //m_router->m_router_pending_events.emplace_back(
+            //    PendingEvent::RouterWakeupEvent, Cycles(1));
+
             return;
         }
     }
@@ -688,6 +718,9 @@ NetworkInterface::checkReschedule()
         CreditLink *inCreditLink = oPort->inCreditLink();
         if (inCreditLink->isReady(curTick())) {
             scheduleEvent(Cycles(1));
+            //m_router->m_router_pending_events.emplace_back(
+            //    PendingEvent::RouterWakeupEvent, Cycles(1));
+
             return;
         }
     }

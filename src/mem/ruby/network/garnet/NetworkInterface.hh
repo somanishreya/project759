@@ -68,7 +68,7 @@ class NetworkInterface : public ClockedObject, public Consumer
 
     void addInPort(NetworkLink *in_link, CreditLink *credit_link);
     void addOutPort(NetworkLink *out_link, CreditLink *credit_link,
-        SwitchID router_id, uint32_t consumerVcs);
+        SwitchID router_id, Router* router_ptr, uint32_t consumerVcs);
 
     void dequeueCallback();
     void wakeup();
@@ -135,6 +135,9 @@ class NetworkInterface : public ClockedObject, public Consumer
     getLocalPacketQueueingLatency() const {
         return m_local_packet_queueing_latency;
     }
+
+    void setRouter(Router* r) { m_router = r; }
+    
     
     
 
@@ -366,6 +369,8 @@ class NetworkInterface : public ClockedObject, public Consumer
     std::vector<uint64_t> m_local_packets_received;
     std::vector<Tick> m_local_packet_network_latency;
     std::vector<Tick> m_local_packet_queueing_latency;
+
+    Router* m_router = nullptr;
     
     
 };
