@@ -142,10 +142,13 @@ OutputUnit::wakeup()
         delete t_credit;
 
         if (m_credit_link->isReady(curTick())) {
-            std::lock_guard<std::mutex> lock(GarnetNetwork::g_scheduling_mutex);
-            scheduleEvent(Cycles(1));
-            //m_router->m_router_pending_events.emplace_back(
-            //    PendingEvent::RouterWakeupEvent, Cycles(1));
+            if (Consumer::s_parallel_active.load(std::memory_order_relaxed)) {
+                std::lock_guard<std::mutex>
+                    lock(GarnetNetwork::g_scheduling_mutex);
+                scheduleEvent(Cycles(1));
+            } else {
+                scheduleEvent(Cycles(1));
+            }
         }
     }
 }
@@ -172,11 +175,11 @@ void
 OutputUnit::insert_flit(flit *t_flit)
 {
     outBuffer.insert(t_flit);
-    {
+    if (Consumer::s_parallel_active.load(std::memory_order_relaxed)) {
         std::lock_guard<std::mutex> lock(GarnetNetwork::g_scheduling_mutex);
         m_out_link->scheduleEventAbsolute(m_router->clockEdge(Cycles(1)));
-        //m_router->m_router_pending_events.emplace_back(
-        //    PendingEvent::OutLinkEvent, m_out_link);
+    } else {
+        m_out_link->scheduleEventAbsolute(m_router->clockEdge(Cycles(1)));
     }
 }
 

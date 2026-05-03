@@ -36,6 +36,7 @@
 #include "base/cast.hh"
 #include "base/compiler.hh"
 #include "debug/RubyNetwork.hh"
+#include "mem/ruby/common/Consumer.hh"
 #include "mem/ruby/common/NetDest.hh"
 #include "mem/ruby/network/MessageBuffer.hh"
 #include "mem/ruby/network/garnet/CommonTypes.hh"
@@ -107,7 +108,21 @@ class BufferedLogger : public trace::Logger
 thread_local const Router* BufferedLogger::currentRouter = nullptr;
 
 GarnetNetwork::GarnetNetwork(const Params &p)
-    : Network(p), globalWakeupEvent([this]{ globalWakeup(); }, name(), false, (Event::Priority) (Event::Default_Pri + 1))
+    : Network(p),
+      globalWakeupEvent([this]{ globalWakeup(); }, name(), false,
+                        (Event::Priority) (Event::Default_Pri + 1)),
+      m_next_packet_id(0),
+      m_num_threads(0),
+      // Empirically the CV round-trip pays for itself at ~16 routers
+      // when work is well-balanced across threads. Below that the
+      // sequential branch wins.
+      m_parallel_threshold(16),
+      m_terminate_workers(false),
+      m_dispatch_generation(0),
+      m_workers_finished(0),
+      m_current_tick(0),
+      m_current_event_queue(nullptr),
+      m_current_mask(0)
 {
     m_num_rows = p.num_rows;
     m_ni_flit_size = p.ni_flit_size;
@@ -115,7 +130,6 @@ GarnetNetwork::GarnetNetwork(const Params &p)
     m_buffers_per_data_vc = p.buffers_per_data_vc;
     m_buffers_per_ctrl_vc = p.buffers_per_ctrl_vc;
     m_routing_algorithm = p.routing_algorithm;
-    m_next_packet_id = 0;
 
     m_enable_fault_model = p.enable_fault_model;
     if (m_enable_fault_model)
@@ -151,39 +165,49 @@ GarnetNetwork::GarnetNetwork(const Params &p)
     // Print Garnet version
     inform("Garnet version %s\n", garnetVersion);
 
-    for (int i = 0; i < 128; i++) {
-        m_wakeup_mask[i].mask = 0;
+    fatal_if(m_routers.size() > 64,
+        "GarnetNetwork parallel wakeup mask only supports up to 64 routers,"
+        " got %d", (int)m_routers.size());
+
+    // Choose the worker pool size. We deliberately cap by
+    // num_routers/8: with 1-cycle work per router, anything larger
+    // costs more in CV signalling than it saves in compute. Setting
+    // num_threads to 0 (the default) picks an automatic value, 1
+    // disables the pool entirely.
+    int requested = p.num_threads;
+    int hw = (int) std::thread::hardware_concurrency();
+    if (hw <= 0) hw = 1;
+    int auto_threads = std::max(1, (int)m_routers.size() / 8);
+    if (requested <= 0) {
+        m_num_threads = std::min(hw, auto_threads);
+    } else {
+        m_num_threads = std::min(requested, hw);
     }
 
-    // Initialize thread pool
-    m_num_threads = p.num_threads;
-    if (m_num_threads <= 0) {
-        m_num_threads = std::thread::hardware_concurrency();
-    }
-    m_terminate_workers = false;
-    m_workers_finished = 0;
-    m_current_work_list = nullptr;
-    m_task_generation = 0;
-
-    for (int i = 0; i < m_num_threads; i++) {
-        m_worker_states.push_back(std::make_unique<WorkerState>());
+    // Build the static router-to-thread assignment as per-thread bit
+    // masks so each worker can extract its routers with one AND.
+    m_thread_router_mask.assign(m_num_threads, 0ULL);
+    for (int id = 0; id < (int) m_routers.size(); id++) {
+        m_thread_router_mask[id % m_num_threads] |= (1ULL << id);
     }
 
-    for (int i = 0; i < m_num_threads; i++) {
-        m_worker_threads.emplace_back(&GarnetNetwork::workerLoop, this, i);
+    // Spawn persistent workers (only if we'll actually use the pool).
+    if (m_num_threads > 1) {
+        for (int i = 0; i < m_num_threads; i++) {
+            m_worker_threads.emplace_back(
+                &GarnetNetwork::workerLoop, this, i);
+        }
     }
 }
 
 GarnetNetwork::~GarnetNetwork()
 {
-    m_terminate_workers = true;
-    for (int i = 0; i < m_num_threads; i++) {
-        {
-            std::lock_guard<std::mutex> lock(m_worker_states[i]->mutex);
-            m_worker_states[i]->task_generation++;
-        }
-        m_worker_states[i]->cv.notify_one();
+    m_terminate_workers.store(true, std::memory_order_release);
+    {
+        std::lock_guard<std::mutex> lock(m_dispatch_mutex);
+        m_dispatch_generation++;
     }
+    m_dispatch_cv.notify_all();
     for (auto& thread : m_worker_threads) {
         if (thread.joinable())
             thread.join();
@@ -241,45 +265,96 @@ GarnetNetwork::init()
 void
 GarnetNetwork::registerWakeup(int router_id, Tick tick)
 {
-    m_wakeup_mask[(tick / clockPeriod()) % 128].mask.fetch_or(1ULL << router_id);
+    // We only need a locked RMW when multiple workers might race on
+    // the same mask slot. Outside the parallel section the simulator
+    // is single-threaded, so a plain load/store avoids the LOCK
+    // prefix on every router scheduling - this fires per
+    // input/output cycle and adds up.
+    auto &slot = m_wakeup_mask[(tick / clockPeriod()) % 128].mask;
+    const uint64_t bit = 1ULL << router_id;
+    if (Consumer::s_parallel_active.load(std::memory_order_relaxed)) {
+        slot.fetch_or(bit, std::memory_order_relaxed);
+    } else {
+        slot.store(slot.load(std::memory_order_relaxed) | bit,
+                   std::memory_order_relaxed);
+    }
+}
+
+void
+GarnetNetwork::runRoutersFromMask(uint64_t mask, Tick current_tick)
+{
+    // alreadyScheduled() is non-empty iff this router has not yet been
+    // serviced for current_tick. If a NetworkLink already woke it
+    // earlier in this tick (Default_Pri events fire before our
+    // Default_Pri+1 globalWakeup), the entry will already be gone and
+    // we must skip wakeup() here to avoid double-executing the router.
+    while (mask) {
+        int id = __builtin_ctzll(mask);
+        Router *r = m_routers[id];
+        if (r->alreadyScheduled(current_tick)) {
+            r->descheduleTick(current_tick);
+            BufferedLogger::currentRouter = r;
+            r->wakeup();
+            BufferedLogger::currentRouter = nullptr;
+        }
+        mask &= mask - 1; // clear lowest set bit
+    }
+}
+
+Tick
+GarnetNetwork::computeNextWakeupTick(int current_idx, Tick current_tick,
+                                     Tick clock_period) const
+{
+    // Scan the 128-cycle ring for the next non-empty slot. If nothing
+    // is queued in that window, fall back to the next cycle so that
+    // routers scheduled by the main thread (e.g. via a NetworkLink
+    // wakeup) still get serviced.
+    for (int i = 1; i < 128; i++) {
+        int idx = (current_idx + i) % 128;
+        if (m_wakeup_mask[idx].mask.load(std::memory_order_relaxed) != 0) {
+            return current_tick + i * clock_period;
+        }
+    }
+    return current_tick + clock_period;
 }
 
 void
 GarnetNetwork::workerLoop(int thread_id)
 {
-    uint64_t last_generation = 0;
+    uint64_t last_seen_generation = 0;
+    const uint64_t my_router_mask = m_thread_router_mask[thread_id];
+
     while (true) {
         {
-            std::unique_lock<std::mutex> lock(m_worker_states[thread_id]->mutex);
-            m_worker_states[thread_id]->cv.wait(lock, [this, thread_id, last_generation] {
-                return m_terminate_workers || m_worker_states[thread_id]->task_generation > last_generation;
-            });
+            std::unique_lock<std::mutex> lock(m_dispatch_mutex);
+            m_dispatch_cv.wait(lock,
+                [this, last_seen_generation] {
+                    return m_terminate_workers.load(
+                               std::memory_order_relaxed) ||
+                           m_dispatch_generation > last_seen_generation;
+                });
         }
 
-        if (m_terminate_workers) return;
+        if (m_terminate_workers.load(std::memory_order_relaxed))
+            return;
 
-        last_generation = m_worker_states[thread_id]->task_generation;
+        last_seen_generation = m_dispatch_generation;
 
+        // Make schedule() etc. find the right event queue if a Consumer
+        // call inside Router::wakeup needs it.
         gem5::curEventQueue(m_current_event_queue);
-        Tick current_tick = m_current_tick;
-        const std::vector<int>* work_list = m_current_work_list;
-        int size = work_list->size();
 
-        while (true) {
-            int i = m_next_work_index.fetch_add(1, std::memory_order_relaxed);
-            if (i >= size) break;
-
-            int id = (*work_list)[i];
-            if (m_routers[id]->alreadyScheduled(current_tick)) {
-                m_routers[id]->descheduleTick(current_tick);
-                BufferedLogger::currentRouter = m_routers[id];
-                m_routers[id]->wakeup();
-                BufferedLogger::currentRouter = nullptr;
-            }
+        // Iterate only the bits that belong to this thread. Static
+        // partitioning keeps each router on the same core run after run
+        // so the routing/switch state stays hot in this thread's L1.
+        uint64_t my_mask = m_current_mask & my_router_mask;
+        if (my_mask) {
+            runRoutersFromMask(my_mask, m_current_tick);
         }
 
-        int finished = m_workers_finished.fetch_add(1, std::memory_order_acq_rel) + 1;
-        if (finished == m_active_threads_for_task) {
+        int finished = m_workers_finished.fetch_add(1,
+            std::memory_order_acq_rel) + 1;
+        if (finished == m_num_threads) {
             std::lock_guard<std::mutex> lock(m_done_mutex);
             m_done_cv.notify_one();
         }
@@ -300,84 +375,44 @@ GarnetNetwork::globalWakeup()
     }
 
     Tick current_tick = curTick();
-    uint64_t mask = m_wakeup_mask[(current_tick / clockPeriod()) % 128].mask.exchange(0);
+    Tick clock_period = clockPeriod();
+    int current_idx = (current_tick / clock_period) % 128;
+    uint64_t mask = m_wakeup_mask[current_idx].mask.exchange(0,
+        std::memory_order_relaxed);
 
-    if (mask == 0) {
-        schedule(globalWakeupEvent, clockEdge(Cycles(1)));
-        return;
-    }
+    if (mask != 0) {
+        int popcount = __builtin_popcountll(mask);
 
-    std::vector<int> work_list;
-    while (mask) {
-        int id = __builtin_ctzll(mask);
-        work_list.push_back(id);
-        mask &= ~(1ULL << id);
-    }
+        // For tiny per-cycle work lists the CV round-trip costs more
+        // than just running the routers inline.
+        if (m_num_threads <= 1 || popcount < m_parallel_threshold) {
+            runRoutersFromMask(mask, current_tick);
+        } else {
+            Consumer::s_parallel_active.store(true,
+                std::memory_order_relaxed);
 
+            m_current_tick = current_tick;
+            m_current_event_queue = eq;
+            m_current_mask = mask;
+            m_workers_finished.store(0, std::memory_order_relaxed);
 
-    // 1. FLUSH ROUTER PENDING EVENTS FIRST
-    //for (int id : work_list) {
-    //    Router* r = m_routers[id];
-
-    //    for (auto& ev : r->m_router_pending_events) {
-    //        switch (ev.type) {
-    //          case PendingEvent::OutLinkEvent:
-    //            ev.out_link->scheduleEventAbsolute(
-    //                r->clockEdge(Cycles(1)));
-    //            break;
-
-    //          case PendingEvent::CreditEvent:
-    //            ev.credit_link->scheduleEventAbsolute(
-    //                r->clockEdge(Cycles(1)));
-    //            break;
-
-              //case PendingEvent::RouterWakeupEvent: {
-              //  Tick target_tick = r->clockEdge(ev.delay);
-              //  registerWakeup(r->get_id(), target_tick);
-              //  break;
-              //}
-    //        }
-    //    }
-
-    //    r->m_router_pending_events.clear();
-    //}
-
-    if (work_list.size() < 16) {
-        // Run sequentially in the master thread to avoid sync overhead for small tasks
-        for (int id : work_list) {
-            if (m_routers[id]->alreadyScheduled(current_tick)) {
-                m_routers[id]->descheduleTick(current_tick);
-                BufferedLogger::currentRouter = m_routers[id];
-                m_routers[id]->wakeup();
-                BufferedLogger::currentRouter = nullptr;
-            }
-        }
-    } else {
-        // Use the thread pool for larger workloads
-        m_next_work_index.store(0, std::memory_order_relaxed);
-        m_current_work_list = &work_list;
-        m_current_tick = current_tick;
-        m_current_event_queue = eq;
-
-        m_task_generation++;
-        int active_threads = std::min(m_num_threads, (int)work_list.size());
-        m_active_threads_for_task = active_threads;
-        m_workers_finished.store(0, std::memory_order_relaxed);
-
-        for (int i = 0; i < active_threads; i++) {
+            // Single notify_all is one futex syscall vs N notify_one's.
             {
-                std::lock_guard<std::mutex> lock(m_worker_states[i]->mutex);
-                m_worker_states[i]->task_generation = m_task_generation;
+                std::lock_guard<std::mutex> lock(m_dispatch_mutex);
+                m_dispatch_generation++;
             }
-            m_worker_states[i]->cv.notify_one();
-        }
+            m_dispatch_cv.notify_all();
 
-        {
-            std::unique_lock<std::mutex> lock(m_done_mutex);
-            m_done_cv.wait(lock, [this, active_threads] {
-                return m_workers_finished.load(std::memory_order_acquire) == active_threads;
-            });
-            m_current_work_list = nullptr;
+            {
+                std::unique_lock<std::mutex> lock(m_done_mutex);
+                m_done_cv.wait(lock, [this] {
+                    return m_workers_finished.load(
+                        std::memory_order_acquire) == m_num_threads;
+                });
+            }
+
+            Consumer::s_parallel_active.store(false,
+                std::memory_order_relaxed);
         }
     }
 
@@ -391,11 +426,9 @@ GarnetNetwork::globalWakeup()
         delete buffered_logger;
     }
 
-    
-
-
-
-    schedule(globalWakeupEvent, clockEdge(Cycles(1)));
+    Tick next_tick = computeNextWakeupTick(current_idx, current_tick,
+                                           clock_period);
+    schedule(globalWakeupEvent, next_tick);
 }
 
 /*
@@ -881,7 +914,8 @@ GarnetNetwork::update_traffic_distribution(RouteInfo route)
     int dest_node = route.dest_router;
     int vnet = route.vnet;
 
-    std::lock_guard<std::mutex> lock(stats_mutex);
+    // Called from NetworkInterface::flitisizeMessage which fires on the
+    // main event queue thread only, so no locking is required.
     if (m_vnet_type[vnet] == DATA_VNET_)
         (*m_data_traffic_distribution[src_node][dest_node])++;
     else

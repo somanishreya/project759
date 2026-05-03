@@ -47,6 +47,7 @@
 #ifndef __MEM_RUBY_COMMON_CONSUMER_HH__
 #define __MEM_RUBY_COMMON_CONSUMER_HH__
 
+#include <atomic>
 #include <iostream>
 #include <mutex>
 #include <set>
@@ -86,6 +87,13 @@ class Consumer
     void recordEvent(Cycles timeDelta);
     void recordEventAbsolute(Tick timeAbs);
     void descheduleTick(Tick tick);
+
+    // Set to true only while a Garnet parallel section is running. When
+    // false, all Consumer mutex acquisitions are skipped (the simulator
+    // is single-threaded outside the parallel region, so no locking is
+    // needed). Marked relaxed-atomic because the value is published via
+    // a CV signal/wait pair which already establishes happens-before.
+    static std::atomic<bool> s_parallel_active;
 
   private:
     mutable std::recursive_mutex m_consumer_mutex;

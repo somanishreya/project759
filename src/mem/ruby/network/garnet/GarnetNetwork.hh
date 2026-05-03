@@ -34,6 +34,7 @@
 
 #include <atomic>
 #include <condition_variable>
+#include <cstdint>
 #include <iostream>
 #include <memory>
 #include <mutex>
@@ -183,6 +184,9 @@ class GarnetNetwork : public Network
     }
 
     void update_traffic_distribution(RouteInfo route);
+    // Packet IDs are only ever allocated from the main thread (the
+    // network interfaces that call this fire on the main event queue,
+    // not from worker threads), so a plain int suffices.
     int getNextPacketID() { return m_next_packet_id++; }
 
   protected:
@@ -235,14 +239,15 @@ class GarnetNetwork : public Network
     GarnetNetwork(const GarnetNetwork& obj);
     GarnetNetwork& operator=(const GarnetNetwork& obj);
 
-    std::mutex stats_mutex;
-
     struct alignas(64) PaddedMask {
         std::atomic<uint64_t> mask;
 
         PaddedMask() : mask(0) {}
     };
 
+    // Ring buffer of pending-router bitmasks indexed by (tick / period) %
+    // 128. Each mask bit is router_id; up to 64 routers per network are
+    // supported by this scheme.
     PaddedMask m_wakeup_mask[128];
 
     std::vector<VNET_type > m_vnet_type;
@@ -251,31 +256,42 @@ class GarnetNetwork : public Network
     std::vector<NetworkBridge *> m_networkbridges; // All network bridges
     std::vector<CreditLink *> m_creditlinks; // All credit links in the network
     std::vector<NetworkInterface *> m_nis;   // All NI's in Network
-    std::atomic<int> m_next_packet_id; // static vairable for packet id allocation
+    int m_next_packet_id; // packet id allocator (main thread only)
 
-    // Thread pool for parallel router execution
-    struct WorkerState {
-        std::mutex mutex;
-        std::condition_variable cv;
-        uint64_t task_generation;
-        WorkerState() : task_generation(0) {}
-    };
-
+    // ----- Parallel router-wakeup machinery ---------------------------
+    //
+    // Workers are persistent and statically own a subset of routers
+    // (router_id % m_num_threads == thread_id). Each cycle the master
+    // publishes (tick, mask, event_queue), wakes all workers via a
+    // single notify_all, then waits on m_done_cv until every worker has
+    // bumped m_workers_finished.
     int m_num_threads;
+    int m_parallel_threshold;
     std::vector<std::thread> m_worker_threads;
-    std::vector<std::unique_ptr<WorkerState>> m_worker_states;
+    std::vector<uint64_t> m_thread_router_mask; // size = m_num_threads
+    std::atomic<bool> m_terminate_workers;
+
+    // Master -> workers
+    std::mutex m_dispatch_mutex;
+    std::condition_variable m_dispatch_cv;
+    uint64_t m_dispatch_generation; // protected by m_dispatch_mutex
+
+    // Workers -> master
     std::mutex m_done_mutex;
     std::condition_variable m_done_cv;
     std::atomic<int> m_workers_finished;
-    std::atomic<bool> m_terminate_workers;
-    const std::vector<int>* m_current_work_list;
-    gem5::EventQueue* m_current_event_queue;
+
+    // Per-cycle dispatch payload (written by master before notify_all,
+    // read by workers after wait). No further sync needed because the
+    // CV mutex provides happens-before.
     Tick m_current_tick;
-    uint64_t m_task_generation;
-    std::atomic<int> m_next_work_index;
-    int m_active_threads_for_task;
+    gem5::EventQueue *m_current_event_queue;
+    uint64_t m_current_mask;
 
     void workerLoop(int thread_id);
+    void runRoutersFromMask(uint64_t mask, Tick current_tick);
+    Tick computeNextWakeupTick(int current_idx, Tick current_tick,
+                               Tick clock_period) const;
 };
 
 inline std::ostream&

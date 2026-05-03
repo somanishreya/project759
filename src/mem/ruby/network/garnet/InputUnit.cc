@@ -152,14 +152,11 @@ InputUnit::increment_credit(int in_vc, bool free_signal, Tick curTime)
     m_router->get_id(), in_vc, free_signal, m_credit_link->name());
     Credit *t_credit = new Credit(in_vc, free_signal, curTime);
     creditQueue.insert(t_credit);
-    {
+    if (Consumer::s_parallel_active.load(std::memory_order_relaxed)) {
         std::lock_guard<std::mutex> lock(GarnetNetwork::g_scheduling_mutex);
         m_credit_link->scheduleEventAbsolute(m_router->clockEdge(Cycles(1)));
-        //m_router->m_router_pending_events.emplace_back(
-        //    PendingEvent::CreditEvent, m_credit_link);
-        
-
-
+    } else {
+        m_credit_link->scheduleEventAbsolute(m_router->clockEdge(Cycles(1)));
     }
 }
 

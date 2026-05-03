@@ -46,6 +46,42 @@ namespace gem5
 namespace ruby
 {
 
+std::atomic<bool> Consumer::s_parallel_active{false};
+
+namespace {
+
+// RAII helper that locks `m` only when a Garnet parallel section is
+// active. Outside parallel regions the simulator is single-threaded so
+// the mutex is unnecessary; skipping it removes ~30-40 ns per Consumer
+// call, which adds up to seconds across a 10M-cycle synthetic-traffic
+// run (these methods fire on every flit/credit scheduling).
+class MaybeLock
+{
+  public:
+    explicit MaybeLock(std::recursive_mutex &m)
+        : m_mutex(nullptr)
+    {
+        if (Consumer::s_parallel_active.load(std::memory_order_relaxed)) {
+            m.lock();
+            m_mutex = &m;
+        }
+    }
+
+    ~MaybeLock()
+    {
+        if (m_mutex)
+            m_mutex->unlock();
+    }
+
+    MaybeLock(const MaybeLock &) = delete;
+    MaybeLock &operator=(const MaybeLock &) = delete;
+
+  private:
+    std::recursive_mutex *m_mutex;
+};
+
+} // namespace
+
 Consumer::Consumer(ClockedObject *_em, Event::Priority ev_prio)
     : m_wakeup_event([this]{ processCurrentEvent(); },
                     "Consumer Event", false, ev_prio),
@@ -55,14 +91,14 @@ Consumer::Consumer(ClockedObject *_em, Event::Priority ev_prio)
 bool
 Consumer::alreadyScheduled(Tick time)
 {
-    std::lock_guard<std::recursive_mutex> lock(m_consumer_mutex);
+    MaybeLock lock(m_consumer_mutex);
     return m_wakeup_ticks.find(time) != m_wakeup_ticks.end();
 }
 
 void
 Consumer::scheduleEvent(Cycles timeDelta)
 {
-    std::lock_guard<std::recursive_mutex> lock(m_consumer_mutex);
+    MaybeLock lock(m_consumer_mutex);
     m_wakeup_ticks.insert(em->clockEdge(timeDelta));
     scheduleNextWakeup();
 }
@@ -70,7 +106,7 @@ Consumer::scheduleEvent(Cycles timeDelta)
 void
 Consumer::scheduleEventAbsolute(Tick evt_time)
 {
-    std::lock_guard<std::recursive_mutex> lock(m_consumer_mutex);
+    MaybeLock lock(m_consumer_mutex);
     m_wakeup_ticks.insert(
         divCeil(evt_time, em->clockPeriod()) * em->clockPeriod());
     scheduleNextWakeup();
@@ -79,14 +115,14 @@ Consumer::scheduleEventAbsolute(Tick evt_time)
 void
 Consumer::recordEvent(Cycles timeDelta)
 {
-    std::lock_guard<std::recursive_mutex> lock(m_consumer_mutex);
+    MaybeLock lock(m_consumer_mutex);
     m_wakeup_ticks.insert(em->clockEdge(timeDelta));
 }
 
 void
 Consumer::recordEventAbsolute(Tick evt_time)
 {
-    std::lock_guard<std::recursive_mutex> lock(m_consumer_mutex);
+    MaybeLock lock(m_consumer_mutex);
     m_wakeup_ticks.insert(
         divCeil(evt_time, em->clockPeriod()) * em->clockPeriod());
 }
@@ -94,15 +130,14 @@ Consumer::recordEventAbsolute(Tick evt_time)
 void
 Consumer::descheduleTick(Tick tick)
 {
-    std::lock_guard<std::recursive_mutex> lock(m_consumer_mutex);
+    MaybeLock lock(m_consumer_mutex);
     m_wakeup_ticks.erase(tick);
 }
 
 void
 Consumer::scheduleNextWakeup()
 {
-    std::lock_guard<std::recursive_mutex> lock(m_consumer_mutex);
-    // look for the next tick in the future to schedule
+    // Callers already hold the mutex (when needed) via MaybeLock.
     auto it = m_wakeup_ticks.lower_bound(em->clockEdge());
     if (it != m_wakeup_ticks.end()) {
         Tick when = *it;
@@ -117,21 +152,26 @@ Consumer::scheduleNextWakeup()
 void
 Consumer::processCurrentEvent()
 {
+    // processCurrentEvent only ever fires from the main event queue,
+    // which is paused while a parallel section is in flight, so locking
+    // is never required here in practice.
     Tick current_tick = em->clockEdge();
-    {
-        std::lock_guard<std::recursive_mutex> lock(m_consumer_mutex);
-        auto it = m_wakeup_ticks.find(current_tick);
-        if (it != m_wakeup_ticks.end()) {
-            m_wakeup_ticks.erase(it);
-        }
+    auto it = m_wakeup_ticks.find(current_tick);
+    bool was_pending = (it != m_wakeup_ticks.end());
+    if (was_pending) {
+        m_wakeup_ticks.erase(it);
     }
 
-    wakeup();
-
-    {
-        std::lock_guard<std::recursive_mutex> lock(m_consumer_mutex);
-        scheduleNextWakeup();
+    // Garnet's globalWakeup() may have already serviced this consumer
+    // for the current tick (and removed the entry via descheduleTick).
+    // The event itself stays in the EventQueue, but we must not fire
+    // wakeup() again - that would double-execute every Router on every
+    // cycle that was driven by an external NetworkLink schedule.
+    if (was_pending) {
+        wakeup();
     }
+
+    scheduleNextWakeup();
 }
 
 } // namespace ruby

@@ -175,7 +175,12 @@ Router::grant_switch(int inport, flit *t_flit)
 void
 Router::schedule_wakeup(Cycles time)
 {
-    // wake up after time cycles
+    // We must record into our own Consumer::m_wakeup_ticks set in
+    // addition to setting the mask bit in GarnetNetwork: a NetworkLink
+    // wakeup may also schedule this router via the normal
+    // Consumer::scheduleEventAbsolute path, and globalWakeup uses
+    // alreadyScheduled() to decide whether to suppress the second
+    // wakeup() call after one of the two paths has already fired.
     Tick target_tick = clockEdge(time);
     recordEvent(time);
     m_network_ptr->registerWakeup(m_id, target_tick);
