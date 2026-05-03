@@ -34,6 +34,7 @@
 #include "debug/RubyNetwork.hh"
 #include "mem/ruby/network/garnet/Credit.hh"
 #include "mem/ruby/network/garnet/CreditLink.hh"
+#include "mem/ruby/network/garnet/GarnetNetwork.hh"
 #include "mem/ruby/network/garnet/Router.hh"
 #include "mem/ruby/network/garnet/flitBuffer.hh"
 
@@ -142,13 +143,10 @@ OutputUnit::wakeup()
         delete t_credit;
 
         if (m_credit_link->isReady(curTick())) {
-            if (Consumer::s_parallel_active.load(std::memory_order_relaxed)) {
-                std::lock_guard<std::mutex>
-                    lock(GarnetNetwork::g_scheduling_mutex);
-                scheduleEvent(Cycles(1));
-            } else {
-                scheduleEvent(Cycles(1));
-            }
+            // Same deferral logic as InputUnit::increment_credit; this
+            // schedules our own Consumer event for the next cycle.
+            GarnetNetwork::deferOrSchedule(this,
+                                           m_router->clockEdge(Cycles(1)));
         }
     }
 }
@@ -175,12 +173,8 @@ void
 OutputUnit::insert_flit(flit *t_flit)
 {
     outBuffer.insert(t_flit);
-    if (Consumer::s_parallel_active.load(std::memory_order_relaxed)) {
-        std::lock_guard<std::mutex> lock(GarnetNetwork::g_scheduling_mutex);
-        m_out_link->scheduleEventAbsolute(m_router->clockEdge(Cycles(1)));
-    } else {
-        m_out_link->scheduleEventAbsolute(m_router->clockEdge(Cycles(1)));
-    }
+    GarnetNetwork::deferOrSchedule(m_out_link,
+                                   m_router->clockEdge(Cycles(1)));
 }
 
 bool

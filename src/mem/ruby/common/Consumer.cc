@@ -40,6 +40,8 @@
 
 #include "mem/ruby/common/Consumer.hh"
 
+#include <algorithm>
+
 namespace gem5
 {
 
@@ -47,6 +49,39 @@ namespace ruby
 {
 
 std::atomic<bool> Consumer::s_parallel_active{false};
+
+namespace {
+
+// Insert `tick` into a sorted ascending vector if not already present.
+// Returns true if an insertion happened.
+inline bool
+insertSorted(std::vector<Tick> &v, Tick tick)
+{
+    auto it = std::lower_bound(v.begin(), v.end(), tick);
+    if (it != v.end() && *it == tick) {
+        return false;
+    }
+    v.insert(it, tick);
+    return true;
+}
+
+inline bool
+containsSorted(const std::vector<Tick> &v, Tick tick)
+{
+    auto it = std::lower_bound(v.begin(), v.end(), tick);
+    return it != v.end() && *it == tick;
+}
+
+inline void
+eraseSorted(std::vector<Tick> &v, Tick tick)
+{
+    auto it = std::lower_bound(v.begin(), v.end(), tick);
+    if (it != v.end() && *it == tick) {
+        v.erase(it);
+    }
+}
+
+} // namespace
 
 namespace {
 
@@ -92,14 +127,14 @@ bool
 Consumer::alreadyScheduled(Tick time)
 {
     MaybeLock lock(m_consumer_mutex);
-    return m_wakeup_ticks.find(time) != m_wakeup_ticks.end();
+    return containsSorted(m_wakeup_ticks, time);
 }
 
 void
 Consumer::scheduleEvent(Cycles timeDelta)
 {
     MaybeLock lock(m_consumer_mutex);
-    m_wakeup_ticks.insert(em->clockEdge(timeDelta));
+    insertSorted(m_wakeup_ticks, em->clockEdge(timeDelta));
     scheduleNextWakeup();
 }
 
@@ -107,7 +142,7 @@ void
 Consumer::scheduleEventAbsolute(Tick evt_time)
 {
     MaybeLock lock(m_consumer_mutex);
-    m_wakeup_ticks.insert(
+    insertSorted(m_wakeup_ticks,
         divCeil(evt_time, em->clockPeriod()) * em->clockPeriod());
     scheduleNextWakeup();
 }
@@ -116,14 +151,14 @@ void
 Consumer::recordEvent(Cycles timeDelta)
 {
     MaybeLock lock(m_consumer_mutex);
-    m_wakeup_ticks.insert(em->clockEdge(timeDelta));
+    insertSorted(m_wakeup_ticks, em->clockEdge(timeDelta));
 }
 
 void
 Consumer::recordEventAbsolute(Tick evt_time)
 {
     MaybeLock lock(m_consumer_mutex);
-    m_wakeup_ticks.insert(
+    insertSorted(m_wakeup_ticks,
         divCeil(evt_time, em->clockPeriod()) * em->clockPeriod());
 }
 
@@ -131,17 +166,40 @@ void
 Consumer::descheduleTick(Tick tick)
 {
     MaybeLock lock(m_consumer_mutex);
-    m_wakeup_ticks.erase(tick);
+    eraseSorted(m_wakeup_ticks, tick);
+}
+
+bool
+Consumer::tryConsumeTick(Tick tick)
+{
+    MaybeLock lock(m_consumer_mutex);
+    if (m_wakeup_ticks.empty()) {
+        return false;
+    }
+    // Fast path: the smallest pending tick is the one we want.
+    if (m_wakeup_ticks.front() == tick) {
+        m_wakeup_ticks.erase(m_wakeup_ticks.begin());
+        return true;
+    }
+    auto it = std::lower_bound(m_wakeup_ticks.begin(),
+                               m_wakeup_ticks.end(), tick);
+    if (it != m_wakeup_ticks.end() && *it == tick) {
+        m_wakeup_ticks.erase(it);
+        return true;
+    }
+    return false;
 }
 
 void
 Consumer::scheduleNextWakeup()
 {
     // Callers already hold the mutex (when needed) via MaybeLock.
-    auto it = m_wakeup_ticks.lower_bound(em->clockEdge());
+    Tick now = em->clockEdge();
+    auto it = std::lower_bound(m_wakeup_ticks.begin(),
+                               m_wakeup_ticks.end(), now);
     if (it != m_wakeup_ticks.end()) {
         Tick when = *it;
-        assert(when >= em->clockEdge());
+        assert(when >= now);
         if (m_wakeup_event.scheduled() && (when < m_wakeup_event.when()))
             em->reschedule(m_wakeup_event, when, true);
         else if (!m_wakeup_event.scheduled())
@@ -156,10 +214,18 @@ Consumer::processCurrentEvent()
     // which is paused while a parallel section is in flight, so locking
     // is never required here in practice.
     Tick current_tick = em->clockEdge();
-    auto it = m_wakeup_ticks.find(current_tick);
-    bool was_pending = (it != m_wakeup_ticks.end());
-    if (was_pending) {
-        m_wakeup_ticks.erase(it);
+    bool was_pending = false;
+    if (!m_wakeup_ticks.empty() && m_wakeup_ticks.front() == current_tick) {
+        // Common case: the smallest pending tick is the current one.
+        m_wakeup_ticks.erase(m_wakeup_ticks.begin());
+        was_pending = true;
+    } else {
+        auto it = std::lower_bound(m_wakeup_ticks.begin(),
+                                   m_wakeup_ticks.end(), current_tick);
+        if (it != m_wakeup_ticks.end() && *it == current_tick) {
+            m_wakeup_ticks.erase(it);
+            was_pending = true;
+        }
     }
 
     // Garnet's globalWakeup() may have already serviced this consumer

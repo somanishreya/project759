@@ -50,7 +50,7 @@
 #include <atomic>
 #include <iostream>
 #include <mutex>
-#include <set>
+#include <vector>
 
 #include "sim/clocked_object.hh"
 
@@ -88,6 +88,12 @@ class Consumer
     void recordEventAbsolute(Tick timeAbs);
     void descheduleTick(Tick tick);
 
+    // Atomic equivalent of `if (alreadyScheduled(t)) descheduleTick(t)`,
+    // but with one binary-search instead of two. Returns whether `tick`
+    // was present (i.e. caller should service this consumer for `tick`).
+    // Used on the Garnet router-wakeup hot path.
+    bool tryConsumeTick(Tick tick);
+
     // Set to true only while a Garnet parallel section is running. When
     // false, all Consumer mutex acquisitions are skipped (the simulator
     // is single-threaded outside the parallel region, so no locking is
@@ -97,7 +103,11 @@ class Consumer
 
   private:
     mutable std::recursive_mutex m_consumer_mutex;
-    std::set<Tick> m_wakeup_ticks;
+    // Sorted ascending, no duplicates. Replaces std::set<Tick> because
+    // virtually every Consumer in Garnet has 0-2 pending ticks at any
+    // time, and a small sorted vector beats an RB-tree by ~5-10x on
+    // both insert and lookup at this size while avoiding heap churn.
+    std::vector<Tick> m_wakeup_ticks;
     EventFunctionWrapper m_wakeup_event;
     ClockedObject *em;
 

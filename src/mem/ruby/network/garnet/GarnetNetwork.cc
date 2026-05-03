@@ -74,6 +74,9 @@ namespace garnet
 
 std::mutex GarnetNetwork::g_scheduling_mutex;
 
+thread_local GarnetNetwork::DeferredQueue *
+    GarnetNetwork::t_deferred_queue = nullptr;
+
 class BufferedLogger : public trace::Logger
 {
   public:
@@ -191,6 +194,12 @@ GarnetNetwork::GarnetNetwork(const Params &p)
         m_thread_router_mask[id % m_num_threads] |= (1ULL << id);
     }
 
+    // Per-worker deferred-schedule buffers.
+    m_deferred_schedules.resize(m_num_threads);
+    for (auto &q : m_deferred_schedules) {
+        q.entries.reserve(64);
+    }
+
     // Spawn persistent workers (only if we'll actually use the pool).
     if (m_num_threads > 1) {
         for (int i = 0; i < m_num_threads; i++) {
@@ -270,32 +279,39 @@ GarnetNetwork::registerWakeup(int router_id, Tick tick)
     // is single-threaded, so a plain load/store avoids the LOCK
     // prefix on every router scheduling - this fires per
     // input/output cycle and adds up.
-    auto &slot = m_wakeup_mask[(tick / clockPeriod()) % 128].mask;
+    int idx = (tick / clockPeriod()) % 128;
+    auto &slot = m_wakeup_mask[idx].mask;
     const uint64_t bit = 1ULL << router_id;
+    auto &active = (idx < 64) ? m_active_lo : m_active_hi;
+    const uint64_t active_bit = 1ULL << (idx & 63);
     if (Consumer::s_parallel_active.load(std::memory_order_relaxed)) {
         slot.fetch_or(bit, std::memory_order_relaxed);
+        // Idempotent: if the bit is already set, the OR is a no-op.
+        active.fetch_or(active_bit, std::memory_order_relaxed);
     } else {
         slot.store(slot.load(std::memory_order_relaxed) | bit,
                    std::memory_order_relaxed);
+        active.store(active.load(std::memory_order_relaxed) | active_bit,
+                     std::memory_order_relaxed);
     }
 }
 
 void
 GarnetNetwork::runRoutersFromMask(uint64_t mask, Tick current_tick)
 {
-    // alreadyScheduled() is non-empty iff this router has not yet been
-    // serviced for current_tick. If a NetworkLink already woke it
-    // earlier in this tick (Default_Pri events fire before our
-    // Default_Pri+1 globalWakeup), the entry will already be gone and
-    // we must skip wakeup() here to avoid double-executing the router.
+    // tryConsumeTick() returns true iff this router still has the
+    // current tick pending (i.e. has not yet been serviced for
+    // current_tick by an earlier Default_Pri Consumer event), in which
+    // case we run it here. Combining the check + erase avoids the
+    // double binary-search over m_wakeup_ticks that we used to do.
+    const bool log = GEM5_UNLIKELY(debug::RubyNetwork);
     while (mask) {
         int id = __builtin_ctzll(mask);
         Router *r = m_routers[id];
-        if (r->alreadyScheduled(current_tick)) {
-            r->descheduleTick(current_tick);
-            BufferedLogger::currentRouter = r;
+        if (r->tryConsumeTick(current_tick)) {
+            if (log) BufferedLogger::currentRouter = r;
             r->wakeup();
-            BufferedLogger::currentRouter = nullptr;
+            if (log) BufferedLogger::currentRouter = nullptr;
         }
         mask &= mask - 1; // clear lowest set bit
     }
@@ -305,17 +321,52 @@ Tick
 GarnetNetwork::computeNextWakeupTick(int current_idx, Tick current_tick,
                                      Tick clock_period) const
 {
-    // Scan the 128-cycle ring for the next non-empty slot. If nothing
-    // is queued in that window, fall back to the next cycle so that
-    // routers scheduled by the main thread (e.g. via a NetworkLink
-    // wakeup) still get serviced.
-    for (int i = 1; i < 128; i++) {
-        int idx = (current_idx + i) % 128;
-        if (m_wakeup_mask[idx].mask.load(std::memory_order_relaxed) != 0) {
-            return current_tick + i * clock_period;
+    // O(1) lookup using the m_active_{lo,hi} companion bitmap. We mask
+    // out bits at and below current_idx in the "current half", then
+    // pick the lowest remaining bit; if none, wrap to the other half.
+    // Falls back to one cycle if the bitmap is entirely empty (rare,
+    // since registerWakeup keeps it in sync with m_wakeup_mask).
+    uint64_t lo = m_active_lo.load(std::memory_order_relaxed);
+    uint64_t hi = m_active_hi.load(std::memory_order_relaxed);
+
+    auto first_bit_after = [&](int after_idx) -> int {
+        // Returns the lowest set-bit position > after_idx in (lo, hi),
+        // or -1 if there is none in [after_idx+1, 127].
+        if (after_idx < 63) {
+            // (lo >> n) << n masks off the low n bits without invoking
+            // shift-by-64 UB.
+            int sh = after_idx + 1;
+            uint64_t lo_masked = (lo >> sh) << sh;
+            if (lo_masked) return __builtin_ctzll(lo_masked);
+            if (hi) return 64 + __builtin_ctzll(hi);
+        } else if (after_idx == 63) {
+            if (hi) return 64 + __builtin_ctzll(hi);
+        } else if (after_idx < 127) {
+            int sh = (after_idx - 64) + 1;
+            uint64_t hi_masked = (hi >> sh) << sh;
+            if (hi_masked) return 64 + __builtin_ctzll(hi_masked);
         }
+        return -1;
+    };
+
+    int idx = first_bit_after(current_idx);
+    int dist;
+    if (idx >= 0) {
+        dist = idx - current_idx;
+    } else {
+        // Wrap: pick the smallest set bit in the bitmap.
+        if (lo) {
+            idx = __builtin_ctzll(lo);
+        } else if (hi) {
+            idx = 64 + __builtin_ctzll(hi);
+        } else {
+            // Nothing scheduled; fall back to the next cycle so that
+            // any registers we might miss don't strand the simulator.
+            return current_tick + clock_period;
+        }
+        dist = 128 - (current_idx - idx);
     }
-    return current_tick + clock_period;
+    return current_tick + dist * clock_period;
 }
 
 void
@@ -323,6 +374,12 @@ GarnetNetwork::workerLoop(int thread_id)
 {
     uint64_t last_seen_generation = 0;
     const uint64_t my_router_mask = m_thread_router_mask[thread_id];
+
+    // Hook this thread's deferred-schedule buffer once. From now on
+    // every InputUnit/OutputUnit call from inside this thread sees a
+    // non-null t_deferred_queue and parks its NetworkLink/CreditLink
+    // schedule requests there instead of touching the EventQueue.
+    t_deferred_queue = &m_deferred_schedules[thread_id];
 
     while (true) {
         {
@@ -362,6 +419,18 @@ GarnetNetwork::workerLoop(int thread_id)
 }
 
 void
+GarnetNetwork::drainDeferredSchedules()
+{
+    for (auto &q : m_deferred_schedules) {
+        if (q.entries.empty()) continue;
+        for (auto &e : q.entries) {
+            e.consumer->scheduleEventAbsolute(e.tick);
+        }
+        q.entries.clear();
+    }
+}
+
+void
 GarnetNetwork::globalWakeup()
 {
     gem5::EventQueue *eq = gem5::curEventQueue();
@@ -381,6 +450,18 @@ GarnetNetwork::globalWakeup()
         std::memory_order_relaxed);
 
     if (mask != 0) {
+        // Slot is now empty; clear the companion active bit. Workers
+        // (if any) only register for FUTURE ticks, so they never touch
+        // this slot until it wraps 128 cycles later, by which time we
+        // will have re-set the bit via registerWakeup.
+        if (current_idx < 64) {
+            m_active_lo.fetch_and(~(1ULL << current_idx),
+                                  std::memory_order_relaxed);
+        } else {
+            m_active_hi.fetch_and(~(1ULL << (current_idx - 64)),
+                                  std::memory_order_relaxed);
+        }
+
         int popcount = __builtin_popcountll(mask);
 
         // For tiny per-cycle work lists the CV round-trip costs more
@@ -413,6 +494,12 @@ GarnetNetwork::globalWakeup()
 
             Consumer::s_parallel_active.store(false,
                 std::memory_order_relaxed);
+
+            // All workers are quiescent and s_parallel_active is now
+            // false, so it is safe to call into the EventQueue and
+            // Consumer mutexes without locks. Drain the per-worker
+            // deferred-schedule buffers serially on the master.
+            drainDeferredSchedules();
         }
     }
 

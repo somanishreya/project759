@@ -33,6 +33,7 @@
 
 #include "debug/RubyNetwork.hh"
 #include "mem/ruby/network/garnet/Credit.hh"
+#include "mem/ruby/network/garnet/GarnetNetwork.hh"
 #include "mem/ruby/network/garnet/Router.hh"
 
 namespace gem5
@@ -152,12 +153,12 @@ InputUnit::increment_credit(int in_vc, bool free_signal, Tick curTime)
     m_router->get_id(), in_vc, free_signal, m_credit_link->name());
     Credit *t_credit = new Credit(in_vc, free_signal, curTime);
     creditQueue.insert(t_credit);
-    if (Consumer::s_parallel_active.load(std::memory_order_relaxed)) {
-        std::lock_guard<std::mutex> lock(GarnetNetwork::g_scheduling_mutex);
-        m_credit_link->scheduleEventAbsolute(m_router->clockEdge(Cycles(1)));
-    } else {
-        m_credit_link->scheduleEventAbsolute(m_router->clockEdge(Cycles(1)));
-    }
+    // Worker threads must not call into EventQueue::schedule() directly
+    // because it is not thread safe. deferOrSchedule() routes the call
+    // either through the per-worker deferred buffer (parallel mode) or
+    // straight to scheduleEventAbsolute() (single-threaded mode).
+    GarnetNetwork::deferOrSchedule(m_credit_link,
+                                   m_router->clockEdge(Cycles(1)));
 }
 
 bool

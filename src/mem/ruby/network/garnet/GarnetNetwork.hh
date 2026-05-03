@@ -41,6 +41,7 @@
 #include <thread>
 #include <vector>
 
+#include "mem/ruby/common/Consumer.hh"
 #include "mem/ruby/network/Network.hh"
 #include "mem/ruby/network/fault_model/FaultModel.hh"
 #include "mem/ruby/network/garnet/CommonTypes.hh"
@@ -106,6 +107,36 @@ class GarnetNetwork : public Network
     int get_router_id(int ni, int vnet);
 
     void registerWakeup(int router_id, Tick tick);
+
+    // ---- Deferred link-schedule machinery (parallel mode) ------------
+    //
+    // Worker threads cannot safely call EventQueue::schedule(), which
+    // is what NetworkLink/CreditLink::scheduleEventAbsolute() ends up
+    // invoking. Instead, while running router wakeups in parallel we
+    // record (consumer, tick) pairs into a per-worker thread-local
+    // buffer; once all workers have finished the master drains the
+    // buffers serially. This removes the formerly-global
+    // g_scheduling_mutex from the hot path completely.
+    struct DeferredEntry {
+        Consumer *consumer;
+        Tick tick;
+    };
+    struct alignas(64) DeferredQueue {
+        std::vector<DeferredEntry> entries;
+    };
+    // Per-worker deferred buffers; main thread holds index 0 of the
+    // pool implicitly (it never defers because it never schedules from
+    // outside an EventQueue context).
+    static thread_local DeferredQueue *t_deferred_queue;
+    inline static void
+    deferOrSchedule(Consumer *c, Tick tick)
+    {
+        if (t_deferred_queue) {
+            t_deferred_queue->entries.push_back({c, tick});
+        } else {
+            c->scheduleEventAbsolute(tick);
+        }
+    }
 
 
     // Methods used by Topology to setup the network
@@ -250,6 +281,14 @@ class GarnetNetwork : public Network
     // supported by this scheme.
     PaddedMask m_wakeup_mask[128];
 
+    // Companion bitmap: bit i is 1 iff m_wakeup_mask[i].mask != 0.
+    // Lets computeNextWakeupTick() find the next non-empty slot in O(1)
+    // (ctz on a 128-bit value) instead of scanning all 128 entries.
+    // Invariant: registerWakeup sets the bit when populating a slot;
+    // globalWakeup clears it after the exchange empties the slot.
+    alignas(64) std::atomic<uint64_t> m_active_lo{0};  // slots 0..63
+    alignas(64) std::atomic<uint64_t> m_active_hi{0};  // slots 64..127
+
     std::vector<VNET_type > m_vnet_type;
     std::vector<Router *> m_routers;   // All Routers in Network
     std::vector<NetworkLink *> m_networklinks; // All flit links in the network
@@ -292,6 +331,11 @@ class GarnetNetwork : public Network
     void runRoutersFromMask(uint64_t mask, Tick current_tick);
     Tick computeNextWakeupTick(int current_idx, Tick current_tick,
                                Tick clock_period) const;
+    void drainDeferredSchedules();
+
+    // Per-worker buffers (size m_num_threads). Each worker writes only
+    // to its own index, the master drains all of them after the join.
+    std::vector<DeferredQueue> m_deferred_schedules;
 };
 
 inline std::ostream&
