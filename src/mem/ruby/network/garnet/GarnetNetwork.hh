@@ -33,12 +33,10 @@
 #define __MEM_RUBY_NETWORK_GARNET_0_GARNETNETWORK_HH__
 
 #include <atomic>
-#include <condition_variable>
 #include <cstdint>
 #include <iostream>
 #include <memory>
 #include <mutex>
-#include <thread>
 #include <vector>
 
 #include "mem/ruby/common/Consumer.hh"
@@ -70,7 +68,7 @@ class GarnetNetwork : public Network
   public:
     typedef GarnetNetworkParams Params;
     GarnetNetwork(const Params &p);
-    ~GarnetNetwork();
+    ~GarnetNetwork() = default;
 
     void init();
 
@@ -124,14 +122,19 @@ class GarnetNetwork : public Network
     struct alignas(64) DeferredQueue {
         std::vector<DeferredEntry> entries;
     };
-    // Per-worker deferred buffers; main thread holds index 0 of the
-    // pool implicitly (it never defers because it never schedules from
-    // outside an EventQueue context).
+    // Per-worker deferred buffers. With OpenMP the gem5 main thread
+    // participates in the parallel region as tid=0, so it ends up with
+    // a non-null t_deferred_queue. We must therefore gate the deferral
+    // on Consumer::s_parallel_active (the same flag that gates
+    // MaybeLock) rather than on t_deferred_queue alone -- otherwise
+    // the main thread would silently park scheduling requests in a
+    // buffer that is only drained inside the parallel branch.
     static thread_local DeferredQueue *t_deferred_queue;
     inline static void
     deferOrSchedule(Consumer *c, Tick tick)
     {
-        if (t_deferred_queue) {
+        if (Consumer::s_parallel_active.load(std::memory_order_relaxed)
+            && t_deferred_queue) {
             t_deferred_queue->entries.push_back({c, tick});
         } else {
             c->scheduleEventAbsolute(tick);
@@ -297,44 +300,32 @@ class GarnetNetwork : public Network
     std::vector<NetworkInterface *> m_nis;   // All NI's in Network
     int m_next_packet_id; // packet id allocator (main thread only)
 
-    // ----- Parallel router-wakeup machinery ---------------------------
+    // ----- Parallel router-wakeup machinery (OpenMP) ------------------
     //
-    // Workers are persistent and statically own a subset of routers
-    // (router_id % m_num_threads == thread_id). Each cycle the master
-    // publishes (tick, mask, event_queue), wakes all workers via a
-    // single notify_all, then waits on m_done_cv until every worker has
-    // bumped m_workers_finished.
+    // Per-cycle work is dispatched to a libgomp thread pool via a
+    // single `#pragma omp parallel` region in globalWakeup(). The pool
+    // is created once on first entry and reused across cycles; the
+    // implicit barrier at end-of-region replaces the explicit done-CV
+    // wait used by the previous std::thread implementation.
+    //
+    // Workers statically own a subset of routers
+    // (router_id % m_num_threads == thread_id), encoded as a 64-bit
+    // bitmask each so each worker extracts its routers with one AND.
+    // Static partitioning keeps each router on the same OS thread run
+    // after run so the routing/switch state stays hot in that thread's
+    // L1.
     int m_num_threads;
     int m_parallel_threshold;
-    std::vector<std::thread> m_worker_threads;
     std::vector<uint64_t> m_thread_router_mask; // size = m_num_threads
-    std::atomic<bool> m_terminate_workers;
 
-    // Master -> workers
-    std::mutex m_dispatch_mutex;
-    std::condition_variable m_dispatch_cv;
-    uint64_t m_dispatch_generation; // protected by m_dispatch_mutex
-
-    // Workers -> master
-    std::mutex m_done_mutex;
-    std::condition_variable m_done_cv;
-    std::atomic<int> m_workers_finished;
-
-    // Per-cycle dispatch payload (written by master before notify_all,
-    // read by workers after wait). No further sync needed because the
-    // CV mutex provides happens-before.
-    Tick m_current_tick;
-    gem5::EventQueue *m_current_event_queue;
-    uint64_t m_current_mask;
-
-    void workerLoop(int thread_id);
     void runRoutersFromMask(uint64_t mask, Tick current_tick);
     Tick computeNextWakeupTick(int current_idx, Tick current_tick,
                                Tick clock_period) const;
     void drainDeferredSchedules();
 
     // Per-worker buffers (size m_num_threads). Each worker writes only
-    // to its own index, the master drains all of them after the join.
+    // to its own index via t_deferred_queue, the master drains all of
+    // them after the parallel region's implicit barrier.
     std::vector<DeferredQueue> m_deferred_schedules;
 };
 

@@ -47,6 +47,8 @@
 #include "mem/ruby/network/garnet/Router.hh"
 #include "mem/ruby/system/RubySystem.hh"
 
+#include <omp.h>
+
 #include <algorithm>
 #include <iomanip>
 #include <map>
@@ -116,16 +118,10 @@ GarnetNetwork::GarnetNetwork(const Params &p)
                         (Event::Priority) (Event::Default_Pri + 1)),
       m_next_packet_id(0),
       m_num_threads(0),
-      // Empirically the CV round-trip pays for itself at ~16 routers
-      // when work is well-balanced across threads. Below that the
-      // sequential branch wins.
-      m_parallel_threshold(16),
-      m_terminate_workers(false),
-      m_dispatch_generation(0),
-      m_workers_finished(0),
-      m_current_tick(0),
-      m_current_event_queue(nullptr),
-      m_current_mask(0)
+      // Empirically the parallel-region round-trip pays for itself at
+      // ~16 routers when work is well-balanced across threads. Below
+      // that the sequential branch wins.
+      m_parallel_threshold(16)
 {
     m_num_rows = p.num_rows;
     m_ni_flit_size = p.ni_flit_size;
@@ -174,11 +170,11 @@ GarnetNetwork::GarnetNetwork(const Params &p)
 
     // Choose the worker pool size. We deliberately cap by
     // num_routers/8: with 1-cycle work per router, anything larger
-    // costs more in CV signalling than it saves in compute. Setting
-    // num_threads to 0 (the default) picks an automatic value, 1
-    // disables the pool entirely.
+    // costs more in parallel-region overhead than it saves in
+    // compute. Setting num_threads to 0 (the default) picks an
+    // automatic value, 1 disables the pool entirely.
     int requested = p.num_threads;
-    int hw = (int) std::thread::hardware_concurrency();
+    int hw = omp_get_num_procs();
     if (hw <= 0) hw = 1;
     int auto_threads = std::max(1, (int)m_routers.size() / 8);
     if (requested <= 0) {
@@ -200,26 +196,18 @@ GarnetNetwork::GarnetNetwork(const Params &p)
         q.entries.reserve(64);
     }
 
-    // Spawn persistent workers (only if we'll actually use the pool).
+    // Pre-warm the OpenMP thread pool. The runtime would otherwise
+    // create threads lazily on the first parallel region, slowing
+    // down the first cycle. Doing it once here also wires up each
+    // worker's thread_local t_deferred_queue ahead of time so the
+    // hot path on cycle 0 has nothing extra to do.
     if (m_num_threads > 1) {
-        for (int i = 0; i < m_num_threads; i++) {
-            m_worker_threads.emplace_back(
-                &GarnetNetwork::workerLoop, this, i);
+        omp_set_num_threads(m_num_threads);
+        #pragma omp parallel num_threads(m_num_threads)
+        {
+            int tid = omp_get_thread_num();
+            t_deferred_queue = &m_deferred_schedules[tid];
         }
-    }
-}
-
-GarnetNetwork::~GarnetNetwork()
-{
-    m_terminate_workers.store(true, std::memory_order_release);
-    {
-        std::lock_guard<std::mutex> lock(m_dispatch_mutex);
-        m_dispatch_generation++;
-    }
-    m_dispatch_cv.notify_all();
-    for (auto& thread : m_worker_threads) {
-        if (thread.joinable())
-            thread.join();
     }
 }
 
@@ -370,55 +358,6 @@ GarnetNetwork::computeNextWakeupTick(int current_idx, Tick current_tick,
 }
 
 void
-GarnetNetwork::workerLoop(int thread_id)
-{
-    uint64_t last_seen_generation = 0;
-    const uint64_t my_router_mask = m_thread_router_mask[thread_id];
-
-    // Hook this thread's deferred-schedule buffer once. From now on
-    // every InputUnit/OutputUnit call from inside this thread sees a
-    // non-null t_deferred_queue and parks its NetworkLink/CreditLink
-    // schedule requests there instead of touching the EventQueue.
-    t_deferred_queue = &m_deferred_schedules[thread_id];
-
-    while (true) {
-        {
-            std::unique_lock<std::mutex> lock(m_dispatch_mutex);
-            m_dispatch_cv.wait(lock,
-                [this, last_seen_generation] {
-                    return m_terminate_workers.load(
-                               std::memory_order_relaxed) ||
-                           m_dispatch_generation > last_seen_generation;
-                });
-        }
-
-        if (m_terminate_workers.load(std::memory_order_relaxed))
-            return;
-
-        last_seen_generation = m_dispatch_generation;
-
-        // Make schedule() etc. find the right event queue if a Consumer
-        // call inside Router::wakeup needs it.
-        gem5::curEventQueue(m_current_event_queue);
-
-        // Iterate only the bits that belong to this thread. Static
-        // partitioning keeps each router on the same core run after run
-        // so the routing/switch state stays hot in this thread's L1.
-        uint64_t my_mask = m_current_mask & my_router_mask;
-        if (my_mask) {
-            runRoutersFromMask(my_mask, m_current_tick);
-        }
-
-        int finished = m_workers_finished.fetch_add(1,
-            std::memory_order_acq_rel) + 1;
-        if (finished == m_num_threads) {
-            std::lock_guard<std::mutex> lock(m_done_mutex);
-            m_done_cv.notify_one();
-        }
-    }
-}
-
-void
 GarnetNetwork::drainDeferredSchedules()
 {
     for (auto &q : m_deferred_schedules) {
@@ -464,41 +403,49 @@ GarnetNetwork::globalWakeup()
 
         int popcount = __builtin_popcountll(mask);
 
-        // For tiny per-cycle work lists the CV round-trip costs more
-        // than just running the routers inline.
+        // For tiny per-cycle work lists the parallel-region round
+        // trip costs more than just running the routers inline.
         if (m_num_threads <= 1 || popcount < m_parallel_threshold) {
             runRoutersFromMask(mask, current_tick);
         } else {
             Consumer::s_parallel_active.store(true,
                 std::memory_order_relaxed);
 
-            m_current_tick = current_tick;
-            m_current_event_queue = eq;
-            m_current_mask = mask;
-            m_workers_finished.store(0, std::memory_order_relaxed);
-
-            // Single notify_all is one futex syscall vs N notify_one's.
+            // Dispatch via OpenMP. The implicit barrier at end-of-
+            // region replaces the explicit done-CV wait used by the
+            // previous std::thread implementation. libgomp keeps the
+            // thread pool parked between regions, so this is a single
+            // wake-all on entry and a barrier release on exit - the
+            // same shape as the hand-rolled CV pair.
+            #pragma omp parallel num_threads(m_num_threads)
             {
-                std::lock_guard<std::mutex> lock(m_dispatch_mutex);
-                m_dispatch_generation++;
-            }
-            m_dispatch_cv.notify_all();
+                int tid = omp_get_thread_num();
+                // Wire the per-thread deferred-schedule buffer. After
+                // the warm-up pass in the constructor this is a no-op
+                // (libgomp reuses OS threads, so thread_local data
+                // persists), but it costs one store and is robust if
+                // the pool is ever recycled.
+                t_deferred_queue = &m_deferred_schedules[tid];
 
-            {
-                std::unique_lock<std::mutex> lock(m_done_mutex);
-                m_done_cv.wait(lock, [this] {
-                    return m_workers_finished.load(
-                        std::memory_order_acquire) == m_num_threads;
-                });
+                // Make schedule() etc. find the right event queue if
+                // a Consumer call inside Router::wakeup needs it.
+                gem5::curEventQueue(eq);
+
+                uint64_t my_mask =
+                    mask & m_thread_router_mask[tid];
+                if (my_mask) {
+                    runRoutersFromMask(my_mask, current_tick);
+                }
             }
+            // Implicit barrier above; all workers are now quiescent.
 
             Consumer::s_parallel_active.store(false,
                 std::memory_order_relaxed);
 
-            // All workers are quiescent and s_parallel_active is now
-            // false, so it is safe to call into the EventQueue and
-            // Consumer mutexes without locks. Drain the per-worker
-            // deferred-schedule buffers serially on the master.
+            // s_parallel_active is now false, so it is safe to call
+            // into the EventQueue and Consumer mutexes without locks.
+            // Drain the per-worker deferred-schedule buffers serially
+            // on the master.
             drainDeferredSchedules();
         }
     }
