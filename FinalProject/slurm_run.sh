@@ -13,14 +13,7 @@ module load python/3.10.4
 # Ensure pip-installed SCons is visible
 export PATH=$HOME/.local/bin:$PATH
 
-# Work in home directory
-cd $HOME
-
-# Clone fresh copy of project
-rm -rf project759
-git clone https://github.com/somanishreya/project759.git
-
-cd project759/FinalProject
+echo "Directory: $PWD"
 
 echo "=== Building gem5 (Garnet_standalone) ==="
 cd gem5
