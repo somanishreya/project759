@@ -22,7 +22,7 @@ echo "Build exit code: $?"
 cd ..
 
 echo "=== Running parallel experiment ==="
-python3 run_parallel.py
+python3 run_report.py
 
 echo "=== Done ==="
 
